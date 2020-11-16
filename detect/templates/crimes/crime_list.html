@@ -1,0 +1,10 @@
+{% extends 'base.html'%}
+{% block content %}
+    {% for crime in crimes %}
+        <div>
+            <h5>{{crime.name}}</h5>
+            <h5>{{crime.description}}</h5>
+        </div>
+        <br>
+    {% endfor %}
+{% endblock %}
