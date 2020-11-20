@@ -7,6 +7,7 @@ urlpatterns = [
     path('student/<int:id>', views.studentDetails, name='student_details'),
     path('student/<int:id>/delete', views.deleteStudent, name='delete_student'),
     path('student/<int:id>/edit', views.updateStudent, name='edit_student'),
+    path('ajax/load-departments/', views.loadDepartments, name='ajax_load_departments'),
     path('employee/create', views.addEmployee, name='add_employee'),
     path('employee', views.allEmployee, name='employees'),
     path('employee/<int:id>', views.employeeDetails, name='employee_details'),

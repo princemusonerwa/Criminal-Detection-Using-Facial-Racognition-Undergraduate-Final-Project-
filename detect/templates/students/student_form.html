@@ -1,15 +1,37 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
 {% block content %}
-    <div class="container">
-        {% if not form.instance.student_id %}
-            <h4>Create Student</h4>
-        {% else %}
-            <h4>Update Student</h4>
-        {% endif %}
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <input type="submit" value="Save Student" class="btn btn-success">
-        </form>
-    </div>
+
+  <div class="container">
+    {% if form.instance.pk %}
+    <h3>Update Student</h3>
+    {% else %}
+      <h3>Create Student</h3>
+    {% endif %}
+
+    <form method="post" id="studentForm" data-departments-url="{% url 'ajax_load_departments' %}" novalidate>
+      {% csrf_token %}
+      {{ form|crispy }}
+      <button type="submit" class="btn btn-success">Save Student</button>
+    </form>
+  </div>
+
+  <script>
+    $("#id_faculty").change(function () {
+      var url = $("#studentForm").attr("data-departments-url");
+      var facultyId = $(this).val();
+
+      $.ajax({
+        url: url,
+        data: {
+          'faculty': facultyId
+        },
+        success: function (data) {
+          $("#id_department").html(data);
+        }
+      });
+
+    });
+  </script>
+
 {% endblock %}

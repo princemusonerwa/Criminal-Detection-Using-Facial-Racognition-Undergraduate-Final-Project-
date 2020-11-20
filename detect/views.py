@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .forms import StudentForm, EmployeeForm, CrimeForm
-from .models import Student, Employee, Crime
+from .models import Student, Employee, Crime, Department, Faculty
 from django.contrib import messages
 
 # Create your views here.
@@ -126,3 +126,8 @@ def updateCrime(request, id):
         messages.success(request, 'Crime updated Successfully.')
         return redirect('/crime/'+str(id))
     return render(request, 'crimes/crime_form.html', {'form':form})
+
+def loadDepartments(request):
+    faculty_id = request.GET.get('faculty')
+    departments = Department.objects.filter(faculty_id=faculty_id).order_by('name')
+    return render(request, 'students/department_dropdown_list_options.html', {'departments': departments})
