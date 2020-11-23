@@ -7,9 +7,9 @@ def get_upload_to(instance,filename):
     new_filename= '{}.{}'.format(uuid.uuid4(),filename.split('.')[-1])
     folder=""
     if(hasattr(instance.person,"student")):
-        folder=f"{instance.person.id}_{instance.person.name}_student_{instance.person.student.student_id}"
+        folder=f"{instance.person.id}_{instance.person.names}_student_{instance.person.student.student_id}"
     elif(hasattr(instance.person,"employee")):
-        folder=f"{instance.person.id}_{instance.person.name}_employee_{instance.person.employee.staff_id}"
+        folder=f"{instance.person.id}_{instance.person.names}_employee_{instance.person.employee.staff_id}"
 
     return "images/training/{}/{}".format(folder,new_filename)
 
@@ -59,7 +59,6 @@ class Gallery(models.Model):
     photos = models.ImageField(upload_to = get_upload_to)
 
     
-
 class Crime(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE, default=None)
     name = models.CharField(max_length=255)

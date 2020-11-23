@@ -26,10 +26,10 @@ class EmployeeForm(forms.ModelForm):
         fields = '__all__'
 
 class GalleryForm(forms.ModelForm):
-    image = forms.ImageField(label='Image')    
+    photos = forms.ImageField(label='Photos')    
     class Meta:
         model = Gallery
-        fields = ('image', )
+        fields = ('photos', )
 
 class CrimeForm(forms.ModelForm):
     class Meta:

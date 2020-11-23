@@ -1,16 +1,25 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .forms import StudentForm, EmployeeForm, CrimeForm
-from .models import Student, Employee, Crime, Department, Faculty
+from .models import Student, Employee, Crime, Department, Faculty, Gallery
 from django.contrib import messages
+from .detection import train, predictKNN
+from django.core.files.storage import FileSystemStorage
+import cv2
 
 # Create your views here.
 
 def addStudent(request):
     if request.method == 'POST':
-        form = StudentForm(request.POST)
+        form = StudentForm(request.POST , request.FILES )
+        files = request.FILES.getlist('images')
+        
         if form.is_valid():
             form.save()
+            for f in files:
+                Gallery.objects.create(person=form.instance.person_ptr,photos=f)
+               
+                
             return redirect('students')
             messages.success(request, 'Student created Successfully.')
     else:
@@ -20,6 +29,11 @@ def addStudent(request):
 def allStudent(request):
     students = Student.objects.all()
     return render(request, 'students/student_list.html', {'students':students})
+
+def train_images(request):
+    train()
+    return redirect('students')
+
 
 def studentDetails(request, id):
     student = get_object_or_404(Student, student_id = id)
@@ -131,3 +145,56 @@ def loadDepartments(request):
     faculty_id = request.GET.get('faculty')
     departments = Department.objects.filter(faculty_id=faculty_id).order_by('name')
     return render(request, 'students/department_dropdown_list_options.html', {'departments': departments})
+
+
+def detect_criminal(request):
+    if  request.method == 'POST':
+        cap = cv2.VideoCapture(0)
+        while(True): 
+            # Capture frame-by-frame
+            ret, image = cap.read()
+            # to speed up the process, we will resize the image captured 
+            image_small = cv2.resize(image, (0,0), None, 0.25, 0.25)
+            # convert the frame image to RGB
+           
+            # create uncodings for our faces in the image 
+            predictions=predictKNN(image_small)
+           
+            for name,loc in predictions:
+                y1,x2,y2,x1 = loc
+                y1,x2,y2,x1 = y1*4,x2*4,y2*4,x1*4
+                cv2.rectangle(image, (x1,y1), (x2,y2), (255,0,0), 2)
+                cv2.rectangle(image, (x1,y2-20), (x2,y2), (255,0,0), cv2.FILLED)
+                cv2.putText(image, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1,(255,255,0), 2)
+
+            # Display the resulting frame
+            cv2.imshow('frame',image)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+        # When everything done, release the capture
+        cap.release()
+        cv2.destroyAllWindows()
+    return render(request, 'detect.html')
+
+def detect_image(request):
+    # This is an example of running face recognition on a single image
+    # and drawing a box around each person that was identified.
+
+    # Load a sample picture and learn how to recognize it.
+
+    #upload image
+    name = ""
+    if request.method == 'POST' and request.FILES['file']:
+        myfile = request.FILES['file']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        image = cv2.imread(uploaded_file_url[1:])
+        print(uploaded_file_url[1:])
+        predictions=predictKNN(image) 
+
+        for pred_name,loc in predictions:
+            name = pred_name
+    return render(request, 'detect.html', {'name':name})
+

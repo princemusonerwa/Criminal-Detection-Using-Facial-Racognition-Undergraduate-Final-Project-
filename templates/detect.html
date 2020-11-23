@@ -1,0 +1,23 @@
+{% extends 'base.html'%}
+{% block content %}
+    <h5>This is the page used to detect a student</h5>
+
+    <form action="{% url 'trainData'%}">
+        {% csrf_token %}
+        <input type="submit" value="Train" class="btn btn-primary">
+    </form>
+    <br>
+
+    <form action="{% url 'webcamdetection'%}" method="post">
+        {% csrf_token %}
+        <input type="submit" value="Load Web Cam" class="btn btn-primary">
+    </form>
+    <br>
+    <form action="{% url 'imagedetection'%}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="file">
+        <input type="submit" value="Predict" class="btn btn-danger">
+    </form>
+
+    <p>{{name}}</p>
+{% endblock %}
