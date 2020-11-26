@@ -26,6 +26,8 @@ class Person(models.Model):
     ]
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="NOT WANTED")
 
+    
+
 class Faculty(models.Model):
     name = models.CharField(max_length=255)
 

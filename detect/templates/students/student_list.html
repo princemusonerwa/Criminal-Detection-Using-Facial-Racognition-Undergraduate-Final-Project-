@@ -1,12 +1,36 @@
 {% extends 'base.html'%}
 {% block content %}
-    {% for student in students %}
+    <div class="container">
         <div>
-            <h5>{{student.names}}</h5>
-            <h5>{{student.address}}</h5>
-            <h5>{{student.faculty}}</h5>
-            <h5>{{student.department}}</h5>
+            <a href="{% url 'add_student'%}" class="btn btn-primary">Add Student</a>
         </div>
-        <br>
-    {% endfor %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Names</th>
+                    <th>Address</th>
+                    <th>Faculty</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{student.names}}</td>
+                    <td>{{student.address}}</td>
+                    <td>{{student.faculty}}</td>
+                    <td>{{student.department}}</td>
+                    <td>{{student.status}}</td>
+                    <td>
+                        <a href="{% url 'student_details' student.pk %}" class="btn btn-secondary btn-sm">Show</a>
+                        <a href="{% url 'edit_student' student.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{% url 'delete_student' student.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

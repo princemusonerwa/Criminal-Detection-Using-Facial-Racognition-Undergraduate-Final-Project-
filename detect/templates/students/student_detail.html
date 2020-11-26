@@ -1,9 +1,29 @@
 {% extends 'base.html'%}
 {% block content %}
-    <h6>{{student.names}}</h6>
-    <h6>{{student.email}}</h6>
-    <h6>{{student.phone}}</h6>
-    <h6>{{student.gender}}</h6>
-    <h6>{{student.faculty}}</h6>
-    <h6>{{student.department}}</h6>   
+    <div class="container">
+        <h6>{{student.names}}</h6>
+        <h6>{{student.email}}</h6>
+        <h6>{{student.address}}</h6>
+        <h6>{{student.phone}}</h6>
+        <h6>{{student.gender}}</h6>
+        <h6>{{student.faculty}}</h6>
+        <h6>{{student.department}}</h6> 
+        <hr>
+        <div>
+            <a href="{% url 'add_student_image' student.student_id %}" class="btn btn-secondary">Add New Image</a>
+        </div>
+        <div class="row">
+            {% for photo in gallery%}
+                <div class="col-md-3" style="margin: 10px;">
+                    <div class="card" style="width: 18rem;">
+                        <img src="{{photo.photos.url}}" alt="Smiley face" width="200" height="200" style="object-fit: center;" class="card-img-top">
+                        <div class="card-body">
+                        <a href="{% url 'delete_student_image' student.student_id photo.id %}">Delete</a></li>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %} 
+        </div>  
+    </div>
+    
 {% endblock %}

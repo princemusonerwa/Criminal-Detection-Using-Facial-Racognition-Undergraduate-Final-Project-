@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+
+  <div class="container">
+    <h3>Add Images</h3>
+    <form method="post" novalidate enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="note-image">Images</label>
+        <input type="file" name="images" class="form-control-file" id="note-image" multiple>
+      </div>
+      <button type="submit" class="btn btn-success">Save Image</button>
+    </form>
+  </div>
+
+{% endblock %}

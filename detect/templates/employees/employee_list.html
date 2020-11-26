@@ -1,10 +1,34 @@
 {% extends 'base.html'%}
 {% block content %}
-    {% for employee in employees %}
+    <div class="container">
         <div>
-            <h5>{{employee.name}}</h5>
-            <h5>{{employee.address}}</h5>
+            <a href="{% url 'add_employee'%}" class="btn btn-primary">Add Employee</a>
         </div>
-        <br>
-    {% endfor %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Names</th>
+                    <th>Address</th>
+                    <th>Gender</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for employee in employees %}
+                <tr>
+                    <td>{{employee.names}}</td>
+                    <td>{{employee.address}}</td>
+                    <td>{{employee.gender}}</td>
+                    <td>{{employee.status}}</td>
+                    <td>
+                        <a href="{% url 'employee_details' employee.pk %}" class="btn btn-secondary btn-sm">Show</a>
+                        <a href="{% url 'edit_employee' employee.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="{% url 'delete_employee' employee.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

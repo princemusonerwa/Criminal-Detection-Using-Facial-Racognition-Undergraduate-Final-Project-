@@ -1,8 +1,24 @@
 {% extends 'base.html'%}
 {% block content %}
-    <h6>{{employee.name}}</h6>
-    <h6>{{employee.email}}</h6>
-    <h6>{{employee.phone}}</h6>
-    <h6>{{employee.gender}}</h6>
-    <h6>{{employee.address}}</h6>   
+    <div class="container">
+        <h6>{{employee.names}}</h6>
+        <h6>{{employee.email}}</h6>
+        <h6>{{employee.phone}}</h6>
+        <h6>{{employee.gender}}</h6>
+        <h6>{{employee.address}}</h6>
+        <hr>
+        <a href="{% url 'add_employee_image' employee.staff_id %}" class="btn btn-secondary">Add New Image</a>
+        <div class="row">
+            {% for photo in gallery%}
+                <div class="col-md-3" style="margin: 10px">
+                    <div class="card" style="width: 18rem;">
+                        <img src="{{photo.photos.url}}" alt="Smiley face" class="card-img-top">
+                        <div class="card-body">
+                            <a href="{% url 'delete_employee_image' employee.staff_id photo.id %}">Delete</a></li>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %} 
+        </div>  
+    </div>
 {% endblock %}

@@ -12,13 +12,11 @@ import cv2
 def addStudent(request):
     if request.method == 'POST':
         form = StudentForm(request.POST , request.FILES )
-        files = request.FILES.getlist('images')
-        
+        files = request.FILES.getlist('images')        
         if form.is_valid():
             form.save()
             for f in files:
-                Gallery.objects.create(person=form.instance.person_ptr,photos=f)
-               
+                Gallery.objects.create(person=form.instance.person_ptr,photos=f)           
                 
             return redirect('students')
             messages.success(request, 'Student created Successfully.')
@@ -30,15 +28,19 @@ def allStudent(request):
     students = Student.objects.all()
     return render(request, 'students/student_list.html', {'students':students})
 
+
 def train_images(request):
     train()
-    return redirect('students')
+    messages.success(request, "Image trained successfully.")
+    return redirect('webcamdetection')
 
 
 def studentDetails(request, id):
     student = get_object_or_404(Student, student_id = id)
+    gallery = student.gallery_set.all()
     context = {
-        'student' : student
+        'student' : student,
+        'gallery': gallery,
     }
     return render(request, 'students/student_detail.html', context)
 
@@ -49,6 +51,54 @@ def deleteStudent(request, id):
         messages.success(request, 'Student deleted Successfully.')
         return redirect('students')
     return render(request, 'students/student_confirm_delete.html', {'student':student})
+
+def addStudentImage(request, id):
+    if request.method == 'POST':
+        student = Student.objects.get(student_id = id)
+        files = request.FILES.getlist('images')        
+        for f in files:
+            Gallery.objects.create(person= student.person_ptr,photos=f)       
+                
+        messages.success(request, 'Image added Successfully.')
+        return redirect('/student/'+str(student.student_id))
+    else:
+        form = StudentForm()
+    return render(request, 'gallery/image_form.html', {'form':form})
+
+def addEmployeeImage(request, id):
+    if request.method == 'POST':
+        employee = Employee.objects.get(staff_id = id)
+        files = request.FILES.getlist('images')        
+        for f in files:
+            Gallery.objects.create(person= employee.person_ptr,photos=f)
+
+        messages.success(request, 'Image added Successfully.')        
+        return redirect('/employee/'+str(employee.staff_id))
+    else:
+        form = StudentForm()
+    return render(request, 'gallery/image_form.html', {'form':form})
+
+def deleteStudentImage(request, id, image_pk):
+    student = Student.objects.get(student_id = id)
+    gallery = student.gallery_set.all()
+    image = gallery.filter(id=image_pk)
+    if request.method == 'POST':
+        student_id = student.student_id
+        image.delete()
+        messages.success(request, 'Image deleted Successfully.')
+        return redirect('/student/'+str(student_id))
+    return render(request, 'gallery/gallery_confirm_delete.html', {'image':image})
+
+def deleteEmployeeImage(request, id, image_pk):
+    employee = Employee.objects.get(staff_id = id)
+    gallery = employee.gallery_set.all()
+    image = gallery.filter(id=image_pk)
+    if request.method == 'POST':
+        staff_id = employee.staff_id
+        image.delete()
+        messages.success(request, 'Image deleted Successfully.')
+        return redirect('/employee/'+str(staff_id))
+    return render(request, 'gallery/gallery_confirm_delete.html', {'image':image})
 
 def updateStudent(request, id):
     obj = get_object_or_404(Student, student_id = id) 
@@ -63,8 +113,12 @@ def updateStudent(request, id):
 def addEmployee(request):
     if request.method == 'POST':
         form = EmployeeForm(request.POST)
+        files = request.FILES.getlist('images')
         if form.is_valid():
             form.save()
+            for f in files:
+                Gallery.objects.create(person=form.instance.person_ptr,photos=f) 
+
             return redirect('employees')
             messages.success(request, 'Employee created Successfully.')
     else:
@@ -78,8 +132,10 @@ def allEmployee(request):
 
 def employeeDetails(request, id):
     employee = get_object_or_404(Employee, staff_id = id)
+    gallery = employee.gallery_set.all()
     context = {
-        'employee' : employee
+        'employee' : employee,
+        'gallery' : gallery,
     }
     return render(request, 'employees/employee_detail.html', context)
 

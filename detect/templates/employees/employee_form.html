@@ -10,6 +10,10 @@
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form|crispy }}
+            <div class="form-group">
+                <label for="note-image">Images</label>
+                <input type="file" name="images" class="form-control-file" id="note-image" multiple>
+              </div>
             <input type="submit" value="Save Employee" class="btn btn-success">
         </form>
     </div>
