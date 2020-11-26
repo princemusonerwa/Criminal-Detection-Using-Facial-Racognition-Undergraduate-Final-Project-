@@ -1,16 +1,23 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from .forms import StudentForm, EmployeeForm, CrimeForm
-from .models import Student, Employee, Crime
+from .models import Student, Employee, Crime, Department, Faculty, Gallery
 from django.contrib import messages
+from .detection import train, predictKNN
+from django.core.files.storage import FileSystemStorage
+import cv2
 
 # Create your views here.
 
 def addStudent(request):
     if request.method == 'POST':
-        form = StudentForm(request.POST)
+        form = StudentForm(request.POST , request.FILES )
+        files = request.FILES.getlist('images')        
         if form.is_valid():
             form.save()
+            for f in files:
+                Gallery.objects.create(person=form.instance.person_ptr,photos=f)           
+                
             return redirect('students')
             messages.success(request, 'Student created Successfully.')
     else:
@@ -21,10 +28,19 @@ def allStudent(request):
     students = Student.objects.all()
     return render(request, 'students/student_list.html', {'students':students})
 
+
+def train_images(request):
+    train()
+    messages.success(request, "Image trained successfully.")
+    return redirect('webcamdetection')
+
+
 def studentDetails(request, id):
     student = get_object_or_404(Student, student_id = id)
+    gallery = student.gallery_set.all()
     context = {
-        'student' : student
+        'student' : student,
+        'gallery': gallery,
     }
     return render(request, 'students/student_detail.html', context)
 
@@ -35,6 +51,54 @@ def deleteStudent(request, id):
         messages.success(request, 'Student deleted Successfully.')
         return redirect('students')
     return render(request, 'students/student_confirm_delete.html', {'student':student})
+
+def addStudentImage(request, id):
+    if request.method == 'POST':
+        student = Student.objects.get(student_id = id)
+        files = request.FILES.getlist('images')        
+        for f in files:
+            Gallery.objects.create(person= student.person_ptr,photos=f)       
+                
+        messages.success(request, 'Image added Successfully.')
+        return redirect('/student/'+str(student.student_id))
+    else:
+        form = StudentForm()
+    return render(request, 'gallery/image_form.html', {'form':form})
+
+def addEmployeeImage(request, id):
+    if request.method == 'POST':
+        employee = Employee.objects.get(staff_id = id)
+        files = request.FILES.getlist('images')        
+        for f in files:
+            Gallery.objects.create(person= employee.person_ptr,photos=f)
+
+        messages.success(request, 'Image added Successfully.')        
+        return redirect('/employee/'+str(employee.staff_id))
+    else:
+        form = StudentForm()
+    return render(request, 'gallery/image_form.html', {'form':form})
+
+def deleteStudentImage(request, id, image_pk):
+    student = Student.objects.get(student_id = id)
+    gallery = student.gallery_set.all()
+    image = gallery.filter(id=image_pk)
+    if request.method == 'POST':
+        student_id = student.student_id
+        image.delete()
+        messages.success(request, 'Image deleted Successfully.')
+        return redirect('/student/'+str(student_id))
+    return render(request, 'gallery/gallery_confirm_delete.html', {'image':image})
+
+def deleteEmployeeImage(request, id, image_pk):
+    employee = Employee.objects.get(staff_id = id)
+    gallery = employee.gallery_set.all()
+    image = gallery.filter(id=image_pk)
+    if request.method == 'POST':
+        staff_id = employee.staff_id
+        image.delete()
+        messages.success(request, 'Image deleted Successfully.')
+        return redirect('/employee/'+str(staff_id))
+    return render(request, 'gallery/gallery_confirm_delete.html', {'image':image})
 
 def updateStudent(request, id):
     obj = get_object_or_404(Student, student_id = id) 
@@ -49,8 +113,12 @@ def updateStudent(request, id):
 def addEmployee(request):
     if request.method == 'POST':
         form = EmployeeForm(request.POST)
+        files = request.FILES.getlist('images')
         if form.is_valid():
             form.save()
+            for f in files:
+                Gallery.objects.create(person=form.instance.person_ptr,photos=f) 
+
             return redirect('employees')
             messages.success(request, 'Employee created Successfully.')
     else:
@@ -64,8 +132,10 @@ def allEmployee(request):
 
 def employeeDetails(request, id):
     employee = get_object_or_404(Employee, staff_id = id)
+    gallery = employee.gallery_set.all()
     context = {
-        'employee' : employee
+        'employee' : employee,
+        'gallery' : gallery,
     }
     return render(request, 'employees/employee_detail.html', context)
 
@@ -126,3 +196,61 @@ def updateCrime(request, id):
         messages.success(request, 'Crime updated Successfully.')
         return redirect('/crime/'+str(id))
     return render(request, 'crimes/crime_form.html', {'form':form})
+
+def loadDepartments(request):
+    faculty_id = request.GET.get('faculty')
+    departments = Department.objects.filter(faculty_id=faculty_id).order_by('name')
+    return render(request, 'students/department_dropdown_list_options.html', {'departments': departments})
+
+
+def detect_criminal(request):
+    if  request.method == 'POST':
+        cap = cv2.VideoCapture(0)
+        while(True): 
+            # Capture frame-by-frame
+            ret, image = cap.read()
+            # to speed up the process, we will resize the image captured 
+            image_small = cv2.resize(image, (0,0), None, 0.25, 0.25)
+            # convert the frame image to RGB
+           
+            # create uncodings for our faces in the image 
+            predictions=predictKNN(image_small)
+           
+            for name,loc in predictions:
+                y1,x2,y2,x1 = loc
+                y1,x2,y2,x1 = y1*4,x2*4,y2*4,x1*4
+                cv2.rectangle(image, (x1,y1), (x2,y2), (255,0,0), 2)
+                cv2.rectangle(image, (x1,y2-20), (x2,y2), (255,0,0), cv2.FILLED)
+                cv2.putText(image, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1,(255,255,0), 2)
+
+            # Display the resulting frame
+            cv2.imshow('frame',image)
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+
+        # When everything done, release the capture
+        cap.release()
+        cv2.destroyAllWindows()
+    return render(request, 'detect.html')
+
+def detect_image(request):
+    # This is an example of running face recognition on a single image
+    # and drawing a box around each person that was identified.
+
+    # Load a sample picture and learn how to recognize it.
+
+    #upload image
+    name = ""
+    if request.method == 'POST' and request.FILES['file']:
+        myfile = request.FILES['file']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
+        image = cv2.imread(uploaded_file_url[1:])
+        print(uploaded_file_url[1:])
+        predictions=predictKNN(image) 
+
+        for pred_name,loc in predictions:
+            name = pred_name
+    return render(request, 'detect.html', {'name':name})
+

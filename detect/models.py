@@ -7,9 +7,9 @@ def get_upload_to(instance,filename):
     new_filename= '{}.{}'.format(uuid.uuid4(),filename.split('.')[-1])
     folder=""
     if(hasattr(instance.person,"student")):
-        folder=f"{instance.person.id}_{instance.person.name}_student_{instance.person.student.student_id}"
+        folder=f"{instance.person.id}_{instance.person.names}_student_{instance.person.student.student_id}"
     elif(hasattr(instance.person,"employee")):
-        folder=f"{instance.person.id}_{instance.person.name}_employee_{instance.person.employee.staff_id}"
+        folder=f"{instance.person.id}_{instance.person.names}_employee_{instance.person.employee.staff_id}"
 
     return "images/training/{}/{}".format(folder,new_filename)
 
@@ -26,38 +26,48 @@ class Person(models.Model):
     ]
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="NOT WANTED")
 
+    
+
+class Faculty(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+class Department(models.Model):
+    faculty = models.ForeignKey(Faculty, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
 
 class Student(Person):
     student_id = models.IntegerField(primary_key = True)
-    FACULTY_CHOICES = [
-      ('BA', 'Business Administration'),
-      ('ED', 'Education'),
-      ('T', 'Theology'),
-      ('IT', 'Information Technology'),
-    ]
-    faculty = models.CharField(max_length=100, choices=FACULTY_CHOICES)
-    department = models.CharField(max_length=100)
+    faculty = models.ForeignKey(Faculty, on_delete=models.SET_NULL, null=True)
+    department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
 
+    def __str__(self):
+        return self.names
 
 class Employee(Person):
-    staff_id = models.CharField(max_length=255)
+    staff_id = models.IntegerField(primary_key = True)
 
     def __str__(self):
         self.name
+
 
 class Gallery(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
     photos = models.ImageField(upload_to = get_upload_to)
 
     
-
 class Crime(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE, default=None)
     name = models.CharField(max_length=255)
     description = models.TextField()
     STATUS_CHOICES = [
-      ('SO', 'Solved'),
-      ('UI', 'Under Investigation'),
+        ('UI', 'Under Investigation'),
+        ('SO', 'Solved'),
     ]
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="Under Investigation")
 
