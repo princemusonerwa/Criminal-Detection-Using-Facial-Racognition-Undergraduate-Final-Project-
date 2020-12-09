@@ -1,5 +1,7 @@
 from django.db import models
 import uuid
+from PIL import Image
+from datetime import datetime
 
 # Create your models
 
@@ -25,8 +27,6 @@ class Person(models.Model):
       ('W', 'WANTED')
     ]
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="NOT WANTED")
-
-    
 
 class Faculty(models.Model):
     name = models.CharField(max_length=255)
@@ -59,7 +59,6 @@ class Employee(Person):
 class Gallery(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
     photos = models.ImageField(upload_to = get_upload_to)
-
     
 class Crime(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE, default=None)
@@ -70,6 +69,12 @@ class Crime(models.Model):
         ('SO', 'Solved'),
     ]
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="Under Investigation")
+
+class DetectedCriminal(models.Model):
+    person = models.ForeignKey(Person, on_delete=models.CASCADE, default=None)
+    time = models.DateTimeField(default = datetime.now, blank= True)
+    location = models.CharField(max_length=255)
+
 
 
 
