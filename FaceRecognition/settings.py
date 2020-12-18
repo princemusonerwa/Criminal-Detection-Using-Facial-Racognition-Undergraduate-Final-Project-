@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'detect',
     'django_cleanup.apps.CleanupConfig',
     'crispy_forms',
+    'django_extensions',
 ]
 
 

@@ -14,7 +14,7 @@
                     <div class="card" style="width: 18rem;">
                         <img src="{{photo.photos.url}}" alt="Smiley face" class="card-img-top" width="250" height="350" style="object-fit: cover;">
                         <div class="card-body">
-                        <form aPction="{% url 'delete_image' photo.id %}" method="post">
+                        <form action="{% url 'delete_image' photo.id %}" method="post">
                             {% csrf_token %}
                             <button class="alert" type="submit">Delete</button>
                         </form>

@@ -11,11 +11,11 @@ def send_notify(id,location):
     splited_id=id.split("_")[0]
     person = Person.objects.get(id=splited_id)
     if person.status == 'W':
-        latest =   person.detectedcriminal_set.all().last()
+        latest = person.detectedcriminal_set.all().last()
         if (latest is None) or ((datetime.datetime.now().replace(tzinfo=utc)-latest.time).total_seconds()>300):
             DetectedCriminal.objects.create(person=person, location=location)
-            send_mail_to('Detected','Criminal detected!!!',['shemusopri@gmail.com','musonerwaprince@gmail.com'])
             send_sms(['0787882305'],"criminal detected by phone")
+            send_mail_to('Detected','Criminal detected!!!',['shemusopri@gmail.com','musonerwaprince@gmail.com'])
             
         
 def send_mail_to(subject, message, receivers):

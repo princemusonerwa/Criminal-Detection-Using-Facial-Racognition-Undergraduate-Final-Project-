@@ -195,8 +195,8 @@ def detect_criminal(request):
            
             for name,loc in predictions:
                 if name != "unknown":
-                    notify(name,"gishushu")
-                    
+                    notify.delay(name,"gishushu")
+
                 y1,x2,y2,x1 = loc
                 y1,x2,y2,x1 = y1*4,x2*4,y2*4,x1*4
                 cv2.rectangle(image, (x1,y1), (x2,y2), (255,0,0), 2)
