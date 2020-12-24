@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'crispy_forms',
     'django_extensions',
+    'accounts',
 ]
 
 
@@ -143,3 +144,5 @@ EMAIL_PORT=587
 EMAIL_USE_TLS= True
 EMAIL_HOST_USER = 'princeshema19974@gmail.com'
 EMAIL_HOST_PASSWORD = 'nhhrekbkpuffgmda'
+
+AUTH_USER_MODEL = 'accounts.User'

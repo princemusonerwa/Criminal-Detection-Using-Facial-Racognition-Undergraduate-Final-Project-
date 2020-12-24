@@ -7,6 +7,7 @@ from .detection import train, predictKNN
 from django.core.files.storage import FileSystemStorage
 import cv2
 from .task import detect as notify
+from .task import trainData as trainData
 
 # Create your views here.
 
@@ -58,6 +59,7 @@ def deleteImage(request, id):
     if request.method == 'POST':
         image.delete()
         messages.success(request, 'Image deleted Successfully.')
+        trainData.delay()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 def addImage(request, id):
@@ -66,7 +68,7 @@ def addImage(request, id):
         files = request.FILES.getlist('images')        
         for f in files:
             Gallery.objects.create(person= person,photos=f) 
-        
+        trainData.delay()    
         messages.success(request, 'Image added Successfully.')
         if(hasattr(person,"student")): 
             student_id = person.student.student_id 

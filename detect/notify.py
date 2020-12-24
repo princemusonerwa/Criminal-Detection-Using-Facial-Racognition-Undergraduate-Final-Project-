@@ -12,10 +12,15 @@ def send_notify(id,location):
     person = Person.objects.get(id=splited_id)
     if person.status == 'W':
         latest = person.detectedcriminal_set.all().last()
-        if (latest is None) or ((datetime.datetime.now().replace(tzinfo=utc)-latest.time).total_seconds()>300):
+        if (latest is None) or ((datetime.datetime.now().replace(tzinfo=utc)-latest.time).total_seconds()>60):
             DetectedCriminal.objects.create(person=person, location=location)
-            send_sms(['0787882305'],"criminal detected by phone")
-            send_mail_to('Detected','Criminal detected!!!',['shemusopri@gmail.com','musonerwaprince@gmail.com'])
+            message = ""
+            if(hasattr(person,"student")): 
+               message = f'Criminal(student) by names of {person.student.names} has been detected {location} in Auca premises.'             
+            if(hasattr(person,"employee")): 
+               message = f'Criminal(employee) by names of {person.employee.names} has been detected {location} in Auca premises.'
+            send_sms(['0787882305'], message)
+            send_mail_to('Detected', message ,['shemusopri@gmail.com','musonerwaprince@gmail.com'])
             
         
 def send_mail_to(subject, message, receivers):
