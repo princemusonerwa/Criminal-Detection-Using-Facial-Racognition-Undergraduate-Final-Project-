@@ -1,29 +1,36 @@
 {% extends 'base.html'%}
 {% block content %}
     <div class="container">
-        <h6>{{student.names}}</h6>
-        <h6>{{student.email}}</h6>
-        <h6>{{student.address}}</h6>
-        <h6>{{student.phone}}</h6>
-        <h6>{{student.gender}}</h6>
-        <h6>{{student.faculty}}</h6>
-        <h6>{{student.department}}</h6> 
+        <h6>Names: {{student.names}}</h6>
+        <h6>Email: {{student.email}}</h6>
+         
         <hr>
         <div>
-            <a href="{% url 'add_student_image' student.student_id %}" class="btn btn-secondary">Add New Image</a>
+            <a href="{% url 'add_image' student.person_ptr.id %}" class="btn btn-secondary">Add New Image</a>
         </div>
         <div class="row">
             {% for photo in gallery%}
                 <div class="col-md-3" style="margin: 10px;">
                     <div class="card" style="width: 18rem;">
-                        <img src="{{photo.photos.url}}" alt="Smiley face" width="200" height="200" style="object-fit: center;" class="card-img-top">
+                        <img src="{{photo.photos.url}}" alt="Smiley face" class="card-img-top" width="250" height="350" style="object-fit: cover;">
                         <div class="card-body">
-                        <a href="{% url 'delete_student_image' student.student_id photo.id %}">Delete</a></li>
+                        <form action="{% url 'delete_image' photo.id %}" method="post">
+                            {% csrf_token %}
+                            <button class="alert" type="submit">Delete</button>
+                        </form>
                         </div>
                     </div>
                 </div>
             {% endfor %} 
         </div>  
     </div>
+
+    <script>
+        $(function() {
+            $('.alert').click(function() {
+                return window.confirm("Are you sure?");
+            });
+        });
+    </script>
     
 {% endblock %}

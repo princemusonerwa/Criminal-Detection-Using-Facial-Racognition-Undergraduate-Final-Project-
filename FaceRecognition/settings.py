@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 MODEL_ROOT=os.path.join(BASE_DIR,'model')
@@ -30,6 +31,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CELERY_IMPORTS = ('detect.task',)
 
 # Application definition
 
@@ -43,6 +45,8 @@ INSTALLED_APPS = [
     'detect',
     'django_cleanup.apps.CleanupConfig',
     'crispy_forms',
+    'django_extensions',
+    'accounts',
 ]
 
 
@@ -133,3 +137,12 @@ STATIC_URL = '/static/'
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media') 
 MEDIA_URL = '/media/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST="smtp.gmail.com"
+EMAIL_PORT=587
+EMAIL_USE_TLS= True
+EMAIL_HOST_USER = 'princeshema19974@gmail.com'
+EMAIL_HOST_PASSWORD = 'nhhrekbkpuffgmda'
+
+AUTH_USER_MODEL = 'accounts.User'

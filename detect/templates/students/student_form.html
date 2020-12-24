@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% block title%} create student {% endblock%}
 {% block content %}
 
   <div class="container">
@@ -9,15 +10,18 @@
       <h3>Create Student</h3>
     {% endif %}
 
-    <form method="post" id="studentForm" data-departments-url="{% url 'ajax_load_departments' %}" novalidate enctype="multipart/form-data">
-      {% csrf_token %}
-      {{ form|crispy }}
-      <div class="form-group">
-        <label for="note-image">Images</label>
-        <input type="file" name="images" class="form-control-file" id="note-image" multiple>
+    <div>
+      <form method="post" id="studentForm" data-departments-url="{% url 'ajax_load_departments' %}" novalidate enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="form-group">
+          <label for="note-image">Images</label>
+          <input type="file" name="images" class="form-control-file" id="note-image" multiple>
+          <button type="submit" class="btn btn-success">Save Student</button>
       </div>
-      <button type="submit" class="btn btn-success">Save Student</button>
-    </form>
+      </form>
+    </div>
+    
   </div>
 
   <script>

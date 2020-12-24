@@ -7,6 +7,7 @@ import pickle
 from django.conf import settings
 import numpy as np
 from face_recognition.face_recognition_cli import image_files_in_folder
+from .models import Person
 
 distance_threshold=0.4
 model_path= os.path.join(settings.MODEL_ROOT, 'trained_knn_model.clf')
@@ -110,3 +111,5 @@ def predictKNN(X_img_path, knn_clf=None, model_path=model_path, distance_thresho
 
     # Predict classes and remove classifications that aren't within the threshold
     return [(pred, loc) if rec else ("unknown", loc) for pred, loc, rec in zip(knn_clf.predict(faces_encodings), X_face_locations, are_matches)]
+
+

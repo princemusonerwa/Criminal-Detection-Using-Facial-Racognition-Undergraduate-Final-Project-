@@ -4,7 +4,12 @@ from .models import Student, Employee, Gallery, Crime, Department
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
-        fields = "__all__"
+        fields = ('student_id', 'names', 'email','phone', 'gender', 'dob', 'address', 'status', 'faculty', 'department')
+
+        widgets = {
+            'student_id' : forms.TextInput(attrs={'class': 'form-control'})
+        }
+
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -23,7 +28,7 @@ class StudentForm(forms.ModelForm):
 class EmployeeForm(forms.ModelForm):
     class Meta:
         model = Employee
-        fields = '__all__'
+        fields = fields = ('staff_id', 'names', 'email','phone', 'gender', 'dob', 'address', 'status')
 
 class GalleryForm(forms.ModelForm):
     photos = forms.ImageField(label='Photos')    
