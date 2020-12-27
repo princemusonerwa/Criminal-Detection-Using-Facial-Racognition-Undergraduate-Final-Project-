@@ -20,8 +20,8 @@ urlpatterns = [
     path('crime/<int:id>', views.crimeDetails, name='crime_details'),
     path('crime/<int:id>/delete', views.deleteCrime, name='delete_crime'),
     path('crime/<int:id>/edit', views.updateCrime, name='edit_crime'),
+    path('detect/', views.detect, name='detect'),
     path('train/', views.train_images, name='trainData'),
-    path('detect/', views.detect_criminal, name='webcamdetection'),
-    path('image/', views.detect_image, name="imagedetection"),   
-
+    path('image/', views.detect_image, name="imagedetection"),  
+    path('camera/', views.detect_criminal, name='cameradetection'),
 ]

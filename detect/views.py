@@ -8,9 +8,11 @@ from django.core.files.storage import FileSystemStorage
 import cv2
 from .task import detect as notify
 from .task import trainData as trainData
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
+@login_required
 def addStudent(request):
     if request.method == 'POST':
         form = StudentForm(request.POST , request.FILES )
@@ -18,10 +20,11 @@ def addStudent(request):
         if form.is_valid():
             form.save()
             for f in files:
-                Gallery.objects.create(person=form.instance.person_ptr,photos=f)           
-                
+                Gallery.objects.create(person=form.instance.person_ptr,photos=f)  
+
+            messages.success(request, 'Student created Successfully.')   
             return redirect('students')
-            messages.success(request, 'Student created Successfully.')
+            
     else:
         form = StudentForm()
     return render(request, 'students/student_form.html', {'form':form})
@@ -30,11 +33,14 @@ def allStudent(request):
     students = Student.objects.all()
     return render(request, 'students/student_list.html', {'students':students})
 
-
+@login_required
 def train_images(request):
     train()
     messages.success(request, "Image trained successfully.")
-    return redirect('webcamdetection')
+    return redirect('detect')
+
+def detect(request):
+    return render(request, "detect.html")
 
 
 def studentDetails(request, id):
@@ -97,9 +103,9 @@ def addEmployee(request):
             form.save()
             for f in files:
                 Gallery.objects.create(person=form.instance.person_ptr,photos=f) 
-
-            return redirect('employees')
+                
             messages.success(request, 'Employee created Successfully.')
+            return redirect('employees')
     else:
         form = EmployeeForm()
     return render(request, 'employees/employee_form.html', {'form':form})
@@ -213,7 +219,6 @@ def detect_criminal(request):
         # When everything done, release the capture
         cap.release()
         cv2.destroyAllWindows()
-    return render(request, 'detect.html')
 
 def detect_image(request):
     # This is an example of running face recognition on a single image

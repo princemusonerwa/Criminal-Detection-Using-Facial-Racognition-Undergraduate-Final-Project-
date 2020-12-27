@@ -2,5 +2,17 @@
 {% block content %}
     <div class="container">
         <h4>This is a home page</h4>
+        <p>
+            <a href="{% url 'students'%}">Students</a>  
+        </p>  
+        <p>
+            <a href="{% url 'employees'%}">Employees</a>    
+        </p>  
+        {% if user.is_admin %}
+            <p><a href="{% url 'users'%}">Users</a></p>
+        {% endif %}
+        <p>
+            <a href="{% url 'detect'%}">Detect</a>    
+        </p>
     </div>
 {% endblock %}
