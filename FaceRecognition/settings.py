@@ -42,11 +42,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'detect',
+    'detect.apps.DetectConfig',
+    'accounts.apps.AccountsConfig',
     'django_cleanup.apps.CleanupConfig',
     'crispy_forms',
     'django_extensions',
-    'accounts',
 ]
 
 
@@ -146,3 +146,7 @@ EMAIL_HOST_USER = 'princeshema19974@gmail.com'
 EMAIL_HOST_PASSWORD = 'nhhrekbkpuffgmda'
 
 AUTH_USER_MODEL = 'accounts.User'
+
+LOGIN_REDIRECT_URL = '/'
+
+LOGIN_URL = 'login'

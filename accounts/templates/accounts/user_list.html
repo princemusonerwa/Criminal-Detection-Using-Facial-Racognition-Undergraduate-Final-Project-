@@ -1,0 +1,30 @@
+{% extends 'base.html'%}
+{% block content %}
+    <div class="container">
+        <div>
+            <a href="{% url 'register'%}" class="btn btn-primary">Add User</a>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Names</th>
+                    <th>Email</th>
+                    <th>Gender</th>
+                    <th>Date of Birth</th>
+                    <th>Address</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                <tr>
+                    <td>{{user.names}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.gender}}</td>
+                    <td>{{user.dob}}</td>
+                    <td>{{user.address}}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

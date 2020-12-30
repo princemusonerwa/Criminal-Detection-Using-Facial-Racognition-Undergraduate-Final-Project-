@@ -3,6 +3,7 @@ from detect.models import Person
 from django.contrib.auth.models import AbstractBaseUser
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.models import PermissionsMixin
+from PIL import Image
 
 # Create your models here.
 
@@ -67,3 +68,18 @@ class User(Person, AbstractBaseUser, PermissionsMixin):
     def has_module_perms(self, app_label):
         return True
 
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(default="default.jpg", upload_to="images/profile_pics")
+
+    def __str__(self):
+        return f'{self.user.names} Profile'
+
+    def save(self, *args, **kwargs):
+        super(Profile, self).save(*args, **kwargs)
+
+        img = Image.open(self.image.path)
+        if img.height > 300 and img.width > 300:
+            output_size = (300,300)
+            img.thumbnail(output_size)
+            img.save(self.image.path)
