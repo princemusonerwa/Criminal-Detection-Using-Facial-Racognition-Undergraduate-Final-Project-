@@ -1,25 +1,75 @@
 {% extends 'base.html'%}
+{% load static %}
 {% block content %}
-    <div class="container">
-        <h5>This is the page used to detect a student</h5>
+<main class="content">
+    <div class="container-fluid p-0">
+        {{name}}
+        <div class="row justify-content-center">
+            <div class="col-lg-4 col-md-6 mt-5">
+                <div class="card card-bordered">
+                    <img class="card-img-top img-fluid" src="{% static 'img/photos/trainDataImage.jpg'%}" alt="image">
+                    <div class="card-body">
+                        <h5 class="title">Train Images</h5>
+                        <p class="card-text">
+                            Train data will help us to create a model that will help in predicting and catching the criminal
+                        </p>
+                        <form action="{% url 'trainData'%}">
+                            {% csrf_token %}
+                            <input type="submit" value="Train" class="btn btn-primary">
+                        </form>
+                    </div>
+                </div>
+            </div>
 
-        <form action="{% url 'trainData'%}">
-            {% csrf_token %}
-            <input type="submit" value="Train" class="btn btn-primary">
-        </form>
-        <br>
+            <div class="col-lg-4 col-md-6 mt-5">
+                <div class="card card-bordered">
+                    <img class="card-img-top img-fluid" src="{% static  'img/photos/uploadimage.jpg' %}" alt="image">
+                    <div class="card-body">
+                        <h5 class="title">Upload Thief Picture</h5>
+                        <p class="card-text">Upload the Image of the criminal and system will quick and easily predict
+                            it's Identity</p>
 
-        <form action="{% url 'cameradetection'%}" method="post">
-            {% csrf_token %}
-            <input type="submit" value="Load Web Cam" class="btn btn-primary">
-        </form>
-        <br>
-        <form action="{% url 'imagedetection'%}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <input type="file" name="file">
-            <input type="submit" value="Predict" class="btn btn-danger">
-        </form>
+                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                            data-target="#exampleModalLong">Upload Picture</button>
+                        <div class="modal fade" id="exampleModalLong">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Upload Picture</h5>
 
-        <p>{{name}}</p>
+                                    </div>
+                                    <form action="{% url 'imagedetection'%}" method="post" enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <div class="modal-body">
+                                            <input type="file" name="file" required>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <a type="button" class="btn btn-secondary" data-dismiss="modal">Close</a>
+                                            <button type="submit" class="btn btn-primary">Process</button>
+                                        </div>>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 mt-5">
+                <div class="card card-bordered">
+                    <img class="card-img-top img-fluid" src="{% static  'img/photos/webcam.jpg' %}" alt="image">
+                    <div class="card-body">
+                        <h5 class="title">Detect Using Webcam.</h5>
+                        <p class="card-text">Webcam is used to model a CCTV in this case
+                        </p>
+                        <form action="{% url 'cameradetection'%}" method="post">
+                            {% csrf_token %}
+                            <input type="submit" value="Open camera" class="btn btn-primary">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</main>
 {% endblock %}

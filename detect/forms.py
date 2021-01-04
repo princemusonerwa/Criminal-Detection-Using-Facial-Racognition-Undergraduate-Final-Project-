@@ -2,12 +2,22 @@ from django import forms
 from .models import Student, Employee, Gallery, Crime, Department
 
 class StudentForm(forms.ModelForm):
+    CHOICES = (('NOT WANTED', 'NOT WANTED'),('WANTED', 'WANTED'),)
+    status = forms.ChoiceField(choices=CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
     class Meta:
         model = Student
         fields = ('student_id', 'names', 'email','phone', 'gender', 'dob', 'address', 'status', 'faculty', 'department')
 
         widgets = {
-            'student_id' : forms.TextInput(attrs={'class': 'form-control'})
+            'student_id' : forms.TextInput(attrs={'class': 'form-control'}),
+            'names' : forms.TextInput(attrs={'class': 'form-control'}),
+            'email' : forms.TextInput(attrs={'class': 'form-control'}),
+            'phone' : forms.TextInput(attrs={'class': 'form-control'}),
+            'gender' : forms.TextInput(attrs={'class': 'form-control'}),
+            'dob' : forms.TextInput(attrs={'class': 'form-control'}),
+            'faculty' : forms.Select(attrs={'class': 'form-control'}),
+            'department' : forms.Select(attrs={'class': 'form-control'}),
+            'address' : forms.TextInput(attrs={'class': 'form-control'}),         
         }
 
 
@@ -26,9 +36,21 @@ class StudentForm(forms.ModelForm):
 
         
 class EmployeeForm(forms.ModelForm):
+    CHOICES = (('NOT WANTED', 'NOT WANTED'),('WANTED', 'WANTED'),)
+    status = forms.ChoiceField(choices=CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
     class Meta:
         model = Employee
         fields = fields = ('staff_id', 'names', 'email','phone', 'gender', 'dob', 'address', 'status')
+
+        widgets = {
+            'staff_id' : forms.TextInput(attrs={'class': 'form-control'}),
+            'names' : forms.TextInput(attrs={'class': 'form-control'}),
+            'email' : forms.TextInput(attrs={'class': 'form-control'}),
+            'phone' : forms.TextInput(attrs={'class': 'form-control'}),
+            'gender' : forms.TextInput(attrs={'class': 'form-control'}),
+            'dob' : forms.TextInput(attrs={'class': 'form-control'}),
+            'address' : forms.TextInput(attrs={'class': 'form-control'}),         
+        }
 
 class GalleryForm(forms.ModelForm):
     photos = forms.ImageField(label='Photos')    

@@ -32,7 +32,7 @@ def send_sms(phones,message):
     data    =   {'recipients':','.join(phones),'message':message, 'sender':'+250787917010'}
     url     =   'https://www.intouchsms.co.rw/api/sendsms/.json'
     r       =   requests.post(url,data=data,auth=("shema19974","Prince@1997"))
-    print (r.json(), r.status_code)
+    print (r.json(), r.status_code)    
 
     
 

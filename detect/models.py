@@ -23,8 +23,8 @@ class Person(models.Model):
     dob = models.DateField(verbose_name="Date of Birth", null="True")
     address = models.CharField(max_length=255)
     STATUS_CHOICES = [
-      ('NT', 'NOT WANTED'),
-      ('W', 'WANTED')
+      ('NOT WANTED', 'NOT WANTED'),
+      ('WANTED', 'WANTED')
     ]
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="NOT WANTED")
 
