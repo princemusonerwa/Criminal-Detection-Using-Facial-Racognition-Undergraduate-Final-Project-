@@ -21,55 +21,44 @@
               {% csrf_token %}
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label class="form-label">Student Id</label>
-                  {{form.student_id}}
+                  {{form.student_id|as_crispy_field}}
                 </div>
                 <div class="form-group col-md-6">
-                  <label class="form-label">Names</label>
-                  {{form.names}}
+                  {{form.names|as_crispy_field}}
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label class="form-label">Email</label>
-                  {{form.email}}
+                  {{form.email|as_crispy_field}}
                 </div>
                 <div class="form-group col-md-6">
-                  <label class="form-label">Phone Number</label>
-                  {{form.phone}}
+                  {{form.phone|as_crispy_field}}
                 </div>
               </div>
               <div class="form-row">
-                <div class="form-group col-md-6">
-                  <label class="form-label">Gender</label>
+                <div class="form-check col-md-6">
+                  <label class="form-label" style="margin-right: 20px;">Gender</label>
                   {{form.gender}}
                 </div>
                 <div class="form-group col-md-6">
-                  <label class="form-label">Birth Date</label>
-                  {{form.dob}}
+                  {{form.dob|as_crispy_field}}
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label class="form-label">Faculty</label>
-                  {{form.faculty}}
+                  {{form.faculty|as_crispy_field}}
                 </div>
                 <div class="form-group col-md-6">
-                  <label class="form-label">Department</label>
-                  {{form.department}}
+                  {{form.department|as_crispy_field}}
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <label class="form-label">Address</label>
-                  {{form.address}}
+                  {{form.address|as_crispy_field}}
                 </div>
-                {% if form.instance.pk %}
                 <div class="form-group col-md-6">
-                  <label class="form-label">Status</label>
-                  {{form.status}}
-                </div>
-                {% endif %}
+                  {{form.status|as_crispy_field}}
+                </div>  
                 <div class="form-group">
                   <label for="note-image">Images</label>
                   <input type="file" name="images" class="form-control-file" id="note-image" multiple>

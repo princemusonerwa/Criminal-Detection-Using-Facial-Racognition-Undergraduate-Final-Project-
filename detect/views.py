@@ -15,7 +15,7 @@ from django.contrib.auth.decorators import login_required
 @login_required
 def addStudent(request):
     if request.method == 'POST':
-        form = StudentForm(request.POST , request.FILES )
+        form = StudentForm(request.POST , request.FILES)
         files = request.FILES.getlist('images')        
         if form.is_valid():
             form.save()

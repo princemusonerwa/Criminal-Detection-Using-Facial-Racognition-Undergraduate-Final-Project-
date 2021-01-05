@@ -3,25 +3,17 @@
 <main class="content">
     <div class="container-fluid p-0">
 
-        <h1 class="h3 mb-3">Responsive DataTables</h1>
+        <h1 class="h3 mb-3">Student List</h1>
 
         <div class="row">
             <div class="col-12">
                 <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">Responsive DataTables</h5>
-                        <h6 class="card-subtitle text-muted">Highly flexible tool that many advanced
-                            features to any HTML table. See official documentation <a
-                                href="https://datatables.net/extensions/responsive/" target="_blank"
-                                rel="noopener noreferrer nofollow">here</a>.</h6>
-                    </div>
                     <div class="card-body">
                         <table id="datatables-reponsive" class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Names</th>
                                     <th>Email</th>
-                                    <th>Phone</th>
                                     <th>Address</th>
                                     <th>Gender</th>
                                     <th>Status</th>
@@ -35,7 +27,6 @@
                                 <tr>
                                     <td>{{student.names}}</td>
                                     <td>{{student.email}}</td>
-                                    <td>{{student.phone}}</td>
                                     <td>{{student.address}}</td>
                                     <td>{{student.gender}}</td>
                                     <td>{{student.status}}</td>
@@ -44,7 +35,7 @@
                                     <td>
                                         <a href="{% url 'student_details' student.pk %}" class="btn btn-default btn-sm">Show</a>
                                         <a href="{% url 'edit_student' student.pk %}" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="{% url 'delete_student' student.pk %}" class="btn btn-danger btn-sm">Delete</a>
+                                        <a href="{% url 'delete_student' student.pk%}" class="btn btn-danger btn-sm">Delete</a>
                                     </td>
                                 </tr>
                                 {% endfor %}

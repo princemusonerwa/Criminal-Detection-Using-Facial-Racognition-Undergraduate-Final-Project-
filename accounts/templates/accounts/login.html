@@ -1,45 +1,76 @@
 {% extends 'base.html'%}
 {% load static%}
 {% block content %}
-<div class="animsition">
-    <div class="page-wrapper">
-        <div class="page-content--bge5">
-            <div class="container">
-                <div class="login-wrap">
-                    <div class="login-content">
-                        <div class="login-logo">
-                            <a href="#">
-                                <img src="{% static 'images/icon/logo.png'%}" alt="CoolAdmin">
-                            </a>
+<main class="content d-flex p-0">
+    <div class="container d-flex flex-column">
+        <div class="row h-100">
+            <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
+                <div class="d-table-cell align-middle">
+
+                    <div class="text-center mt-4">
+                        <h1 class="h2">Welcome back, Chris</h1>
+                        <p class="lead">
+                            Sign in to your account to continue
+                        </p>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            {% if form.errors %}
+                        {% for field in form %}
+                        {% for error in field.errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
                         </div>
-                        <div class="login-form">
-                            <form method="post">
-                                {% csrf_token %}
-                                <div class="form-group">
-                                    <label>Email Address</label>
-                                    <input class="au-input au-input--full" type="email" name="username" placeholder="Email">
+                        {% endfor %}
+                        {% endfor %}
+                        {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
+                        </div>
+                        <div class="card-body">
+                            <div class="m-sm-4">
+                                <div class="text-center">
+                                    <img src="{{ user.last_login.image.url }}" alt="No Image" class="img-fluid rounded-circle"
+                                        width="132" height="132" />
                                 </div>
-                                <div class="form-group">
-                                    <label>Password</label>
-                                    <input class="au-input au-input--full" type="password" name="password" placeholder="Password">
-                                </div>
-                                <div class="login-checkbox">
-                                    <label>
-                                        <input type="checkbox" name="remember">Remember Me
-                                    </label>
-                                    <label>
-                                        <a href="{% url 'password_reset'%}">Forgotten Password?</a>
-                                    </label>
-                                </div>
-                                <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">sign in</button>
-                            </form>
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input class="form-control form-control-lg" type="email" name="username"
+                                            placeholder="Enter your email" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Password</label>
+                                        <input class="form-control form-control-lg" type="password" name="password"
+                                            placeholder="Enter your password" />
+                                        <small>
+                                            <a href="{% url 'password_reset'%}">Forgot password?</a>
+                                        </small>
+                                    </div>
+                                    <div>
+                                        <div class="custom-control custom-checkbox align-items-center">
+                                            <input type="checkbox" class="custom-control-input" value="remember-me"
+                                                name="remember-me" checked>
+                                            <label class="custom-control-label text-small">Remember me next
+                                                time</label>
+                                        </div>
+                                    </div>
+                                    <div class="text-center mt-3">
+                                        <button type="submit" class="btn btn-lg btn-primary">Sign In</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
-
     </div>
-</div>
-<!-- end document-->
+</main>
 {% endblock %}

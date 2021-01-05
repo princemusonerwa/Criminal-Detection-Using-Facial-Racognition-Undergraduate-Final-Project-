@@ -19,7 +19,11 @@ class Person(models.Model):
     names = models.CharField(max_length=255)
     email = models.EmailField(verbose_name='email address', unique=True)
     phone = models.CharField(verbose_name="Phone Number", max_length=15)
-    gender = models.CharField(max_length=255)
+    GENDER_CHOICES = [
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+    ]
+    gender = models.CharField(max_length=255, choices=GENDER_CHOICES, default="Male")
     dob = models.DateField(verbose_name="Date of Birth", null="True")
     address = models.CharField(max_length=255)
     STATUS_CHOICES = [
@@ -66,8 +70,8 @@ class Crime(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     STATUS_CHOICES = [
-        ('UI', 'Under Investigation'),
-        ('SO', 'Solved'),
+        ('Under Investigation', 'Under Investigation'),
+        ('Solved', 'Solved'),
     ]
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="Under Investigation")
 
