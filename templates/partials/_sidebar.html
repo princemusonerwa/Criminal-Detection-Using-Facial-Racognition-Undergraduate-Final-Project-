@@ -1,8 +1,8 @@
 <nav id="sidebar" class="sidebar">
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="{% url 'index'%}">
-            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" enable-background="new 0 0 20 20"
+            <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+                y="0px" width="20px" height="20px" viewBox="0 0 20 20" enable-background="new 0 0 20 20"
                 xml:space="preserve">
                 <path d="M19.4,4.1l-9-4C10.1,0,9.9,0,9.6,0.1l-9,4C0.2,4.2,0,4.6,0,5s0.2,0.8,0.6,0.9l9,4C9.7,10,9.9,10,10,10s0.3,0,0.4-0.1l9-4
       C19.8,5.8,20,5.4,20,5S19.8,4.2,19.4,4.1z" />
@@ -32,8 +32,7 @@
             </li>
             <li class="sidebar-item active">
                 <a href="#employees" data-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle" data-feather="layout"></i> <span
-                        class="align-middle">employee</span>
+                    <i class="align-middle" data-feather="layout"></i> <span class="align-middle">employee</span>
                 </a>
                 <ul id="employees" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
                     <li class="sidebar-item"><a class="sidebar-link" href="{% url 'add_employee'%}">Add
@@ -42,6 +41,7 @@
                             Employee</a></li>
                 </ul>
             </li>
+            {% if user.is_admin %}
             <li class="sidebar-item active">
                 <a href="#users" data-toggle="collapse" class="sidebar-link collapsed">
                     <i class="align-middle" data-feather="layout"></i> <span class="align-middle">Users</span>
@@ -55,10 +55,11 @@
             </li>
             <li class="sidebar-item">
                 <a class="sidebar-link" href="{% url 'detect'%}">
-                    <i class="align-middle" data-feather="calendar"></i> <span
-                        class="align-middle">Detect Criminal</span>
+                    <i class="align-middle" data-feather="calendar"></i> <span class="align-middle">Detect
+                        Criminal</span>
                 </a>
             </li>
+            {% endif %}
         </ul>
     </div>
 </nav>

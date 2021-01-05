@@ -5,7 +5,7 @@
 <main class="content">
     <div class="container-fluid p-0">
         <h1 class="h3 mb-3">Profile</h1>
-        <img src="{{ user.profile.image.url }}" alt="" class="rounded-circle" style="object-fit: cover;" width="128" height="128" >
+        <img src="{{ user.profile.image.url }}" alt="" class="rounded-circle" width="128" height="128" style="object-fit: cover;">
         <div class="media-body">
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}

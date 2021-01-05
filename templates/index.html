@@ -1,4 +1,124 @@
 {% extends 'base.html'%}
+{% load mathfilters %}
 {% block content %}
+<main class="content">
+    <div class="container-fluid p-0">
 
+        <div class="row mb-2 mb-xl-3">
+            <div class="col-auto d-none d-sm-block">
+                <h3>Dashboard</h3>
+            </div>
+        </div>
+        <div class="row">
+
+            <div class="col-12 col-sm-6 col-xxl d-flex">
+                <div class="card flex-fill">
+                    <div class="card-body py-4">
+                        <div class="media">
+                            <div class="media-body">
+                                <h3 class="mb-2">{{numberOfStudents}}</h3>
+                                <p class="mb-2">Total Student</p>
+                                <div class="mb-0">
+                                    <span class="badge badge-soft-success mr-2"> <i
+                                            class="mdi mdi-arrow-bottom-right"></i>
+                                        {{numberOfStudents|div:numberOfPeople|mul:100}}% </span>
+                                    <span class="text-muted">Of registered people</span>
+                                </div>
+                            </div>
+                            <div class="d-inline-block ml-3">
+                                <div class="stat">
+                                    <i class="align-middle text-success" data-feather="dollar-sign"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-6 col-xxl d-flex">
+                <div class="card flex-fill">
+                    <div class="card-body py-4">
+                        <div class="media">
+                            <div class="media-body">
+                                <h3 class="mb-2">{{numberOfEmployees}}</h3>
+                                <p class="mb-2">Total Employee</p>
+                                <div class="mb-0">
+                                    <span class="badge badge-soft-success mr-2"> <i
+                                            class="mdi mdi-arrow-bottom-right"></i>
+                                        {{numberOfEmployees|div:numberOfPeople|mul:100}}% </span>
+                                    <span class="text-muted">Of registered people</span>
+                                </div>
+                            </div>
+                            <div class="d-inline-block ml-3">
+                                <div class="stat">
+                                    <i class="align-middle text-success" data-feather="dollar-sign"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-6 col-xxl d-flex">
+                <div class="card flex-fill">
+                    <div class="card-body py-4">
+                        <div class="media">
+                            <div class="media-body">
+                                <h3 class="mb-2">{{numberOfCriminals}}</h3>
+                                <p class="mb-2">Pending Crime</p>
+                                <div class="mb-0">
+                                    <span class="badge badge-soft-danger mr-2"> <i
+                                            class="mdi mdi-arrow-bottom-right"></i>{{numberOfCriminals|div:numberOfPeople|mul:100}}%</span>
+                                    <span class="text-muted">Of registered people</span>
+                                </div>
+                            </div>
+                            <div class="d-inline-block ml-3">
+                                <div class="stat">
+                                    <i class="align-middle text-danger" data-feather="shopping-bag"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table id="datatables-reponsive" class="table table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Names</th>
+                                    <th>Email</th>
+                                    <th>Address</th>
+                                    <th>Gender</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for person in people %}
+                                <tr>
+                                    <td>{{person.names}}</td>
+                                    <td>{{person.email}}</td>
+                                    <td>{{person.address}}</td>
+                                    <td>{{person.gender}}</td>
+                                    <td>
+                                        {% if criminal.status == 'WANTED'%}
+                                        <span class="badge badge-danger">{{criminal.status}}</span>
+                                        {% else %}
+                                        <span class="badge badge-secodary">{{criminal.status}}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{criminal.faculty}}</td>
+                                    <td>{{criminal.department}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
 {% endblock %}

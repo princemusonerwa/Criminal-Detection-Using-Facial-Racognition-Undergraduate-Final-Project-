@@ -5,6 +5,7 @@ from .models import User
 from django.contrib import messages
 
 # Create your views here.
+
 def register(request):
     if request.method == 'POST':
         form = UserForm(request.POST)
