@@ -4,7 +4,9 @@
     <div class="container-fluid p-0">
 
         <h1 class="h3 mb-3">Employee List</h1>
-
+        <a href="{% url 'export_employee_csv'%}" class='btn btn-primary'>Export to csv</a>
+        <a href="{% url 'export_employee_excel'%}" class='btn btn-primary'>Export to excel</a>
+        <a href="{% url 'export_employee_pdf'%}" target="_blank" class='btn btn-primary'>Export to pdf</a>
         <div class="row">
             <div class="col-12">
                 <div class="card">

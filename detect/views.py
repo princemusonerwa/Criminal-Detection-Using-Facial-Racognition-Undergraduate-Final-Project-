@@ -299,4 +299,54 @@ def exportStudentListexcel(request):
 
     return response
 
+def exportEmployeeListCsv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition']= 'attachement; filename=TeacherList'+ str(datetime.now())+'.csv'
+    writer = csv.writer(response)
+    writer.writerow(['staff_id', 'names', 'Dob', 'status', 'Address', 'Phone'])
+    employees = Employee.objects.all()
+    for employee in employees:
+        writer.writerow([employee.staff_id, employee.names, employee.dob, employee.status, employee.address, employee.phone])
+    
+    return response
 
+def exportEmployeeListPdf(request):
+    path = "employees/pdf_page.html"
+    employees = Employee.objects.all()
+    context = {"employees" : employees}
+
+    html = render_to_string('employees/pdf_page.html',context)
+    io_bytes = BytesIO()
+    
+    pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), io_bytes)
+    
+    if not pdf.err:
+        # we can just return the HttpResponse
+        response = HttpResponse(io_bytes.getvalue(), content_type='application/pdf')
+        response['Content-Disposition']= 'inline; filename=EmployeeList'+ str(datetime.now())+'.pdf'
+        return response
+    else:
+        return HttpResponse("Error while rendering PDF", status=400)
+
+def exportEmployeeListExcel(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition']= 'attachement; filename=EmployeeList'+ str(datetime.now())+'.xls'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Teachers')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['staff_id', 'names', 'Dob', 'status']
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+    rows = Employee.objects.all().values_list('staff_id', 'names', 'dob', 'status')
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, str(row[col_num]), font_style)
+        
+    wb.save(response)
+
+    return response
