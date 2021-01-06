@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Student List</title>
+    <style>
+        th,
+        td {
+            text-align: left;
+        }
+
+        td {
+            text-align: justify;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 style="text-align: center;">Student List</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Student_Id</th>
+                <th>Names</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Date of Birth</th>
+                <th>Gender</th>
+                <th>Status</th>
+                <th>Faculty</th>
+                <th>Department</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for student in students %}
+            <tr>
+                <td>{{student.student_id}}</td>
+                <td>{{student.names}}</td>
+                <td>{{student.phone}}</td>
+                <td>{{student.address}}</td>
+                <td>{{student.dob}}</td>
+                <td>{{student.gender}}</td>
+                <td>{{student.status}}</td>
+                <td>{{student.faculty}}</td>
+                <td>{{student.department}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+</html>
+{% endblock %}

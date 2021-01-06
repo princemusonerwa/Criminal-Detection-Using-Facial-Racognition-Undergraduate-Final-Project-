@@ -9,6 +9,12 @@ import cv2
 from .task import detect as notify
 from .task import trainData as trainData
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
+import csv
+from xhtml2pdf import pisa
+from django.template.loader import render_to_string
+from io import BytesIO
+import xlwt
 
 # Create your views here.
 
@@ -240,4 +246,57 @@ def detect_image(request):
         for pred_name,loc in predictions:
             name = pred_name
     return render(request, 'detect.html', {'name':name})
+
+def export_csv(request):
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition']= 'attachement; filename=StudentList'+ str(datetime.now())+'.csv'
+    writer = csv.writer(response)
+    writer.writerow(['student_id', 'names', 'Dob', 'status'])
+    students = Student.objects.all()
+    for student in students:
+        writer.writerow([student.student_id, student.names, student.dob,student.status])
+    
+    return response
+
+def export_pdf(request):
+    path = "students/pdf_page.html"
+    students = Student.objects.all()
+    context = {"students" : students}
+
+    html = render_to_string('students/pdf_page.html',context)
+    io_bytes = BytesIO()
+    
+    pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), io_bytes)
+    
+    if not pdf.err:
+        # we can just return the HttpResponse
+        response = HttpResponse(io_bytes.getvalue(), content_type='application/pdf')
+        response['Content-Disposition']= 'inline; filename=StudentList'+ str(datetime.now())+'.pdf'
+        return response
+    else:
+        return HttpResponse("Error while rendering PDF", status=400)
+
+def export_excel(request):
+    response = HttpResponse(content_type='application/ms-excel')
+    response['Content-Disposition']= 'attachement; filename=StudentList'+ str(datetime.now())+'.xls'
+    wb = xlwt.Workbook(encoding='utf-8')
+    ws = wb.add_sheet('Students')
+    row_num = 0
+    font_style = xlwt.XFStyle()
+    font_style.font.bold = True
+    columns = ['student_id', 'names', 'Dob', 'status']
+    for col_num in range(len(columns)):
+        ws.write(row_num, col_num, columns[col_num], font_style)
+
+    font_style = xlwt.XFStyle()
+    rows = Student.objects.all().values_list('student_id', 'names', 'dob', 'status')
+    for row in rows:
+        row_num += 1
+        for col_num in range(len(row)):
+            ws.write(row_num, col_num, str(row[col_num]), font_style)
+        
+    wb.save(response)
+
+    return response
+
 
