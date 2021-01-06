@@ -247,7 +247,7 @@ def detect_image(request):
             name = pred_name
     return render(request, 'detect.html', {'name':name})
 
-def export_csv(request):
+def exportStudentListCsv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition']= 'attachement; filename=StudentList'+ str(datetime.now())+'.csv'
     writer = csv.writer(response)
@@ -258,7 +258,7 @@ def export_csv(request):
     
     return response
 
-def export_pdf(request):
+def exportStudentListPdf(request):
     path = "students/pdf_page.html"
     students = Student.objects.all()
     context = {"students" : students}
@@ -276,7 +276,7 @@ def export_pdf(request):
     else:
         return HttpResponse("Error while rendering PDF", status=400)
 
-def export_excel(request):
+def exportStudentListexcel(request):
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition']= 'attachement; filename=StudentList'+ str(datetime.now())+'.xls'
     wb = xlwt.Workbook(encoding='utf-8')

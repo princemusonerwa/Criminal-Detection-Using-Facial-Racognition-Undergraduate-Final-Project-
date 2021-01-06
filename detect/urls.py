@@ -24,7 +24,7 @@ urlpatterns = [
     path('train/', views.train_images, name='trainData'),
     path('image/', views.detect_image, name="imagedetection"),  
     path('camera/', views.detect_criminal, name='cameradetection'),
-    path('export-csv', views.export_csv, name='export_csv'),
-    path('export-excel', views.export_excel, name='export_excel'),
-    path('export-pdf', views.export_pdf, name='export_pdf'),
+    path('export-student-csv', views.exportStudentListCsv, name='export_student_csv'),
+    path('export-student-excel', views.exportStudentListexcel, name='export_student_excel'),
+    path('export-student-pdf', views.exportStudentListPdf, name='export_student_pdf'),
 ]
