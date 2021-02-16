@@ -15,6 +15,7 @@ from xhtml2pdf import pisa
 from django.template.loader import render_to_string
 from io import BytesIO
 import xlwt
+import threading
 
 # Create your views here.
 
@@ -199,41 +200,53 @@ def loadDepartments(request):
     departments = Department.objects.filter(faculty_id=faculty_id).order_by('name')
     return render(request, 'students/department_dropdown_list_options.html', {'departments': departments})
 
+class camThread(threading.Thread):
+    def __init__(self, previewName, camID):
+        threading.Thread.__init__(self)
+        self.previewName = previewName
+        self.camID = camID
+    def run(self):
+        print("Starting " + self.previewName)
+        camPreview(self.previewName, self.camID)
+
+def camPreview(previewName, camID):
+    cv2.namedWindow(previewName)
+    cam = cv2.VideoCapture(camID)
+    if cam.isOpened():
+        ret, frame = cam.read()
+    else:
+        ret = False
+
+    while ret:
+        ret, frame = cam.read()
+            # to speed up the process, we will resize the image captured 
+        image_small = cv2.resize(frame, (0,0), None, 0.25, 0.25)
+        # convert the frame image to RGB
+        
+        # create uncodings for our faces in the image 
+        predictions=predictKNN(image_small)
+        
+        for name,loc in predictions:
+            if name != "unknown":
+                notify.delay(name,"gishushu")
+
+            y1,x2,y2,x1 = loc
+            y1,x2,y2,x1 = y1*4,x2*4,y2*4,x1*4
+            cv2.rectangle(frame, (x1,y1), (x2,y2), (255,0,0), 2)
+            cv2.rectangle(frame, (x1,y2-20), (x2,y2), (255,0,0), cv2.FILLED)
+            cv2.putText(frame, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1,(255,255,0), 2)
+        cv2.imshow(previewName, frame)
+            
+        key = cv2.waitKey(20)
+        if key == 27:  # exit on ESC
+            break
+    cv2.destroyWindow(previewName)
 
 def detect_criminal(request):
     if  request.method == 'POST':
-        cap = cv2.VideoCapture(0)
-        fourcc = cv2.VideoWriter_fourcc(*'XVID')
-        videoWriter = cv2.VideoWriter('C:/Users/Prince/Desktop/prince.avi', fourcc, 10.0, (640, 480))
-        while(True): 
-            # Capture frame-by-frame
-            ret, image = cap.read()
-            # to speed up the process, we will resize the image captured 
-            image_small = cv2.resize(image, (0,0), None, 0.25, 0.25)
-            # convert the frame image to RGB
-           
-            # create uncodings for our faces in the image 
-            predictions=predictKNN(image_small)
-           
-            for name,loc in predictions:
-                if name != "unknown":
-                    notify.delay(name,"gishushu")
-
-                y1,x2,y2,x1 = loc
-                y1,x2,y2,x1 = y1*4,x2*4,y2*4,x1*4
-                cv2.rectangle(image, (x1,y1), (x2,y2), (255,0,0), 2)
-                cv2.rectangle(image, (x1,y2-20), (x2,y2), (255,0,0), cv2.FILLED)
-                cv2.putText(image, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1,(255,255,0), 2)
-
-            # Display the resulting frame
-            cv2.imshow('frame',image)
-            videoWriter.write(image)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-
-        # When everything done, release the capture
-        cap.release()
-        cv2.destroyAllWindows()
+        thread1 = camThread("Camera 1", 0)
+        thread1.start()
+        return redirect("/detect")
 
 def detect_image(request):
     # This is an example of running face recognition on a single image
@@ -306,7 +319,7 @@ def exportStudentListexcel(request):
         
     wb.save(response)
 
-    return response
+    return redirect("/index")
 
   
 def exportEmployeeListCsv(request):
