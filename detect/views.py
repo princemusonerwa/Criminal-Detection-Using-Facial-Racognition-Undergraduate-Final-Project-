@@ -48,7 +48,7 @@ def train_images(request):
 def detect(request):
     return render(request, "detect.html")
 
-
+@login_required
 def studentDetails(request, id):
     student = get_object_or_404(Student, student_id = id)
     gallery = student.gallery_set.all()
@@ -58,6 +58,7 @@ def studentDetails(request, id):
     }
     return render(request, 'students/student_detail.html', context)
 
+@login_required
 def deleteStudent(request, id):
     student = Student.objects.get(student_id = id)
     if request.method == 'POST':
@@ -66,21 +67,21 @@ def deleteStudent(request, id):
         return redirect('students')
     return render(request, 'students/student_confirm_delete.html', {'student':student})
 
+@login_required
 def deleteImage(request, id):
     image = Gallery.objects.get(id = id)
     if request.method == 'POST':
         image.delete()
         messages.success(request, 'Image deleted Successfully.')
-        trainData.delay()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
+@login_required
 def addImage(request, id):
     if request.method == 'POST':
         person = Person.objects.get(id = id)
         files = request.FILES.getlist('images')        
         for f in files:
-            Gallery.objects.create(person= person,photos=f) 
-        trainData.delay()    
+            Gallery.objects.create(person= person,photos=f)   
         messages.success(request, 'Image added Successfully.')
         if(hasattr(person,"student")): 
             student_id = person.student.student_id 
@@ -91,6 +92,7 @@ def addImage(request, id):
     else:
         return render(request, 'gallery/image_form.html')
 
+@login_required
 def updateStudent(request, id):
     obj = get_object_or_404(Student, student_id = id) 
     # pass the object as instance in form 
@@ -101,6 +103,7 @@ def updateStudent(request, id):
         return redirect('/student/'+str(id))
     return render(request, 'students/student_form.html', {'form':form})
 
+@login_required
 def addEmployee(request):
     if request.method == 'POST':
         form = EmployeeForm(request.POST)
@@ -116,11 +119,12 @@ def addEmployee(request):
         form = EmployeeForm()
     return render(request, 'employees/employee_form.html', {'form':form})
 
-
+@login_required
 def allEmployee(request):
     employees = Employee.objects.all()
     return render(request, 'employees/employee_list.html', {'employees':employees})
 
+@login_required
 def employeeDetails(request, id):
     employee = get_object_or_404(Employee, staff_id = id)
     gallery = employee.gallery_set.all()
@@ -130,6 +134,7 @@ def employeeDetails(request, id):
     }
     return render(request, 'employees/employee_detail.html', context)
 
+@login_required
 def deleteEmployee(request, id):
     employee = Employee.objects.get(staff_id = id)
     if request.method == 'POST':
@@ -138,6 +143,7 @@ def deleteEmployee(request, id):
         return redirect('employees')
     return render(request, 'employees/employee_confirm_delete.html', {'employee':employee})
 
+@login_required
 def updateEmployee(request, id):
     obj = get_object_or_404(Employee, staff_id = id) 
     # pass the object as instance in form 
@@ -197,6 +203,8 @@ def loadDepartments(request):
 def detect_criminal(request):
     if  request.method == 'POST':
         cap = cv2.VideoCapture(0)
+        fourcc = cv2.VideoWriter_fourcc(*'XVID')
+        videoWriter = cv2.VideoWriter('C:/Users/Prince/Desktop/prince.avi', fourcc, 10.0, (640, 480))
         while(True): 
             # Capture frame-by-frame
             ret, image = cap.read()
@@ -219,6 +227,7 @@ def detect_criminal(request):
 
             # Display the resulting frame
             cv2.imshow('frame',image)
+            videoWriter.write(image)
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
 
@@ -284,12 +293,12 @@ def exportStudentListexcel(request):
     row_num = 0
     font_style = xlwt.XFStyle()
     font_style.font.bold = True
-    columns = ['student_id', 'names', 'Dob', 'status']
+    columns = ['student_id', 'names', 'email', 'phone', 'gender', 'dob', 'address', 'status', 'faculty', 'department']
     for col_num in range(len(columns)):
         ws.write(row_num, col_num, columns[col_num], font_style)
 
     font_style = xlwt.XFStyle()
-    rows = Student.objects.all().values_list('student_id', 'names', 'dob', 'status')
+    rows = Student.objects.all().values_list('student_id', 'names', 'email', 'phone', 'gender', 'dob', 'address', 'status', 'faculty', 'department')
     for row in rows:
         row_num += 1
         for col_num in range(len(row)):
@@ -299,6 +308,7 @@ def exportStudentListexcel(request):
 
     return response
 
+  
 def exportEmployeeListCsv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition']= 'attachement; filename=TeacherList'+ str(datetime.now())+'.csv'

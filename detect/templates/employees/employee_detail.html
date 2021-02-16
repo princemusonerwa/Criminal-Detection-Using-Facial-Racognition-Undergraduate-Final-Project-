@@ -14,7 +14,7 @@
                         <div class="card-body">
                             <form action="{% url 'delete_image' photo.id %}" method="post">
                                 {% csrf_token %}
-                                <button class="alert" type="submit">Delete</button>
+                                <button class="alert" type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>
                         </div>
                 </div>
@@ -24,5 +24,12 @@
     </div>
 
 </main>
+<script>
+    $(function() {
+        $('.alert').click(function() {
+            return window.confirm("Are you sure?");
+        });
+    });
+</script>
 
 {% endblock %}

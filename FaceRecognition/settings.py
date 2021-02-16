@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'crispy_forms',
     'django_extensions',
+    'django_static_fontawesome',
     'mathfilters',
 ]
 
@@ -90,8 +91,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'final_project',
         'USER': 'postgres',
-        'PORT': '5433',
-        'PASSWORD': '19974',
+        'PORT': '5432',
+        'PASSWORD': 'Prince@1997',
         'HOST': 'localhost',
     }
 }
@@ -151,6 +152,6 @@ EMAIL_HOST_PASSWORD = 'nhhrekbkpuffgmda'
 
 AUTH_USER_MODEL = 'accounts.User'
 
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = 'index'
 
 LOGIN_URL = 'login'

@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <!DOCTYPE html>
 <html lang="en">
@@ -7,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Employee List</title>
+    <title>User List</title>
     <style>
         th,
         td {
@@ -17,35 +18,39 @@
         td {
             text-align: justify;
         }
+
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }
     </style>
 </head>
 
 <body>
-    <h1 style="text-align: center;">Employee List</h1>
+    <img src="static/img/AucaLogo.jpg" alt="No Image" width="100px" height="100px" style="object-fit: cover;"
+        class="center">
+    <h1 style="text-align: center;">User List</h1>
 
-    <table class="table">
+    <table>
         <thead>
             <tr>
-                <th>Student_Id</th>
                 <th>Names</th>
+                <th>Email</th>
                 <th>Phone</th>
                 <th>Address</th>
-                <th>Date of Birth</th>
                 <th>Gender</th>
-                <th>Status</th>
             </tr>
         </thead>
-
         <tbody>
-            {% for employee in employees %}
+            {% for user in users %}
             <tr>
-                <td>{{employee.staff_id}}</td>
-                <td>{{employee.names}}</td>
-                <td>{{employee.phone}}</td>
-                <td>{{employee.address}}</td>
-                <td>{{employee.dob}}</td>
-                <td>{{employee.gender}}</td>
-                <td>{{employee.status}}</td>
+                <td>{{user.names}}</td>
+                <td>{{user.email}}</td>
+                <td>{{user.phone}}</td>
+                <td>{{user.address}}</td>
+                <td>{{user.gender}}</td>
             </tr>
             {% endfor %}
         </tbody>

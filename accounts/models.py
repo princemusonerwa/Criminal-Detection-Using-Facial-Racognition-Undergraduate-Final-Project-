@@ -8,7 +8,7 @@ from PIL import Image
 # Create your models here.
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, names, phone, gender, dob, password = None ):
+    def create_user(self, email, names, phone, gender, dob, address, password = None ):
         if not email:
             raise ValueError("Email is required!")
         if not names:
@@ -17,25 +17,29 @@ class UserManager(BaseUserManager):
             raise ValueError("Phone number is required!")
         if not gender:
             raise ValueError("Gender is required!")
+        if not address:
+            raise ValueError("Address is required!")
         user = self.model(
             email = self.normalize_email(email),
             names = names,
             phone = phone,
             gender = gender,
-            dob=dob,
+            dob = dob,
+            address = address,
             password  = password
         )
         user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self, email, names, phone, gender, dob, password = None):
+    def create_superuser(self, email, names, phone, gender, dob, address, password = None):
         user = self.create_user(
             email = email,
             names=names,
             phone=phone,
             gender=gender, 
             dob=dob,
+            address=address,
             password=password
         )
         user.is_admin = True
@@ -57,7 +61,7 @@ class User(Person, AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'email'
 
-    REQUIRED_FIELDS = ["names", 'phone','gender', 'dob']
+    REQUIRED_FIELDS = ["names", 'phone','gender', 'dob', 'address']
 
     def __str__(self):
         return self.names

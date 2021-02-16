@@ -8,6 +8,11 @@
                     <div class="card-header">
                         <h5 class="card-title">All Users</h5>
                     </div>
+                    <div>
+                        <a href="{% url 'export_user_csv'%}" class='btn btn-primary'>Export to csv</a>
+                        <a href="{% url 'export_user_excel'%}" class='btn btn-primary'>Export to excel</a>
+                        <a href="{% url 'export_user_pdf'%}" target="_blank" class='btn btn-primary'>Export to pdf</a>
+                    </div>
                     <div class="card-body">
                         <table class="table table-striped" style="width:100%">
                             <thead>
@@ -30,8 +35,8 @@
                                     <td>{{user.address}}</td>
                                     <td>{{user.gender}}</td>
                                     <td>
-                                        <a href="" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="" class="btn btn-danger btn-sm">Delete</a>
+                                        <a href="{% url 'edit_user' user.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                                        <a href="{% url 'delete_user' user.pk %}" class="btn btn-danger btn-sm">Delete</a>
                                     </td>
                                 </tr>
                                 {% endfor %}

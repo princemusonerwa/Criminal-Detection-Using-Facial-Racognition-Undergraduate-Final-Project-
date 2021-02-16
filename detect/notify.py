@@ -1,4 +1,5 @@
 from .models import Person, DetectedCriminal 
+from accounts.models import User
 from django.core.mail import send_mail
 from FaceRecognition.settings import EMAIL_HOST_USER
 import datetime
@@ -9,17 +10,22 @@ utc=pytz.UTC
 
 def send_notify(id,location):
     splited_id=id.split("_")[0]
+    phoneNumbers = []
+    userEmails = []
     person = Person.objects.get(id=splited_id)
-    if person.status == 'W':
+    if person.status == 'WANTED':
         latest = person.detectedcriminal_set.all().last()
         if (latest is None) or ((datetime.datetime.now().replace(tzinfo=utc)-latest.time).total_seconds()>60):
             DetectedCriminal.objects.create(person=person, location=location)
             message = ""
+            userPhones = User.objects.all().values_list('phone', flat=True)
+            for phone in userPhones:
+                phoneNumbers.append(phone)
             if(hasattr(person,"student")): 
                message = f'Criminal(student) by names of {person.student.names} has been detected {location} in Auca premises.'             
             if(hasattr(person,"employee")): 
                message = f'Criminal(employee) by names of {person.employee.names} has been detected {location} in Auca premises.'
-            send_sms(['0787882305'], message)
+            send_sms(phoneNumbers, message)
             send_mail_to('Detected', message ,['shemusopri@gmail.com','musonerwaprince@gmail.com'])
             
         

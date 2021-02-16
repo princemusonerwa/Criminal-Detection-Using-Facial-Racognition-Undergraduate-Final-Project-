@@ -2,7 +2,6 @@
 {% block content %}
 <main class="content">
     <div class="container-fluid p-0">
-
         <a href="{% url 'add_image' student.person_ptr.id %}" class="btn btn-primary float-right mt-n1"><i class="fas fa-plus"></i> New Image</a>
         <h1 class="h3 mb-3">Gallery</h1>
 
@@ -14,7 +13,7 @@
                         <div class="card-body">
                             <form action="{% url 'delete_image' photo.id %}" method="post">
                                 {% csrf_token %}
-                                <button class="alert" type="submit">Delete</button>
+                                <button class="alert btn btn-danger" type="submit">Delete</button>
                             </form>
                         </div>
                 </div>
@@ -24,5 +23,12 @@
     </div>
 
 </main>
+<script>
+    $(function() {
+        $('.alert').click(function() {
+            return window.confirm("Are you sure?");
+        });
+    });
+</script>
 
 {% endblock %}

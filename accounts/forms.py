@@ -2,6 +2,7 @@ from django import forms
 from .models import User, Profile
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
+from django.contrib.auth.forms import AuthenticationForm
 
 class UserForm(UserCreationForm):
     password1 = forms.CharField(label='Password', widget=forms.PasswordInput(attrs={'class': 'form-control'}))
@@ -10,7 +11,7 @@ class UserForm(UserCreationForm):
     email = forms.EmailField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     phone = forms.CharField(label="Phone number",widget=forms.TextInput(attrs={'class': 'form-control'}))
     GENDER_CHOICE= ( ('Male', 'Male'),('Female', 'Female'))
-    gender = forms.ChoiceField(choices=GENDER_CHOICE, widget=forms.RadioSelect(attrs={'class': 'form-check-input  d-inline'}))
+    gender = forms.ChoiceField(choices=GENDER_CHOICE)
     dob = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
     address = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
 
@@ -34,4 +35,10 @@ class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['image']
+
+class MyAuthenticationForm(AuthenticationForm):
+    # add your form widget here
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control form-control-lg'})) 
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control form-control-lg'}))
+
     

@@ -9,83 +9,102 @@
                 <h3>Dashboard</h3>
             </div>
         </div>
+        <div class="col-md-12">
+              <div class="row">
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Total Regestered Person</h5>
+                            <h1 class="display-5 mt-1 mb-3">{{numberOfPeople}}</h1>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Total Employee</h5>
+                            <h1 class="display-5 mt-1 mb-3">{{numberOfEmployees}}</h1>
+                            <div class="mb-1">
+                                <span class="text-success"> <i
+                                        class="mdi mdi-arrow-bottom-right"></i>{{numberOfEmployees|div:numberOfPeople|mul:100|stringformat:".0f" }}% </span>
+                                <span class="text-muted">of Total registered people</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Total Student</h5>
+                            <h1 class="display-5 mt-1 mb-3">{{numberOfStudents}}</h1>
+                            <div class="mb-1">
+                                <span class="text-success"> <i
+                                        class="mdi mdi-arrow-bottom-right"></i>{{numberOfStudents|div:numberOfPeople|mul:100|stringformat:".0f"}}%</span>
+                                <span class="text-muted">of Total registered people</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Pending Crimes</h5>
+                            <h1 class="display-5 mt-1 mb-3">{{numberOfCriminals}}</h1>
+                            <div class="mb-1">
+                                <span class="text-success"> <i
+                                        class="mdi mdi-arrow-bottom-right"></i> {{numberOfCriminals|div:numberOfPeople|mul:100|stringformat:".0f"}}% </span>
+                                <span class="text-muted">of Total registered people</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
         <div class="row">
-
-            <div class="col-12 col-sm-6 col-xxl d-flex">
-                <div class="card flex-fill">
-                    <div class="card-body py-4">
-                        <div class="media">
-                            <div class="media-body">
-                                <h3 class="mb-2">{{numberOfStudents}}</h3>
-                                <p class="mb-2">Total Student</p>
-                                <div class="mb-0">
-                                    <span class="badge badge-soft-success mr-2"> <i
-                                            class="mdi mdi-arrow-bottom-right"></i>
-                                        {{numberOfStudents|div:numberOfPeople|mul:100}}% </span>
-                                    <span class="text-muted">Of registered people</span>
-                                </div>
-                            </div>
-                            <div class="d-inline-block ml-3">
-                                <div class="stat">
-                                    <i class="align-middle text-success" data-feather="dollar-sign"></i>
-                                </div>
-                            </div>
+            
+            <div class="col-12 col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Gender Report</h5>
+                        <h6 class="card-subtitle text-muted">This chart responds to the question, How many male and female are registered?</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart chart-sm">
+                            <canvas id="chartjs-pie1"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-12 col-sm-6 col-xxl d-flex">
-                <div class="card flex-fill">
-                    <div class="card-body py-4">
-                        <div class="media">
-                            <div class="media-body">
-                                <h3 class="mb-2">{{numberOfEmployees}}</h3>
-                                <p class="mb-2">Total Employee</p>
-                                <div class="mb-0">
-                                    <span class="badge badge-soft-success mr-2"> <i
-                                            class="mdi mdi-arrow-bottom-right"></i>
-                                        {{numberOfEmployees|div:numberOfPeople|mul:100}}% </span>
-                                    <span class="text-muted">Of registered people</span>
-                                </div>
-                            </div>
-                            <div class="d-inline-block ml-3">
-                                <div class="stat">
-                                    <i class="align-middle text-success" data-feather="dollar-sign"></i>
-                                </div>
-                            </div>
-                        </div>
+            <div class="col-12 col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Crime Report</h5>
+                        <h6 class="card-subtitle text-muted">This chart responds to the question, How many people registered to have committed crimes?</h6>
                     </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-xxl d-flex">
-                <div class="card flex-fill">
-                    <div class="card-body py-4">
-                        <div class="media">
-                            <div class="media-body">
-                                <h3 class="mb-2">{{numberOfCriminals}}</h3>
-                                <p class="mb-2">Pending Crime</p>
-                                <div class="mb-0">
-                                    <span class="badge badge-soft-danger mr-2"> <i
-                                            class="mdi mdi-arrow-bottom-right"></i>{{numberOfCriminals|div:numberOfPeople|mul:100}}%</span>
-                                    <span class="text-muted">Of registered people</span>
-                                </div>
-                            </div>
-                            <div class="d-inline-block ml-3">
-                                <div class="stat">
-                                    <i class="align-middle text-danger" data-feather="shopping-bag"></i>
-                                </div>
-                            </div>
+                    <div class="card-body">
+                        <div class="chart chart-sm">
+                            <canvas id="chartjs-pie"></canvas>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row">
-            <div class="col-12">
+            <div class="col-6">
                 <div class="card">
+                    <div class="card-header">
+                        <h3>Auca Registered People</h3>
+                    </div>
                     <div class="card-body">
-                        <table id="datatables-reponsive" class="table table-striped" style="width:100%">
+                        <table class="table table-striped" style="width:100%">
                             <thead>
                                 <tr>
                                     <th>Names</th>
@@ -103,14 +122,39 @@
                                     <td>{{person.address}}</td>
                                     <td>{{person.gender}}</td>
                                     <td>
-                                        {% if criminal.status == 'WANTED'%}
-                                        <span class="badge badge-danger">{{criminal.status}}</span>
+                                        {% if person.status == 'WANTED'%}
+                                        <span class="badge badge-danger">{{person.status}}</span>
                                         {% else %}
-                                        <span class="badge badge-secodary">{{criminal.status}}</span>
+                                        <span class="badge badge-primary">{{person.status}}</span>
                                         {% endif %}
                                     </td>
-                                    <td>{{criminal.faculty}}</td>
-                                    <td>{{criminal.department}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>All Detected Criminal Data</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Names</th>
+                                    <th>Time</th>
+                                    <th>Location</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for criminal in detectedCriminal %}
+                                <tr>
+                                    <td>{{criminal.person.names}}</td>
+                                    <td>{{criminal.time}}</td>
+                                    <td>{{criminal.location}}</td>
                                 </tr>
                                 {% endfor %}
                             </tbody>
@@ -119,6 +163,105 @@
                 </div>
             </div>
         </div>
+        
     </div>
 </main>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Bar chart
+        new Chart(document.getElementById("chartjs-bar"), {
+            type: "bar",
+            data: {
+                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                datasets: [{
+                    label: "Last year",
+                    backgroundColor: window.theme.primary,
+                    borderColor: window.theme.primary,
+                    hoverBackgroundColor: window.theme.primary,
+                    hoverBorderColor: window.theme.primary,
+                    data: [54, 67, 41, 55, 62, 45, 55, 73, 60, 76, 48, 79],
+                    barPercentage: .75,
+                    categoryPercentage: .5
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        gridLines: {
+                            display: false
+                        },
+                        stacked: false,
+                        ticks: {
+                            stepSize: 20
+                        }
+                    }],
+                    xAxes: [{
+                        stacked: false,
+                        gridLines: {
+                            color: "transparent"
+                        }
+                    }]
+                }
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Pie chart
+        new Chart(document.getElementById("chartjs-pie"), {
+            type: "pie",
+            data: {
+                labels: ["Wanted", "Not wanted"],
+                datasets: [{
+                    data: [{{wanted}}, {{unwanted}}],
+                    backgroundColor: [
+                        window.theme.danger,
+                        window.theme.primary,
+                        window.theme.warning,
+                        "#E8EAED"
+                    ],
+                    borderColor: "transparent"
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                }
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Pie chart
+        new Chart(document.getElementById("chartjs-pie1"), {
+            type: "pie",
+            data: {
+                labels: ["Male", "Female"],
+                datasets: [{
+                    data: [{{male}}, {{female}}],
+                    backgroundColor: [
+                        window.theme.primary,
+                        window.theme.warning,
+                        "#E8EAED"
+                    ],
+                    borderColor: "transparent"
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

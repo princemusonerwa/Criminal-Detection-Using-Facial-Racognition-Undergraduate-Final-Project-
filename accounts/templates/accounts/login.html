@@ -1,66 +1,36 @@
 {% extends 'base.html'%}
 {% load static%}
+{% load crispy_forms_tags %}
 {% block content %}
 <main class="content d-flex p-0">
     <div class="container d-flex flex-column">
         <div class="row h-100">
             <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
                 <div class="d-table-cell align-middle">
-
-                    <div class="text-center mt-4">
-                        <h1 class="h2">Welcome back, Chris</h1>
-                        <p class="lead">
-                            Sign in to your account to continue
-                        </p>
-                    </div>
-
-                    <div class="card">
-                        <div class="card-header">
-                            {% if form.errors %}
-                        {% for field in form %}
-                        {% for error in field.errors %}
-                        <div class="alert alert-danger">
-                            <strong>{{ error|escape }}</strong>
-                        </div>
-                        {% endfor %}
-                        {% endfor %}
-                        {% for error in form.non_field_errors %}
-                        <div class="alert alert-danger">
-                            <strong>{{ error|escape }}</strong>
-                        </div>
-                        {% endfor %}
-                        {% endif %}
-                        </div>
+                    <div class="card" style="width: 30rem; height: 25rem;">
                         <div class="card-body">
                             <div class="m-sm-4">
-                                <div class="text-center">
-                                    <img src="{{ user.last_login.image.url }}" alt="No Image" class="img-fluid rounded-circle"
-                                        width="132" height="132" />
+                                <div class="text-center mt-4">
+                                    <h1>Sign In</h1>
                                 </div>
                                 <form method="POST">
                                     {% csrf_token %}
                                     <div class="form-group">
-                                        <label>Email</label>
-                                        <input class="form-control form-control-lg" type="email" name="username"
-                                            placeholder="Enter your email" />
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Password</label>
-                                        <input class="form-control form-control-lg" type="password" name="password"
-                                            placeholder="Enter your password" />
+                                        {{form}}  
                                         <small>
                                             <a href="{% url 'password_reset'%}">Forgot password?</a>
-                                        </small>
+                                        </small>                                      
                                     </div>
                                     <div>
                                         <div class="custom-control custom-checkbox align-items-center">
+                                            <!-- add checked  for being checked-->
                                             <input type="checkbox" class="custom-control-input" value="remember-me"
-                                                name="remember-me" checked>
+                                                name="remember-me">
                                             <label class="custom-control-label text-small">Remember me next
                                                 time</label>
                                         </div>
                                     </div>
-                                    <div class="text-center mt-3">
+                                    <div class="text-center">
                                         <button type="submit" class="btn btn-lg btn-primary">Sign In</button>
                                     </div>
                                 </form>
