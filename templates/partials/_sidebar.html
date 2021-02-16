@@ -1,0 +1,56 @@
+{% load static%}
+<nav id="sidebar" class="sidebar ">
+    <div class="sidebar-content js-simplebar">
+        <a class="sidebar-brand" href="{% url 'index'%}">
+            <img src="{% static 'img/AucaLogo.jpg'%}" alt="No Image" width="24px" height="24px" style="object-fit: cover;">
+
+            <span class="align-middle">Detection App</span>
+        </a>
+
+        <ul class="sidebar-nav">
+            <li class="sidebar-header">
+            </li>
+            <li class="sidebar-item active">
+                <a href="#students" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle fa fa-graduation-cap" ></i> <span class="align-middle">Student</span>
+                </a>
+                <ul id="students" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
+                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'add_student'%}">Add
+                            Student</a></li>
+                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'students'%}">All Student</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="sidebar-item active">
+                <a href="#employees" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle fa fa-user"></i> <span class="align-middle">employee</span>
+                </a>
+                <ul id="employees" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
+                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'add_employee'%}">Add
+                            Employee</a></li>
+                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'employees'%}">All
+                            Employee</a></li>
+                </ul>
+            </li>
+            {% if user.is_admin %}
+            <li class="sidebar-item active">
+                <a href="#users" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle fa fa-user-plus"></i> <span class="align-middle">Users</span>
+                </a>
+                <ul id="users" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
+                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'register'%}">Add User</a>
+                    </li>
+                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'users'%}">All User</a>
+                    </li>
+                </ul>
+            </li>
+            {% endif %}
+            <li class="sidebar-item">
+                <a class="sidebar-link" href="{% url 'detect'%}">
+                    <i class="fa fa-camera"></i> <span class="align-middle">Detect
+                        Criminal</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</nav>

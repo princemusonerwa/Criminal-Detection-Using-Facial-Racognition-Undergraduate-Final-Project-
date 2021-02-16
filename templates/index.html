@@ -1,18 +1,267 @@
 {% extends 'base.html'%}
+{% load mathfilters %}
 {% block content %}
-    <div class="container">
-        <h4>This is a home page</h4>
-        <p>
-            <a href="{% url 'students'%}">Students</a>  
-        </p>  
-        <p>
-            <a href="{% url 'employees'%}">Employees</a>    
-        </p>  
-        {% if user.is_admin %}
-            <p><a href="{% url 'users'%}">Users</a></p>
-        {% endif %}
-        <p>
-            <a href="{% url 'detect'%}">Detect</a>    
-        </p>
+<main class="content">
+    <div class="container-fluid p-0">
+
+        <div class="row mb-2 mb-xl-3">
+            <div class="col-auto d-none d-sm-block">
+                <h3>Dashboard</h3>
+            </div>
+        </div>
+        <div class="col-md-12">
+              <div class="row">
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Total Regestered Person</h5>
+                            <h1 class="display-5 mt-1 mb-3">{{numberOfPeople}}</h1>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Total Employee</h5>
+                            <h1 class="display-5 mt-1 mb-3">{{numberOfEmployees}}</h1>
+                            <div class="mb-1">
+                                <span class="text-success"> <i
+                                        class="mdi mdi-arrow-bottom-right"></i>{{numberOfEmployees|div:numberOfPeople|mul:100|stringformat:".0f" }}% </span>
+                                <span class="text-muted">of Total registered people</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Total Student</h5>
+                            <h1 class="display-5 mt-1 mb-3">{{numberOfStudents}}</h1>
+                            <div class="mb-1">
+                                <span class="text-success"> <i
+                                        class="mdi mdi-arrow-bottom-right"></i>{{numberOfStudents|div:numberOfPeople|mul:100|stringformat:".0f"}}%</span>
+                                <span class="text-muted">of Total registered people</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-sm-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title mb-4">Pending Crimes</h5>
+                            <h1 class="display-5 mt-1 mb-3">{{numberOfCriminals}}</h1>
+                            <div class="mb-1">
+                                <span class="text-success"> <i
+                                        class="mdi mdi-arrow-bottom-right"></i> {{numberOfCriminals|div:numberOfPeople|mul:100|stringformat:".0f"}}% </span>
+                                <span class="text-muted">of Total registered people</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+        <div class="row">
+            
+            <div class="col-12 col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Gender Report</h5>
+                        <h6 class="card-subtitle text-muted">This chart responds to the question, How many male and female are registered?</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart chart-sm">
+                            <canvas id="chartjs-pie1"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Crime Report</h5>
+                        <h6 class="card-subtitle text-muted">This chart responds to the question, How many people registered to have committed crimes?</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart chart-sm">
+                            <canvas id="chartjs-pie"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Auca Registered People</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Names</th>
+                                    <th>Email</th>
+                                    <th>Address</th>
+                                    <th>Gender</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for person in people %}
+                                <tr>
+                                    <td>{{person.names}}</td>
+                                    <td>{{person.email}}</td>
+                                    <td>{{person.address}}</td>
+                                    <td>{{person.gender}}</td>
+                                    <td>
+                                        {% if person.status == 'WANTED'%}
+                                        <span class="badge badge-danger">{{person.status}}</span>
+                                        {% else %}
+                                        <span class="badge badge-primary">{{person.status}}</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>All Detected Criminal Data</h3>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped" style="width:100%">
+                            <thead>
+                                <tr>
+                                    <th>Names</th>
+                                    <th>Time</th>
+                                    <th>Location</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for criminal in detectedCriminal %}
+                                <tr>
+                                    <td>{{criminal.person.names}}</td>
+                                    <td>{{criminal.time}}</td>
+                                    <td>{{criminal.location}}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
     </div>
+</main>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Bar chart
+        new Chart(document.getElementById("chartjs-bar"), {
+            type: "bar",
+            data: {
+                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+                datasets: [{
+                    label: "Last year",
+                    backgroundColor: window.theme.primary,
+                    borderColor: window.theme.primary,
+                    hoverBackgroundColor: window.theme.primary,
+                    hoverBorderColor: window.theme.primary,
+                    data: [54, 67, 41, 55, 62, 45, 55, 73, 60, 76, 48, 79],
+                    barPercentage: .75,
+                    categoryPercentage: .5
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                },
+                scales: {
+                    yAxes: [{
+                        gridLines: {
+                            display: false
+                        },
+                        stacked: false,
+                        ticks: {
+                            stepSize: 20
+                        }
+                    }],
+                    xAxes: [{
+                        stacked: false,
+                        gridLines: {
+                            color: "transparent"
+                        }
+                    }]
+                }
+            }
+        });
+    });
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Pie chart
+        new Chart(document.getElementById("chartjs-pie"), {
+            type: "pie",
+            data: {
+                labels: ["Wanted", "Not wanted"],
+                datasets: [{
+                    data: [{{wanted}}, {{unwanted}}],
+                    backgroundColor: [
+                        window.theme.danger,
+                        window.theme.primary,
+                        window.theme.warning,
+                        "#E8EAED"
+                    ],
+                    borderColor: "transparent"
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                }
+            }
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Pie chart
+        new Chart(document.getElementById("chartjs-pie1"), {
+            type: "pie",
+            data: {
+                labels: ["Male", "Female"],
+                datasets: [{
+                    data: [{{male}}, {{female}}],
+                    backgroundColor: [
+                        window.theme.primary,
+                        window.theme.warning,
+                        "#E8EAED"
+                    ],
+                    borderColor: "transparent"
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                legend: {
+                    display: false
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

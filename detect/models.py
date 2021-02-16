@@ -2,6 +2,9 @@ from django.db import models
 import uuid
 from PIL import Image
 from datetime import datetime
+from django.core.exceptions import ValidationError
+import re
+from django.core.validators import MinLengthValidator
 
 # Create your models
 
@@ -15,16 +18,29 @@ def get_upload_to(instance,filename):
 
     return "images/training/{}/{}".format(folder,new_filename)
 
+def validate_mobile(value):
+    """ Raise a ValidationError if the value looks like a mobile telephone number.
+    """
+    rule = re.compile(r'^(?:\+?250)?[0]\d{9,13}$')
+
+    if not rule.search(value):
+        msg = u"Invalid mobile number."
+        raise ValidationError(msg)
+
 class Person(models.Model):
-    names = models.CharField(max_length=255)
+    names = models.CharField(max_length=255, validators=[MinLengthValidator(5)])
     email = models.EmailField(verbose_name='email address', unique=True)
     phone = models.CharField(verbose_name="Phone Number", max_length=15)
-    gender = models.CharField(max_length=255)
+    GENDER_CHOICES = [
+        ('Male', 'Male'),
+        ('Female', 'Female'),
+    ]
+    gender = models.CharField(max_length=255, choices=GENDER_CHOICES, default="Male")
     dob = models.DateField(verbose_name="Date of Birth", null="True")
     address = models.CharField(max_length=255)
     STATUS_CHOICES = [
-      ('NT', 'NOT WANTED'),
-      ('W', 'WANTED')
+      ('NOT WANTED', 'NOT WANTED'),
+      ('WANTED', 'WANTED')
     ]
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="NOT WANTED")
 
@@ -42,8 +58,13 @@ class Department(models.Model):
     def __str__(self):
         return self.name
 
+def validate_length(value):
+    value = str(value)
+    if not len(value) == 5:
+        raise ValidationError("Id must be made of 5 digits")
+
 class Student(Person):
-    student_id = models.IntegerField(primary_key = True)
+    student_id = models.IntegerField(primary_key = True, validators=[validate_length])
     faculty = models.ForeignKey(Faculty, on_delete=models.SET_NULL, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
 
@@ -52,6 +73,13 @@ class Student(Person):
 
 class Employee(Person):
     staff_id = models.IntegerField(primary_key = True)
+    DEPARTMENT_CHOICES = [
+      ('Human Resource', 'Human Resource'),
+      ('Finance', 'Finance'),
+      ('Information Management', 'Information Management'),
+      ('Administration', 'Administration'),
+    ]
+    department = models.CharField(max_length=100, choices=DEPARTMENT_CHOICES)
 
     def __str__(self):
         self.name
@@ -66,8 +94,8 @@ class Crime(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     STATUS_CHOICES = [
-        ('UI', 'Under Investigation'),
-        ('SO', 'Solved'),
+        ('Under Investigation', 'Under Investigation'),
+        ('Solved', 'Solved'),
     ]
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="Under Investigation")
 
