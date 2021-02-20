@@ -1,5 +1,5 @@
 from django import forms
-from .models import Student, Employee, Gallery, Crime, Department
+from .models import Student, Employee, Gallery, Crime, Department, Person, Faculty, Department
 
 
 class StudentForm(forms.ModelForm):
@@ -78,8 +78,17 @@ class GalleryForm(forms.ModelForm):
         model = Gallery
         fields = ('photos', )
 
+class FacultyForm(forms.ModelForm):
+    class Meta:
+        model = Faculty 
+        fields = '__all__'
+
+class DepartmentForm(forms.ModelForm):
+    class Meta:
+        model = Department 
+        fields = '__all__'
 
 class CrimeForm(forms.ModelForm):
     class Meta:
         model = Crime
-        fields = '__all__'
+        fields = ['person','name','description','status']

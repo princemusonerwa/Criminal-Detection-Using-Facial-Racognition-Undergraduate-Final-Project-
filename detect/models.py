@@ -44,6 +44,9 @@ class Person(models.Model):
     ]
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="NOT WANTED")
 
+    def __str__(self):
+        return self.names 
+
 
 class Faculty(models.Model):
     name = models.CharField(max_length=255)
@@ -100,7 +103,7 @@ class Crime(models.Model):
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="Under Investigation")
 
     def __str__(self):
-        return self.person.names
+        return self.name
 
 
 class DetectedCriminal(models.Model):

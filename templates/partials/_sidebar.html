@@ -2,7 +2,8 @@
 <nav id="sidebar" class="sidebar ">
     <div class="sidebar-content js-simplebar">
         <a class="sidebar-brand" href="{% url 'index'%}">
-            <img src="{% static 'img/AucaLogo.jpg'%}" alt="No Image" width="24px" height="24px" style="object-fit: cover;">
+            <img src="{% static 'img/AucaLogo.jpg'%}" alt="No Image" width="24px" height="24px"
+                style="object-fit: cover;" class="">
 
             <span class="align-middle">Detection App</span>
         </a>
@@ -12,7 +13,7 @@
             </li>
             <li class="sidebar-item active">
                 <a href="#students" data-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle fa fa-graduation-cap" ></i> <span class="align-middle">Student</span>
+                    <i class="align-middle fa fa-graduation-cap"></i> <span class="align-middle">Student</span>
                 </a>
                 <ul id="students" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
                     <li class="sidebar-item"><a class="sidebar-link" href="{% url 'add_student'%}">Add
@@ -23,7 +24,7 @@
             </li>
             <li class="sidebar-item active">
                 <a href="#employees" data-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle fa fa-user"></i> <span class="align-middle">employee</span>
+                    <i class="align-middle fa fa-user"></i> <span class="align-middle">Employee</span>
                 </a>
                 <ul id="employees" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
                     <li class="sidebar-item"><a class="sidebar-link" href="{% url 'add_employee'%}">Add
@@ -41,6 +42,28 @@
                     <li class="sidebar-item"><a class="sidebar-link" href="{% url 'register'%}">Add User</a>
                     </li>
                     <li class="sidebar-item"><a class="sidebar-link" href="{% url 'users'%}">All User</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="sidebar-item active">
+                <a href="#faculty" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle fa fa-user-plus"></i> <span class="align-middle">Faculty</span>
+                </a>
+                <ul id="faculty" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
+                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'add_faculty'%}">Add Faculty </a>
+                    </li>
+                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'faculties'%}">All Faculties </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="sidebar-item active">
+                <a href="#departments" data-toggle="collapse" class="sidebar-link collapsed">
+                    <i class="align-middle fa fa-user-plus"></i> <span class="align-middle">Department</span>
+                </a>
+                <ul id="departments" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
+                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'add_department'%}">Add Department</a>
+                    </li>
+                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'departments'%}">All Departments</a>
                     </li>
                 </ul>
             </li>

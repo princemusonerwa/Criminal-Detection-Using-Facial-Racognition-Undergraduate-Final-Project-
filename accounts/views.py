@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from .forms import UserForm, ProfileUpdateForm, UserUpdateForm
+from .forms import UserForm, ProfileUpdateForm, UserUpdateForm, MyAuthenticationForm
 from .models import User
 from django.contrib import messages
 from datetime import datetime
@@ -12,6 +12,7 @@ import csv
 import xlwt
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
+from django.contrib.auth import authenticate, login, logout
 # Create your views here.
 
 def check_is_admin(func):
@@ -80,6 +81,27 @@ def profile(request):
     }
     return render(request, 'accounts/profile.html', context)
 
+def signIn(request):
+    if request.user.is_authenticated:
+        return render(request, 'home.html')
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            messages.success(request, "You are logged in")
+            return redirect('index')
+        else:
+            messages.error(request, "Email or password is invalid")
+            return redirect('signin')
+    else:
+        form = MyAuthenticationForm()
+        return render(request, 'accounts/login.html', {'form': form})
+
+def signOut(request):
+    logout(request)
+    return redirect('signin')
 
 def exportUserListCsv(request):
     response = HttpResponse(content_type='text/csv')

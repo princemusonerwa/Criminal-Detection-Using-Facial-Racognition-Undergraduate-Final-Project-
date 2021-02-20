@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title%} create employee{% endblock%}
+{% block content %}
+<main class="content">
+  <div class="container-fluid p-0">
+    <div class="row justify-content-center">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            {% if form.instance.pk %}
+              <h1 class="h3">Update Faculty</h1>
+            {% else %}
+              <h1 class="h3">Create Faculty</h1>
+            {% endif %}
+          </div>
+          <div class="card-body">
+            <form method="post" novalidate enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="form-row">
+                <div class="form-group col-md-6">
+                  {{form.name|as_crispy_field}}
+                </div>
+              </div>                                      
+              <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}

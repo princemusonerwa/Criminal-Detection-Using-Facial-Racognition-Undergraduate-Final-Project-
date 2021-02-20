@@ -152,6 +152,4 @@ EMAIL_HOST_PASSWORD = 'nhhrekbkpuffgmda'
 
 AUTH_USER_MODEL = 'accounts.User'
 
-LOGIN_REDIRECT_URL = 'index'
-
-LOGIN_URL = 'login'
+LOGIN_URL = 'signin'

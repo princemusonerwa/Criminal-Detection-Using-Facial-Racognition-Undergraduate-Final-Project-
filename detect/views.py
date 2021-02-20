@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import StudentForm, EmployeeForm, CrimeForm
-from .models import Student, Employee, Crime, Department, Faculty, Gallery, Person
+from .forms import StudentForm, EmployeeForm, CrimeForm, DepartmentForm, FacultyForm
+from .models import Student, Employee, Crime, Department, Faculty, Gallery, Person, Faculty, Department
 from django.contrib import messages
 from .detection import train, predictKNN
 from django.core.files.storage import FileSystemStorage
@@ -36,6 +36,7 @@ def addStudent(request):
         form = StudentForm()
     return render(request, 'students/student_form.html', {'form':form})
 
+@login_required
 def allStudent(request):
     students = Student.objects.all()
     return render(request, 'students/student_list.html', {'students':students})
@@ -159,6 +160,7 @@ def addCrime(request):
     if request.method == 'POST':
         form = CrimeForm(request.POST)
         if form.is_valid():
+            person = form.cleaned_data.get('person')
             form.save()
             return redirect('crimes')
             messages.success(request, 'Crime created Successfully.')
@@ -185,7 +187,7 @@ def deleteCrime(request, id):
         return redirect('crimes')
     return render(request, 'crimes/crime_confirm_delete.html', {'crime':crime})
 
-def updateCrime(request, id):
+def updateCrime(request):
     obj = get_object_or_404(Crime, id = id) 
     # pass the object as instance in form 
     form = CrimeForm(request.POST or None, instance = obj) 
@@ -194,6 +196,87 @@ def updateCrime(request, id):
         messages.success(request, 'Crime updated Successfully.')
         return redirect('/crime/'+str(id))
     return render(request, 'crimes/crime_form.html', {'form':form})
+
+
+def addFaculty(request):
+    if request.method == 'POST':
+        form = FacultyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('faculties')
+            messages.success(request, 'Faculty created Successfully.')
+    else:
+        form = FacultyForm()
+    return render(request, 'faculties/faculty_form.html', {'form':form})
+
+def allFaculty(request):
+    faculties = Faculty.objects.all()
+    return render(request, 'faculties/faculty_list.html', {'faculties':faculties})
+
+def facultyDetails(request, id):
+    faculty= get_object_or_404(Faculty, id = id)
+    context = {
+        'faculty' : faculty
+    }
+    return render(request, 'faculties/faculty_detail.html', context)
+
+def deleteFaculty(request, id):
+    faculty = Faculty.objects.get(id = id)
+    if request.method == 'POST':
+        faculty.delete()
+        messages.success(request, 'Faculty deleted Successfully.')
+        return redirect('faculties')
+    return render(request, 'faculties/faculty_confirm_delete.html', {'faculty':faculty})
+
+def updateFaculty(request, id):
+    obj = get_object_or_404(Faculty, id = id) 
+    # pass the object as instance in form 
+    form = FacultyForm(request.POST or None, instance = obj) 
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Faculty updated Successfully.')
+        return redirect('/faculty/'+str(id))
+    return render(request, 'faculties/faculty_form.html', {'form':form})
+
+def addDepartment(request):
+    if request.method == 'POST':
+        form = DepartmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('departments')
+            messages.success(request, 'Department created Successfully.')
+    else:
+        form = DepartmentForm()
+    return render(request, 'departements/department_form.html', {'form':form})
+
+def allDepartment(request):
+    departments = Department.objects.all()
+    return render(request, 'departements/department_list.html', {'departments':departments})
+
+def departmentDetails(request, id):
+    department= get_object_or_404(Department, id = id)
+    context = {
+        'department' : department
+    }
+    return render(request, 'departements/department_detail.html', context)
+
+def deleteDepartment(request, id):
+    department = Department.objects.get(id = id)
+    if request.method == 'POST':
+        department.delete()
+        messages.success(request, 'Department deleted Successfully.')
+        return redirect('departments')
+    return render(request, 'departements/department_confirm_delete.html', {'department':department})
+
+def updateDepartment(request, id):
+    obj = get_object_or_404(Crime, id = id) 
+    # pass the object as instance in form 
+    form = DepartmentForm(request.POST or None, instance = obj) 
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Department updated Successfully.')
+        return redirect('/department/'+str(id))
+    return render(request, 'departements/department_form.html', {'form':form})
 
 def loadDepartments(request):
     faculty_id = request.GET.get('faculty')
@@ -228,7 +311,8 @@ def camPreview(previewName, camID):
         
         for name,loc in predictions:
             if name != "unknown":
-                notify.delay(name,"gishushu")
+                if camID == 0:
+                    notify.delay(name,"1st Flow")
 
             y1,x2,y2,x1 = loc
             y1,x2,y2,x1 = y1*4,x2*4,y2*4,x1*4

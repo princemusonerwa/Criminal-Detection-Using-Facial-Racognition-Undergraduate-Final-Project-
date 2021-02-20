@@ -20,6 +20,19 @@ urlpatterns = [
     path('crime/<int:id>', views.crimeDetails, name='crime_details'),
     path('crime/<int:id>/delete', views.deleteCrime, name='delete_crime'),
     path('crime/<int:id>/edit', views.updateCrime, name='edit_crime'),
+
+    path('faculty/create', views.addFaculty, name='add_faculty'),
+    path('faculty', views.allFaculty, name='faculties'),
+    path('faculty/<int:id>', views.facultyDetails, name='faculty_details'),
+    path('faculty/<int:id>/delete', views.deleteFaculty, name='delete_faculty'),
+    path('facutly/<int:id>/edit', views.updateFaculty, name='edit_faculty'),
+
+    path('department/create', views.addDepartment, name='add_department'),
+    path('department', views.allDepartment, name='departments'),
+    path('department/<int:id>', views.departmentDetails, name='department_details'),
+    path('department/<int:id>/delete', views.deleteDepartment, name='delete_department'),
+    path('department/<int:id>/edit', views.updateDepartment, name='edit_department'),
+
     path('detect/', views.detect, name='detect'),
     path('train/', views.train_images, name='trainData'),
     path('image/', views.detect_image, name="imagedetection"),  
