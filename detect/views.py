@@ -66,8 +66,7 @@ def deleteStudent(request, id):
     if request.method == 'POST':
         student.delete()
         messages.success(request, 'Student deleted Successfully.')
-        return redirect('students')
-    return render(request, 'students/student_confirm_delete.html', {'student':student})
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 @login_required
 def deleteImage(request, id):

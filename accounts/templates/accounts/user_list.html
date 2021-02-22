@@ -1,52 +1,87 @@
 {% extends 'base.html'%}
 {% block content %}
-<main class="content">
-    <div class="container-fluid p-0">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title">All Users</h5>
-                    </div>
-                    <div>
-                        <a href="{% url 'export_user_csv'%}" class='btn btn-primary'>Export to csv</a>
-                        <a href="{% url 'export_user_excel'%}" class='btn btn-primary'>Export to excel</a>
-                        <a href="{% url 'export_user_pdf'%}" target="_blank" class='btn btn-primary'>Export to pdf</a>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-striped" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Names</th>
-                                    <th>Email</th>
-                                    <th>Phone</th>
-                                    <th>Address</th>
-                                    <th>Gender</th>
-                                    <th>Action</th>
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Users</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
 
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for user in users %}
-                                <tr>
-                                    <td>{{user.names}}</td>
-                                    <td>{{user.email}}</td>
-                                    <td>{{user.phone}}</td>
-                                    <td>{{user.address}}</td>
-                                    <td>{{user.gender}}</td>
-                                    <td>
-                                        <a href="{% url 'edit_user' user.pk %}" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="{% url 'delete_user' user.pk %}" class="btn btn-danger btn-sm">Delete</a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+    <div class="row mb-2">
+        <div class="col-sm-4">
+            <a href="{% url 'register'%}" class="btn btn-danger btn-rounded mb-3"><i class="mdi mdi-plus"></i> Create
+                User</a>
+        </div>
+        <div class="col-sm-8">
+            <div class="text-sm-right">
+                <div class="btn-group mb-3">
+                    <button type="button" class="btn btn-primary">All</button>
+                </div>
+                <div class="btn-group mb-3 ml-1">
+                    <button type="button" class="btn btn-light">Ongoing</button>
+                    <button type="button" class="btn btn-light">Finished</button>
+                </div>
+                <div class="btn-group mb-3 ml-2 d-none d-sm-inline-block">
+                    <button type="button" class="btn btn-secondary"><i class="dripicons-view-apps"></i></button>
+                </div>
+                <div class="btn-group mb-3 d-none d-sm-inline-block">
+                    <button type="button" class="btn btn-link text-muted"><i class="dripicons-checklist"></i></button>
+                </div>
+            </div>
+        </div><!-- end col-->
+        <div class="container-fluid p-0">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table id="datatables-reponsive" class="table table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Names</th>
+                                        <th>Email</th>
+                                        <th>Phone</th>
+                                        <th>Address</th>
+                                        <th>Gender</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for user in users %}
+                                    <tr>
+                                        <td>{{user.names}}</td>
+                                        <td>{{User.email}}</td>
+                                        <td>{{user.phone}}</td>
+                                        <td>{{user.address}}</td>
+                                        <td>{{user.gender}}</td>
+                                        <td>
+                                            <a href="{% url 'edit_user' user.pk %}" class="action-icon"> <i
+                                                    class="mdi mdi-square-edit-outline"></i></a>
+                                            <a href="{% url 'delete_user' user.pk%}" class="action-icon"> <i
+                                                    class="mdi mdi-delete"></i></a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    // Datatables Responsive
+                    $("#datatables-reponsive").DataTable({
+                        responsive: true
+                    });
+                });
+            </script>
+        </div>
+        <!-- end row-->
     </div>
-</main>
-{% endblock %}
+
+    {% endblock %}
