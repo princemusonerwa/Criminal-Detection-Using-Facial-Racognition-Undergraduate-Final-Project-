@@ -2,7 +2,7 @@
 
     <!--- Sidemenu -->
     <ul class="metismenu side-nav">
-        
+
         <li class="side-nav-item">
             <a href="{% url 'index'%}" class="side-nav-link">
                 <i class="uil-home-alt"></i>
@@ -10,6 +10,7 @@
             </a>
         </li>
 
+        {% if user.is_admin %}
         <li class="side-nav-item">
             <a href="javascript: void(0);" class="side-nav-link">
                 <i class="uil-store"></i>
@@ -44,6 +45,23 @@
 
         <li class="side-nav-item">
             <a href="javascript: void(0);" class="side-nav-link">
+                <i class="uil-store"></i>
+                <span> Users </span>
+                <span class="menu-arrow"></span>
+            </a>
+            <ul class="side-nav-second-level" aria-expanded="false">
+                <li>
+                    <a href="{% url 'register'%}">Create user</a>
+                </li>
+                <li>
+                    <a href="{% url 'users'%}">All Uses</a>
+                </li>
+            </ul>
+        </li>
+        {% endif %}
+
+        <li class="side-nav-item">
+            <a href="javascript: void(0);" class="side-nav-link">
                 <i class="uil-briefcase"></i>
                 <span> Student </span>
                 <span class="menu-arrow"></span>
@@ -73,23 +91,6 @@
                 </li>
             </ul>
         </li>
-
-        <li class="side-nav-item">
-            <a href="javascript: void(0);" class="side-nav-link">
-                <i class="uil-store"></i>
-                <span> Users </span>
-                <span class="menu-arrow"></span>
-            </a>
-            <ul class="side-nav-second-level" aria-expanded="false">
-                <li>
-                    <a href="{% url 'register'%}">Create user</a>
-                </li>
-                <li>
-                    <a href="{% url 'users'%}">All Uses</a>
-                </li>
-            </ul>
-        </li>
-
 
         <li class="side-nav-item">
             <a href="{% url 'detect'%}" class="side-nav-link">

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from .forms import UserForm, ProfileUpdateForm, UserUpdateForm, MyAuthenticationForm
+from .forms import UserForm, ProfileUpdateForm, UserUpdateForm, MyAuthenticationForm, ReporterForm
 from .models import User
 from django.contrib import messages
 from datetime import datetime
@@ -35,7 +35,19 @@ def register(request):
             return redirect('users')
     else:
         form = UserForm()
-    return render(request, 'accounts/register.html', {'form': form})
+    return render(request, 'accounts/add_user.html', {'form': form})
+
+def addReporter(request):
+	if request.method == "POST":
+		form = ReporterForm(request.POST)
+		if form.is_valid():
+			user = form.save()
+			messages.success(request, "Registration successful." )
+			return redirect("signin")
+	else:
+	    form = ReporterForm
+	return render (request, "accounts/register.html", {"form":form})
+
 
 def updateUser(request, id):
     obj = get_object_or_404(User, id = id) 

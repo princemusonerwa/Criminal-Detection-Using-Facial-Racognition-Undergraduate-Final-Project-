@@ -57,13 +57,14 @@ class EmployeeForm(forms.ModelForm):
     GENDER_CHOICE = (('Male', 'Male'), ('Female', 'Female'))
     gender = forms.ChoiceField(choices=GENDER_CHOICE, widget=forms.RadioSelect(
         attrs={'class': 'form-check-input  d-inline'}))
-    dob = forms.CharField(widget=forms.TextInput(
+    dob = forms.DateField(widget=forms.TextInput(
         attrs={'class': 'form-control'}))
     address = forms.CharField(widget=forms.TextInput(
         attrs={'class': 'form-control'}))
     CHOICES = (('NOT WANTED', 'NOT WANTED'), ('WANTED', 'WANTED'),)
     status = forms.ChoiceField(
         choices=CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
+
 
     class Meta:
         model = Employee

@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 import uuid
 from PIL import Image
 from datetime import datetime
@@ -27,6 +28,11 @@ def validate_mobile(value):
         msg = u"Invalid mobile number."
         raise ValidationError(msg)
 
+def validate_dob(value):
+    today = date.today()
+    if value > today:
+        raise ValidationError('Date of birth cannot be in future.')
+
 class Person(models.Model):
     names = models.CharField(max_length=255, validators=[MinLengthValidator(5)])
     email = models.EmailField(verbose_name='email address', unique=True)
@@ -36,7 +42,7 @@ class Person(models.Model):
         ('Female', 'Female'),
     ]
     gender = models.CharField(max_length=255, choices=GENDER_CHOICES, default="Male")
-    dob = models.DateField(verbose_name="Date of Birth", null="True")
+    dob = models.DateField(verbose_name="Date of Birth", null="True", validators=[validate_dob])
     address = models.CharField(max_length=255)
     STATUS_CHOICES = [
       ('NOT WANTED', 'NOT WANTED'),

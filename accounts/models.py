@@ -56,6 +56,7 @@ class User(Person, AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_securityOfficer = models.BooleanField(default=True)
+    is_reporter = models.BooleanField(default=True)
 
     objects = UserManager()
 

@@ -9,14 +9,13 @@
     <title>Log In</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
-    <meta content="Coderthemes" name="author" />
+    <meta content="App Detection" name="author" />
     <!-- App favicon -->
     <link rel="shortcut icon" href="assets/images/favicon.ico">
 
     <!-- App css -->
     <link href="{% static 'logincss/css/icons.min.css'%}" rel="stylesheet" type="text/css" />
     <link href="{% static 'logincss/css/app.min.css'%}" rel="stylesheet" type="text/css" id="light-style" />
-    <!-- <link href="assets/css/app-dark.min.css" rel="stylesheet" type="text/css" id="dark-style" /> -->
 
 </head>
 
@@ -40,6 +39,17 @@
                                 <p class="text-muted mb-4">Enter your email address and password to access admin panel.
                                 </p>
                             </div>
+
+                            <span>
+                                {% if messages %}
+            
+                                {% for message in messages %}
+                                <div style="color: red;">
+                                    {{message}}
+                                </div>
+                                {% endfor %}
+                                {% endif %}
+                            </span>
 
                             <form action="{% url 'signin'%}" method="POST">
                                 {% csrf_token %} 
@@ -80,7 +90,7 @@
 
                     <div class="row mt-3">
                         <div class="col-12 text-center">
-                            <p class="text-muted">Don't have an account? <a href="pages-register.html"
+                            <p class="text-muted">Don't have an account? <a href="{% url 'add_reporter'%}"
                                     class="text-muted ml-1"><b>Sign Up</b></a></p>
                         </div> <!-- end col -->
                     </div>
@@ -95,7 +105,7 @@
     <!-- end page -->
 
     <footer class="footer footer-alt">
-        <script>document.write(new Date().getFullYear())</script> © Prince - Coderthemes.com
+        <script>document.write(new Date().getFullYear())</script> © Prince - Criminal Detection using Facial recognition
     </footer>
 
     <!-- bundle -->
@@ -104,6 +114,5 @@
 
 </body>
 
-<!-- Mirrored from coderthemes.com/hyper/saas/pages-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 20 Feb 2021 10:14:52 GMT -->
 
 </html>

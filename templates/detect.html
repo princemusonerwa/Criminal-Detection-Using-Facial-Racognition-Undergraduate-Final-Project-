@@ -2,11 +2,11 @@
 {% load static %}
 {% block content %}
 <main class="content">
-    <div class="container-fluid p-0">
+    <div class="container-fluid">
         <h1>{{name}}</h1>
         <div class="row justify-content-center">
             {% if user.is_admin %}
-            <div class="col-lg-4 col-md-6 mt-5">
+            <div class="col-lg-4 col-md-6 mt-3">
                 <div class="card card-bordered">
                     <img class="card-img-top img-fluid" src="{% static 'img/avatars/trainDataImage.jpg'%}" alt="image">
                     <div class="card-body">
@@ -23,7 +23,7 @@
             </div>
             {% endif %}
 
-            <div class="col-lg-4 col-md-6 mt-5">
+            <div class="col-lg-4 col-md-6 mt-3">
                 <div class="card card-bordered">
                     <img class="card-img-top img-fluid" src="{% static  'img/avatars/uploadimage.jpg' %}" alt="image">
                     <div class="card-body">
@@ -57,7 +57,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-4 col-md-6 mt-5">
+            <div class="col-lg-4 col-md-6 mt-3">
                 <div class="card card-bordered">
                     <img class="card-img-top img-fluid" src="{% static  'img/avatars/webcam.jpg' %}" alt="image">
                     <div class="card-body">
