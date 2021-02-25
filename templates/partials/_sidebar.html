@@ -60,6 +60,7 @@
         </li>
         {% endif %}
 
+        {% if user.is_admin or user.is_securityOfficer %}
         <li class="side-nav-item">
             <a href="javascript: void(0);" class="side-nav-link">
                 <i class="uil-briefcase"></i>
@@ -97,6 +98,22 @@
                 <i class="uil-calender"></i>
                 <span> Detect </span>
             </a>
+        </li>
+        {% endif %}
+        <li class="side-nav-item">
+            <a href="javascript: void(0);" class="side-nav-link">
+                <i class="uil-clipboard-alt"></i>
+                <span> Crimes </span>
+                <span class="menu-arrow"></span>
+            </a>
+            <ul class="side-nav-second-level" aria-expanded="false">
+                <li>
+                    <a href="{% url 'add_crime'%}">Add a Crime</a>
+                </li>
+                <li>
+                    <a href="{% url 'crimes'%}">All Crimes</a>
+                </li>
+            </ul>
         </li>
     </ul>
 </div>

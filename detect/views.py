@@ -159,10 +159,13 @@ def addCrime(request):
     if request.method == 'POST':
         form = CrimeForm(request.POST)
         if form.is_valid():
-            person = form.cleaned_data.get('person')
-            form.save()
+            obj = form.save(commit=False)
+            obj.user_id = request.user.id
+            obj.save()
             return redirect('crimes')
             messages.success(request, 'Crime created Successfully.')
+        else:
+            messages.success(request, "An error occured.")
     else:
         form = CrimeForm()
     return render(request, 'crimes/crime_form.html', {'form':form})
@@ -186,7 +189,7 @@ def deleteCrime(request, id):
         return redirect('crimes')
     return render(request, 'crimes/crime_confirm_delete.html', {'crime':crime})
 
-def updateCrime(request):
+def updateCrime(request, id):
     obj = get_object_or_404(Crime, id = id) 
     # pass the object as instance in form 
     form = CrimeForm(request.POST or None, instance = obj) 

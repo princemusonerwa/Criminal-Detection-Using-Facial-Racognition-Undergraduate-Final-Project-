@@ -90,6 +90,8 @@ class DepartmentForm(forms.ModelForm):
         fields = '__all__'
 
 class CrimeForm(forms.ModelForm):
+    start_time = forms.TimeField()
+    end_time = forms.TimeField()
     class Meta:
         model = Crime
-        fields = ['person','name','description','status']
+        exclude = ['user', 'status']

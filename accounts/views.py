@@ -58,7 +58,7 @@ def updateUser(request, id):
         form.save()
         messages.success(request, f'Account created for {names}!')
         return redirect('users')
-    return render(request, 'accounts/register.html', {'form': form})
+    return render(request, 'accounts/add_user.html', {'form': form})
 
 def deleteUser(request, id):
     user = User.objects.get(id = id)
@@ -113,7 +113,7 @@ def signIn(request):
 
 def signOut(request):
     logout(request)
-    return redirect('signin')
+    return redirect('home')
 
 def exportUserListCsv(request):
     response = HttpResponse(content_type='text/csv')

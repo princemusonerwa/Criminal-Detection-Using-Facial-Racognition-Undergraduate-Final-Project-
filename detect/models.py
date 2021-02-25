@@ -6,6 +6,8 @@ from datetime import datetime
 from django.core.exceptions import ValidationError
 import re
 from django.core.validators import MinLengthValidator
+from django.conf import settings
+
 
 # Create your models
 
@@ -99,9 +101,13 @@ class Gallery(models.Model):
     photos = models.ImageField(upload_to = get_upload_to)
     
 class Crime(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE, default=None)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
     description = models.TextField()
+    recordedDate = models.DateTimeField(auto_now=True)
+    room = models.CharField(max_length=255)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
     STATUS_CHOICES = [
         ('Under Investigation', 'Under Investigation'),
         ('Solved', 'Solved'),

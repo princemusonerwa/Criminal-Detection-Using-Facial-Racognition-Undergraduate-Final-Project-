@@ -1,10 +1,83 @@
 {% extends 'base.html'%}
 {% block content %}
-    {% for crime in crimes %}
-        <div>
-            <h5>{{crime.name}}</h5>
-            <h5>{{crime.description}}</h5>
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Crimes</h4>
+            </div>
         </div>
-        <br>
-    {% endfor %}
-{% endblock %}
+    </div>
+    <!-- end page title -->
+
+    <div class="row mb-2">
+        <div class="col-sm-4">
+            <a href="{% url 'add_crime'%}" class="btn btn-primary btn-rounded mb-3"><i class="mdi mdi-plus"></i> Create
+                Crime</a>
+        </div>
+        <div class="col-sm-8">
+            <div class="text-sm-right">
+                <div class="btn-group mb-3 d-none d-sm-inline-block">
+                    <a href="{% url 'export_student_pdf'%}" target="_blank" class='btn btn-light mb-2'>Export to pdf</a>
+                </div>
+            </div>
+        </div>
+        <div class="container-fluid p-0">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table id="datatables-reponsive" class="table table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Description</th>
+                                        <th>Status</th>
+                                        <th>Reporter</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for crime in crimes %}
+                                    <tr>
+                                        <td>{{crime.name}}</td>
+                                        <td>{{crime.description}}</td>
+                                        <td>{{crime.status}}</td>
+                                        <td>{{crime.user.names}}</td>
+                                        <td>
+
+                                            <a href="{% url 'crime_details' crime.pk %}" class="action-icon"> <i
+                                                    class="mdi mdi-eye"></i></a>
+                                            {% if user.admin or user.id == crime.user.id %}
+                                            <a href="{% url 'edit_crime' crime.pk %}" class="action-icon"> <i
+                                                    class="mdi mdi-square-edit-outline"></i></a>
+                                            <a href="{% url 'delete_crime' crime.pk %}" class="action-icon"> <i
+                                                    class="mdi mdi-delete confirm-delete"></i></a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    // Datatables Responsive
+                    $("#datatables-reponsive").DataTable({
+                        responsive: true
+                    });
+                });
+                $(document).on('click', '.confirm-delete', function () {
+                    return confirm('Are you sure you want to delete this?');
+                })
+            </script>
+        </div>
+        <!-- end row-->
+    </div>
+
+    {% endblock %}
