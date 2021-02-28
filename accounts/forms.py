@@ -31,7 +31,7 @@ class UserForm(UserCreationForm):
             'names' : forms.TextInput(attrs={'class': 'form-control'}),
             'email' : forms.EmailInput(attrs={'class': 'form-control'}),
             'phone' : forms.TextInput(attrs={'class': 'form-control'}),  
-            'gender' : forms.Select(attrs={'class': 'form-control'}),          
+            'gender' : forms.RadioSelect(attrs={'class': 'custom-radio-list'}),           
             'dob' : forms.TextInput(attrs={'class': 'form-control'}),
             'address' : forms.TextInput(attrs={'class': 'form-control'}),
         }
