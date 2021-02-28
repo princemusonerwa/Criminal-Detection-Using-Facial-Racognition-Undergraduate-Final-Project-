@@ -9,8 +9,9 @@
     <meta content="Prince" name="author" />
 
     <!-- App css -->
-    <link href="{% static 'logincss/css/icons.min.css'%}" rel="stylesheet" type="text/css" />
-    <link href="{% static 'logincss/css/app.min.css'%}" rel="stylesheet" type="text/css" id="light-style" />
+    <link href="{% static 'css/icons.min.css'%}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/app.min.css'%}" rel="stylesheet" type="text/css" id="light-style" />
+    <link href="{% static 'css/main.css'%}" rel="stylesheet" type="text/css"/>
     <title>{% block title%} Face Detection {% endblock%}</title>
 </head>
 
@@ -24,7 +25,7 @@
             <!-- LOGO -->
             <a href="{% url 'index'%}" class="logo text-center logo-light">
                 <span class="logo-lg">
-                    <img src="{% static 'logincss/images/aucalogo.jpg'%}" alt="" height="50" width="50" class="rounded-circle">
+                    <img src="{% static 'images/aucalogo.jpg'%}" alt="" height="50" width="50" class="rounded-circle">
                 </span>
             </a>
             <!-- Left side navbar -->
@@ -80,12 +81,12 @@
         }
     </script>
     
-    <script src="{% static 'logincss/js/vendor.min.js'%}"></script>
-    <script src="{% static 'logincss/js/app.min.js'%}"></script>
+    <script src="{% static 'js/vendor.min.js'%}"></script>
+    <script src="{% static 'js/app.min.js'%}"></script>
 
-    <script src="{% static 'logincss/js/vendor/jquery.dataTables.min.js'%}"></script>
-    <script src="{% static 'logincss/js/vendor/dataTables.bootstrap4.js'%}"></script>
-    <script src="{% static 'logincss/js/vendor/dataTables.responsive.min.js'%}"></script>
+    <script src="{% static 'js/vendor/jquery.dataTables.min.js'%}"></script>
+    <script src="{% static 'js/vendor/dataTables.bootstrap4.js'%}"></script>
+    <script src="{% static 'js/vendor/dataTables.responsive.min.js'%}"></script>
     
 </body>
 

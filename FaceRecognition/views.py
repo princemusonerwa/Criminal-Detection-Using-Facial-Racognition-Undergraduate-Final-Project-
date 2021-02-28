@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from detect.models import Student, Employee, Person, DetectedCriminal
+from detect.models import Student, Employee, Person, DetectedCriminal, Crime
 from django.db.models import Count
 from django.http import JsonResponse
 
@@ -33,4 +33,5 @@ def index(request):
     return render(request, "index.html", context)
 
 def home(request):
-    return render(request, "home.html")
+    crimes = Crime.objects.all().order_by('-recorded_date')[:3]
+    return render(request, "home.html", {'crimes':crimes})

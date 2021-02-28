@@ -10,9 +10,9 @@
         <div class="card">
           <div class="card-header">
             {% if form.instance.pk %}
-              <h1 class="h3">Update Employee</h1>
+            <h1 class="h4">Update Employee</h1>
             {% else %}
-              <h1 class="h3">Create Employee</h1>
+            <h1 class="h4">Create Employee</h1>
             {% endif %}
           </div>
           <div class="card-body">
@@ -20,47 +20,60 @@
               {% csrf_token %}
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  {{form.staff_id|as_crispy_field}}
+                  {{form.staff_id.label_tag}}
+                  {{form.staff_id}}
                 </div>
                 <div class="form-group col-md-6">
-                  {{form.names|as_crispy_field}}
+                  {{form.names.label_tag}}
+                  {{form.names}}
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  {{form.email|as_crispy_field}}
+                  {{form.email.label_tag}}
+                  {{form.email}}
                 </div>
                 <div class="form-group col-md-6">
-                  {{form.phone|as_crispy_field}}
+                  {{form.phone.label_tag}}
+                  {{form.phone}}
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-check col-md-6">
-                    <label class="form-label" style="margin-right: 20px;">Gender</label>
-                    {{form.gender}}
+                  {{form.gender.label_tag}}
+                  {{form.gender}}
                 </div>
                 <div class="form-group col-md-6">
-                  {{form.dob|as_crispy_field}}
+                  {{form.dob.label_tag}}
+                  {{form.dob}}
                 </div>
-              </div>             
+              </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  {{form.address|as_crispy_field}}
+                  {{form.address.label_tag}}
+                  {{form.address}}
                 </div>
                 <div class="form-group col-md-6">
-                  {{form.status|as_crispy_field}}
+                  {{form.status.label_tag}}
+                  {{form.status}}
                 </div>
-                <div class="form-group">
-                    <label for="note-image">Images</label>
-                    <input type="file" name="images" class="form-control-file" id="note-image" multiple>
-                  </div> 
-              </div>                        
-              <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+              </div>
+              <div class="form-row">
+              <div class="form-group col-md-6">
+                {{form.employee_status.label_tag}}
+                {{form.employee_status}}
+              </div>
+              <div class="form-group col-md-6">
+                <label for="note-image">Images</label>
+                <input type="file" name="images" class="form-control-file" id="note-image" multiple>
+              </div>
           </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
         </div>
       </div>
     </div>
+  </div>
   </div>
 </main>
 {% endblock %}

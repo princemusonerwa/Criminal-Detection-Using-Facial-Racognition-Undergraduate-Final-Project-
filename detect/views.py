@@ -16,7 +16,7 @@ from django.template.loader import render_to_string
 from io import BytesIO
 import xlwt
 import threading
-
+from datetime import datetime
 # Create your views here.
 
 @login_required
@@ -38,7 +38,7 @@ def addStudent(request):
 
 @login_required
 def allStudent(request):
-    students = Student.objects.all()
+    students = Student.objects.all().order_by('student_id')
     return render(request, 'students/student_list.html', {'students':students})
 
 @login_required
@@ -101,7 +101,7 @@ def updateStudent(request, id):
     if form.is_valid():
         form.save()
         messages.success(request, 'Student updated Successfully.')
-        return redirect('/student/'+str(id))
+        return redirect("students")
     return render(request, 'students/student_form.html', {'form':form})
 
 @login_required
@@ -152,7 +152,7 @@ def updateEmployee(request, id):
     if form.is_valid():
         form.save()
         messages.success(request, 'Employee updated Successfully.')
-        return redirect('/employee/'+str(id))
+        return redirect('employees')
     return render(request, 'employees/employee_form.html', {'form':form})
 
 def addCrime(request):
@@ -271,13 +271,13 @@ def deleteDepartment(request, id):
     return render(request, 'departements/department_confirm_delete.html', {'department':department})
 
 def updateDepartment(request, id):
-    obj = get_object_or_404(Crime, id = id) 
+    obj = get_object_or_404(Department, id = id) 
     # pass the object as instance in form 
     form = DepartmentForm(request.POST or None, instance = obj) 
     if form.is_valid():
         form.save()
         messages.success(request, 'Department updated Successfully.')
-        return redirect('/department/'+str(id))
+        return redirect("departments")
     return render(request, 'departements/department_form.html', {'form':form})
 
 def loadDepartments(request):
@@ -291,13 +291,23 @@ class camThread(threading.Thread):
         self.previewName = previewName
         self.camID = camID
     def run(self):
-        print("Starting " + self.previewName)
+        date = datetime.now() 
+        print(date)
+        print(f'Starting at {self.previewName}')
         camPreview(self.previewName, self.camID)
 
 def camPreview(previewName, camID):
+    start_time = datetime.now()
+    start_time = f'{start_time.year}-{start_time.month}-{start_time.day}-{start_time.hour}-{start_time.minute}-{start_time.second}'
+    end_time = None
     cv2.namedWindow(previewName)
     cam = cv2.VideoCapture(camID)
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    save_path = f'/media/{start_time}__{end_time}.avi'
+
+    out = cv2.VideoWriter(save_path, fourcc, 20.0, (640, 480)) 
     if cam.isOpened():
+        print(f'The time the camera went on is {start_time}')
         ret, frame = cam.read()
     else:
         ret = False
@@ -322,10 +332,17 @@ def camPreview(previewName, camID):
             cv2.rectangle(frame, (x1,y2-20), (x2,y2), (255,0,0), cv2.FILLED)
             cv2.putText(frame, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1,(255,255,0), 2)
         cv2.imshow(previewName, frame)
-            
+        # Converts to HSV color space, OCV reads colors as BGR 
+        # frame is converted to hsv 
+       
+        out.write(frame)  
+
         key = cv2.waitKey(20)
         if key == 27:  # exit on ESC
             break
+    end_time = datetime.now()
+    end_time = f'{end_time.year}-{end_time.month}-{end_time.day}-{end_time.hour}-{end_time.minute}-{end_time.second}'
+    print(f'The time the camera went off is {end_time}')
     cv2.destroyWindow(previewName)
 
 def detect_criminal(request):

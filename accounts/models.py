@@ -49,6 +49,7 @@ class UserManager(BaseUserManager):
         return user
 
 class User(Person, AbstractBaseUser, PermissionsMixin):
+    person = models.OneToOneField(Person, parent_link = True, primary_key = True,db_column = 'person_id', on_delete=models.CASCADE) 
     date_joined = models.DateTimeField(auto_now_add=True) 
     last_login = models.DateTimeField(auto_now_add=True)
     is_admin = models.BooleanField(default=False) 

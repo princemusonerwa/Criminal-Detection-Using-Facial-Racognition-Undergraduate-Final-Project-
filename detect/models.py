@@ -76,6 +76,13 @@ def validate_length(value):
 
 class Student(Person):
     student_id = models.IntegerField(primary_key = True, validators=[validate_length])
+    STUDENT_STATUS = [
+        ('Active', 'Active'),
+        ('Inactive', 'Inactive'),
+        ('Graduated', 'Graduated'),
+        ('Suspended', 'Suspended')
+    ]
+    student_status = models.CharField(max_length=100, choices=STUDENT_STATUS, default="Active")
     faculty = models.ForeignKey(Faculty, on_delete=models.SET_NULL, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
 
@@ -91,6 +98,12 @@ class Employee(Person):
       ('Administration', 'Administration'),
     ]
     department = models.CharField(max_length=100, choices=DEPARTMENT_CHOICES)
+    EMPLOYEE_STATUS = [
+      ('Active', 'Active'),
+      ('Inactive', 'Inactive'),
+      ('Fired', 'Fired'),
+    ]
+    employee_status = models.CharField(max_length=100, choices=EMPLOYEE_STATUS, default="Active")
 
     def __str__(self):
         self.name
@@ -104,7 +117,7 @@ class Crime(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
     description = models.TextField()
-    recordedDate = models.DateTimeField(auto_now=True)
+    recorded_date = models.DateTimeField(auto_now=True)
     room = models.CharField(max_length=255)
     start_time = models.TimeField()
     end_time = models.TimeField()

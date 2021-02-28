@@ -13,8 +13,8 @@
     <meta content="Coderthemes" name="author" />
 
     <!-- App css -->
-    <link href="{% static 'logincss/css/icons.min.css'%}" rel="stylesheet" type="text/css" />
-    <link href="{% static 'logincss/css/app.min.css'%}" rel="stylesheet" type="text/css" id="light-style" />
+    <link href="{% static 'css/icons.min.css'%}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/app.min.css'%}" rel="stylesheet" type="text/css" id="light-style" />
 
 </head>
 
@@ -41,21 +41,6 @@
                 <ul class="navbar-nav mr-auto align-items-center">
                     <li class="nav-item mx-lg-2">
                         <a class="nav-link active" href="{% url 'home'%}">Home</a>
-                    </li>
-                    <li class="nav-item mx-lg-1">
-                        <a class="nav-link" href="#">Features</a>
-                    </li>
-                    <li class="nav-item mx-lg-1">
-                        <a class="nav-link" href="#">Pricing</a>
-                    </li>
-                    <li class="nav-item mx-lg-1">
-                        <a class="nav-link" href="#">FAQs</a>
-                    </li>
-                    <li class="nav-item mx-lg-1">
-                        <a class="nav-link" href="#">Clients</a>
-                    </li>
-                    <li class="nav-item mx-lg-1">
-                        <a class="nav-link" href="#">Contact</a>
                     </li>
                 </ul>
 
@@ -101,7 +86,7 @@
     <!-- END HERO -->
 
     <!-- START SERVICES -->
-    <section class="py-5">
+    <section class="py-3">
         <div class="container">
             <div class="row py-4">
                 <div class="col-lg-12">
@@ -110,50 +95,17 @@
                         <h3>The Latest crime <span class="text-primary">made</span> Inside AUCA</h3>
                     </div>
                 </div>
-            </div>
-
+            </div>            
             <div class="row">
+                {% for crime in crimes %}
                 <div class="col-lg-4">
                     <div class="text-center p-3">
-                        <div class="avatar-sm m-auto">
-                            <span class="avatar-title bg-primary-lighten rounded-circle">
-                                <i class="uil uil-desktop text-primary font-24"></i>
-                            </span>
-                        </div>
-                        <h4 class="mt-3">Responsive Layouts</h4>
-                        <p class="text-muted mt-2 mb-0">Et harum quidem rerum as expedita distinctio nam libero tempore
-                            cum soluta nobis est cumque quo.
+                        <h4 class="mt-3">{{crime.name}}</h4>
+                        <p class="text-muted mt-2 mb-0">{{crime.description}}
                         </p>
                     </div>
                 </div>
-
-                <div class="col-lg-4">
-                    <div class="text-center p-3">
-                        <div class="avatar-sm m-auto">
-                            <span class="avatar-title bg-primary-lighten rounded-circle">
-                                <i class="uil uil-vector-square text-primary font-24"></i>
-                            </span>
-                        </div>
-                        <h4 class="mt-3">Based on Bootstrap UI</h4>
-                        <p class="text-muted mt-2 mb-0">Temporibus autem quibusdam et aut officiis necessitatibus saepe
-                            eveniet ut sit et recusandae.
-                        </p>
-                    </div>
-                </div>
-
-                <div class="col-lg-4">
-                    <div class="text-center p-3">
-                        <div class="avatar-sm m-auto">
-                            <span class="avatar-title bg-primary-lighten rounded-circle">
-                                <i class="uil uil-presentation text-primary font-24"></i>
-                            </span>
-                        </div>
-                        <h4 class="mt-3">Creative Design</h4>
-                        <p class="text-muted mt-2 mb-0">Nam libero tempore, cum soluta a est eligendi minus id quod
-                            maxime placeate facere assumenda est.
-                        </p>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
 
         </div>
@@ -239,8 +191,8 @@
     <!-- END FOOTER -->
 
     <!-- bundle -->
-    <script src="{% static 'logincss/js/vendor.min.js'%}"></script>
-    <script src="{% static 'logincss/js/app.min.js'%}"></script>
+    <script src="{% static 'js/vendor.min.js'%}"></script>
+    <script src="{% static 'js/app.min.js'%}"></script>
 
 </body>
 
