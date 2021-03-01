@@ -6,8 +6,7 @@ from django.contrib import messages
 from .detection import train, predictKNN
 from django.core.files.storage import FileSystemStorage
 import cv2
-from .task import detect as notify
-from .task import trainData as trainData
+from .task import detect as notify, trainData
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 import csv
@@ -28,10 +27,9 @@ def addStudent(request):
             form.save()
             for f in files:
                 Gallery.objects.create(person=form.instance.person_ptr,photos=f)  
-
+            trainData.delay()
             messages.success(request, 'Student created Successfully.')   
-            return redirect('students')
-            
+            return redirect('students')            
     else:
         form = StudentForm()
     return render(request, 'students/student_form.html', {'form':form})
@@ -54,9 +52,12 @@ def detect(request):
 def studentDetails(request, id):
     student = get_object_or_404(Student, student_id = id)
     gallery = student.gallery_set.all()
+    profile_image = student.gallery_set.first
+    
     context = {
         'student' : student,
         'gallery': gallery,
+        'profile_image' : profile_image
     }
     return render(request, 'students/student_detail.html', context)
 
@@ -66,43 +67,37 @@ def deleteStudent(request, id):
     if request.method == 'POST':
         student.delete()
         messages.success(request, 'Student deleted Successfully.')
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+        return redirect('students')
+    return render(request, 'students/student_confirm_delete.html', {'student':student})
 
-@login_required
-def deleteImage(request, id):
-    image = Gallery.objects.get(id = id)
-    if request.method == 'POST':
-        image.delete()
-        messages.success(request, 'Image deleted Successfully.')
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-@login_required
-def addImage(request, id):
-    if request.method == 'POST':
-        person = Person.objects.get(id = id)
-        files = request.FILES.getlist('images')        
-        for f in files:
-            Gallery.objects.create(person= person,photos=f)   
-        messages.success(request, 'Image added Successfully.')
-        if(hasattr(person,"student")): 
-            student_id = person.student.student_id 
-            return redirect('student_details',str(student_id))  
-        if(hasattr(person,"employee")): 
-            staff_id = person.employee.staff_id 
-            return redirect('employee_details',str(staff_id))
-    else:
-        return render(request, 'gallery/image_form.html')
-
-@login_required
 def updateStudent(request, id):
     obj = get_object_or_404(Student, student_id = id) 
     # pass the object as instance in form 
-    form = StudentForm(request.POST or None, instance = obj) 
+    form = StudentForm(request.POST or request.FILES or None, instance = obj) 
+    files = request.FILES.getlist('images') 
     if form.is_valid():
         form.save()
+        for f in files:
+                Gallery.objects.create(person=obj,photos=f) 
         messages.success(request, 'Student updated Successfully.')
-        return redirect("students")
+        return redirect('students')
     return render(request, 'students/student_form.html', {'form':form})
+
+
+
+@login_required
+def updateEmployee(request, id):
+    obj = get_object_or_404(Employee, student_id = id) 
+    # pass the object as instance in form 
+    form = EmployeeForm(request.POST or request.FILES or None, instance = obj) 
+    files = request.FILES.getlist('images') 
+    if form.is_valid():
+        form.save()
+        for f in files:
+                Gallery.objects.create(person=obj,photos=f) 
+        messages.success(request, 'Employee updated Successfully.')
+        return redirect('employees')
+    return render(request, 'employees/employee_form.html', {'form':form})
 
 @login_required
 def addEmployee(request):
@@ -154,6 +149,33 @@ def updateEmployee(request, id):
         messages.success(request, 'Employee updated Successfully.')
         return redirect('employees')
     return render(request, 'employees/employee_form.html', {'form':form})
+
+
+@login_required
+def deleteImage(request, id):
+    image = Gallery.objects.get(id = id)
+    if request.method == 'POST':
+        image.delete()
+        messages.success(request, 'Image deleted Successfully.')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required
+def addImage(request, id):
+    if request.method == 'POST':
+        person = Person.objects.get(id = id)
+        files = request.FILES.getlist('images')        
+        for f in files:
+            Gallery.objects.create(person= person,photos=f)   
+        messages.success(request, 'Image added Successfully.')
+        if(hasattr(person,"student")): 
+            student_id = person.student.student_id 
+            return redirect('student_details',str(student_id))  
+        if(hasattr(person,"employee")): 
+            staff_id = person.employee.staff_id 
+            return redirect('employee_details',str(staff_id))
+    else:
+        return render(request, 'gallery/image_form.html')
+
 
 def addCrime(request):
     if request.method == 'POST':

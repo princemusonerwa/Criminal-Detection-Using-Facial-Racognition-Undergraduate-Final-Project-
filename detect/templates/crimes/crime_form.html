@@ -7,10 +7,12 @@
         {% else %}
             <h4>Update Crime</h4>
         {% endif %}
-        <form method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <input type="submit" value="Save Crime" class="btn btn-primary">
-        </form>
+        <div class="">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form|crispy }}
+                <input type="submit" value="Save Crime" class="btn btn-primary">
+            </form>
+        </div>
     </div>
 {% endblock %}

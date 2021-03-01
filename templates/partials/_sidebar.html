@@ -3,12 +3,14 @@
     <!--- Sidemenu -->
     <ul class="metismenu side-nav">
 
+        {% if user.is_authenticated %}
         <li class="side-nav-item">
             <a href="{% url 'index'%}" class="side-nav-link">
                 <i class="uil-home-alt"></i>
                 <span> Dashboard </span>
             </a>
         </li>
+        {% endif %}
 
         {% if user.is_admin %}
         <li class="side-nav-item">

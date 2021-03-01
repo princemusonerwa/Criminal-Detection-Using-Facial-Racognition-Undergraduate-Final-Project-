@@ -7,18 +7,18 @@ class StudentForm(forms.ModelForm):
         model = Student
         fields = ('student_id', 'names', 'email', 'phone', 'gender',
                   'dob', 'address', 'status', 'faculty', 'department')
-        
+
         widgets = {
-            'student_id' : forms.TextInput(attrs={'class': 'form-control'}),
-            'names' : forms.TextInput(attrs={'class': 'form-control'}),
-            'email' : forms.EmailInput(attrs={'class': 'form-control'}),
-            'phone' : forms.TextInput(attrs={'class': 'form-control'}),  
-            'gender' : forms.RadioSelect(attrs={'class': 'custom-radio-list'}),      
-            'dob' : forms.TextInput(attrs={'class': 'form-control'}),
-            'address' : forms.TextInput(attrs={'class': 'form-control'}),           
-            'faculty' : forms.Select(attrs={'class': 'form-control'}),
-            'department' : forms.Select(attrs={'class': 'form-control'}),
-            'status' : forms.Select(attrs={'class': 'form-control'})
+            'student_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'names': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'gender': forms.RadioSelect(attrs={'class': 'custom-radio-list'}),
+            'dob': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'faculty': forms.Select(attrs={'class': 'form-control'}),
+            'department': forms.Select(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-control'})
         }
 
     def __init__(self, *args, **kwargs):
@@ -43,16 +43,22 @@ class EmployeeForm(forms.ModelForm):
         fields = ('staff_id', 'names', 'email',
                   'phone', 'gender', 'dob', 'address', 'employee_status', 'status')
         widgets = {
-            'staff_id' : forms.TextInput(attrs={'class': 'form-control'}),
-            'names' : forms.TextInput(attrs={'class': 'form-control'}),
-            'email' : forms.EmailInput(attrs={'class': 'form-control', 'rows':4, 'cols':15}),
-            'phone' : forms.TextInput(attrs={'class': 'form-control'}),  
-            'gender' : forms.RadioSelect(attrs={'class': 'custom-radio-list'}),           
-            'dob' : forms.TextInput(attrs={'class': 'form-control'}),
-            'address' : forms.TextInput(attrs={'class': 'form-control'}),
-            'employee_status' : forms.Select(attrs={'class': 'form-control'}),           
-            'status' : forms.Select(attrs={'class': 'form-control'}),
+            'staff_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'names': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'rows': 4, 'cols': 15}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'gender': forms.RadioSelect(attrs={'class': 'custom-radio-list'}),
+            'dob': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'employee_status': forms.Select(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-control'}),
         }
+
+        def get_form(self, request, obj=None, **kwargs):
+            if obj:
+                if obj.get_profile().type==1:
+                    self.exclude = ('user_permissions',)
+            return super(EmployeeForm, self).get_form(request, obj=None, **kwargs)
 
 class GalleryForm(forms.ModelForm):
     photos = forms.ImageField(label='Photos')
@@ -61,19 +67,27 @@ class GalleryForm(forms.ModelForm):
         model = Gallery
         fields = ('photos', )
 
+
 class FacultyForm(forms.ModelForm):
     class Meta:
-        model = Faculty 
+        model = Faculty
         fields = '__all__'
+
 
 class DepartmentForm(forms.ModelForm):
     class Meta:
-        model = Department 
+        model = Department
         fields = '__all__'
+
 
 class CrimeForm(forms.ModelForm):
     start_time = forms.TimeField()
     end_time = forms.TimeField()
+
     class Meta:
         model = Crime
         exclude = ['user', 'status']
+
+        widgets = {
+            'description' : forms.Textarea(attrs={'class': 'form-control', 'rows':3})
+        }
