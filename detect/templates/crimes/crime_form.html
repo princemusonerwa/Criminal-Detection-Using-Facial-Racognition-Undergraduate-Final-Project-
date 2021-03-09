@@ -1,18 +1,55 @@
 {% extends 'base.html'%}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="container">
-        {% if not form.instance.student_id %}
-            <h4>Create Crime</h4>
-        {% else %}
-            <h4>Update Crime</h4>
-        {% endif %}
-        <div class="">
-            <form method="post" enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form|crispy }}
-                <input type="submit" value="Save Crime" class="btn btn-primary">
-            </form>
-        </div>
+<div class="container">
+    {% if not form.instance.id %}
+    <h4>Create Crime</h4>
+    {% else %}
+    <h4>Update Crime</h4>
+    {% endif %}
+    <div class="card-body">
+        <form method="post" novalidate enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {{form.name.label_tag}}
+                    {{form.name}}
+                </div>
+                <div class="form-group col-md-6">
+                    {{form.description.label_tag}}
+                    {{form.description}}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {{form.recorded_date.label_tag}}
+                    {{form.email}}
+                </div>
+                <div class="form-group col-md-6">
+                    {{form.room.label_tag}}
+                    {{form.room}}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-check col-md-6">
+                    {{form.start_time.label_tag}}
+                    {{form.start_time}}
+                </div>
+                <div class="form-group col-md-6">
+                    {{form.end_time.label_tag}}
+                    {{form.end_time}}
+                </div>
+            </div>
+            {% if user.is_admin %}
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    {{form.status.label_tag}}
+                    {{form.status}}
+                </div>
+            </div>
+            {% endif %}
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
     </div>
+</div>
 {% endblock %}

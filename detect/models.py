@@ -125,7 +125,7 @@ class Crime(models.Model):
         ('Under Investigation', 'Under Investigation'),
         ('Solved', 'Solved'),
     ]
-    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="Under Investigation")
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="Under Investigation",)
 
     def __str__(self):
         return self.name

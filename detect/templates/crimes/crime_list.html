@@ -1,4 +1,5 @@
 {% extends 'base.html'%}
+{% block title %}{% endblock %}
 {% block content %}
 <div class="container-fluid">
     <!-- start page title -->
@@ -49,12 +50,10 @@
 
                                             <a href="{% url 'crime_details' crime.pk %}" class="action-icon"> <i
                                                     class="mdi mdi-eye"></i></a>
-                                            {% if user.admin or user.id == crime.user.id %}
                                             <a href="{% url 'edit_crime' crime.pk %}" class="action-icon"> <i
                                                     class="mdi mdi-square-edit-outline"></i></a>
                                             <a href="{% url 'delete_crime' crime.pk %}" class="action-icon"> <i
                                                     class="mdi mdi-delete confirm-delete"></i></a>
-                                            {% endif %}
                                         </td>
                                     </tr>
                                     {% endfor %}

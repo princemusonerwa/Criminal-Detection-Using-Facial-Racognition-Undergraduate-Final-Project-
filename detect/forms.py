@@ -86,7 +86,7 @@ class CrimeForm(forms.ModelForm):
 
     class Meta:
         model = Crime
-        exclude = ['user', 'status']
+        exclude = ['user',]
 
         widgets = {
             'description' : forms.Textarea(attrs={'class': 'form-control', 'rows':3})

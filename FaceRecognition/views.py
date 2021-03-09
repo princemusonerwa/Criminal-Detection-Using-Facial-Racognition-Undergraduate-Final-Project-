@@ -35,3 +35,9 @@ def index(request):
 def home(request):
     crimes = Crime.objects.all().order_by('-recorded_date')[:3]
     return render(request, "home.html", {'crimes':crimes})
+
+def error_404_view(request, exception):
+    return render(request,'404.html')
+
+def error_500_view(request):
+    return render(request,'500.html')

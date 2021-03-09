@@ -29,7 +29,7 @@ SECRET_KEY = '_r_ain6y4%=5us^z3ftm$()+af^!0f_ro4d+ptz7e1$ypt5u=)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS =  ['*']
 
 CELERY_IMPORTS = ('detect.task',)
 
