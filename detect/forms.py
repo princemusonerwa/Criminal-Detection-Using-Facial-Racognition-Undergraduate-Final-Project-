@@ -1,33 +1,25 @@
 from django import forms
-from .models import Student, Employee, Gallery, Crime, Department
+from .models import Student, Employee, Gallery, Crime, Department, Person, Faculty, Department
 
 
 class StudentForm(forms.ModelForm):
-    student_id = forms.DecimalField(
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
-    names = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
-    email = forms.EmailField(widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
-    phone = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
-    GENDER_CHOICE = (('Male', 'Male'), ('Female', 'Female'))
-    gender = forms.ChoiceField(choices=GENDER_CHOICE, widget=forms.RadioSelect(
-        attrs={'class': 'form-check-input  d-inline'}))
-    dob = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
-    address = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
-    CHOICES = (('NOT WANTED', 'NOT WANTED'), ('WANTED', 'WANTED'),)
-    status = forms.ChoiceField(
-        choices=CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
-    faculty = forms.Select(attrs={'class': 'form-control'})
-    department = forms.Select(attrs={'class': 'form-control'})
-
     class Meta:
         model = Student
         fields = ('student_id', 'names', 'email', 'phone', 'gender',
                   'dob', 'address', 'status', 'faculty', 'department')
+
+        widgets = {
+            'student_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'names': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'gender': forms.RadioSelect(attrs={'class': 'custom-radio-list'}),
+            'dob': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'faculty': forms.Select(attrs={'class': 'form-control'}),
+            'department': forms.Select(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-control'})
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -46,30 +38,27 @@ class StudentForm(forms.ModelForm):
 
 
 class EmployeeForm(forms.ModelForm):
-    staff_id = forms.DecimalField(
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
-    names = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
-    email = forms.EmailField(widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
-    phone = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
-    GENDER_CHOICE = (('Male', 'Male'), ('Female', 'Female'))
-    gender = forms.ChoiceField(choices=GENDER_CHOICE, widget=forms.RadioSelect(
-        attrs={'class': 'form-check-input  d-inline'}))
-    dob = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
-    address = forms.CharField(widget=forms.TextInput(
-        attrs={'class': 'form-control'}))
-    CHOICES = (('NOT WANTED', 'NOT WANTED'), ('WANTED', 'WANTED'),)
-    status = forms.ChoiceField(
-        choices=CHOICES, widget=forms.Select(attrs={'class': 'form-control'}))
-
     class Meta:
         model = Employee
         fields = ('staff_id', 'names', 'email',
-                  'phone', 'gender', 'dob', 'address', 'status')
+                  'phone', 'gender', 'dob', 'address', 'employee_status', 'status')
+        widgets = {
+            'staff_id': forms.TextInput(attrs={'class': 'form-control'}),
+            'names': forms.TextInput(attrs={'class': 'form-control'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'rows': 4, 'cols': 15}),
+            'phone': forms.TextInput(attrs={'class': 'form-control'}),
+            'gender': forms.RadioSelect(attrs={'class': 'custom-radio-list'}),
+            'dob': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'employee_status': forms.Select(attrs={'class': 'form-control'}),
+            'status': forms.Select(attrs={'class': 'form-control'}),
+        }
 
+        def get_form(self, request, obj=None, **kwargs):
+            if obj:
+                if obj.get_profile().type==1:
+                    self.exclude = ('user_permissions',)
+            return super(EmployeeForm, self).get_form(request, obj=None, **kwargs)
 
 class GalleryForm(forms.ModelForm):
     photos = forms.ImageField(label='Photos')
@@ -79,7 +68,26 @@ class GalleryForm(forms.ModelForm):
         fields = ('photos', )
 
 
+class FacultyForm(forms.ModelForm):
+    class Meta:
+        model = Faculty
+        fields = '__all__'
+
+
+class DepartmentForm(forms.ModelForm):
+    class Meta:
+        model = Department
+        fields = '__all__'
+
+
 class CrimeForm(forms.ModelForm):
+    start_time = forms.TimeField()
+    end_time = forms.TimeField()
+
     class Meta:
         model = Crime
-        fields = '__all__'
+        exclude = ['user',]
+
+        widgets = {
+            'description' : forms.Textarea(attrs={'class': 'form-control', 'rows':3})
+        }

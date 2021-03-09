@@ -1,62 +1,86 @@
 {% extends 'base.html'%}
 {% block content %}
-<main class="content">
-    <div class="container-fluid p-0">
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Students</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
 
-        <h1 class="h3 mb-3">Student List</h1>
-        <a href="{% url 'export_student_csv'%}" class='btn btn-primary'>Export to csv</a>
-        <a href="{% url 'export_student_excel'%}" class='btn btn-primary'>Export to excel</a>
-        <a href="{% url 'export_student_pdf'%}" target="_blank" class='btn btn-primary'>Export to pdf</a>
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <table id="datatables-reponsive" class="table table-striped" style="width:100%">
-                            <thead>
-                                <tr>
-                                    <th>Names</th>
-                                    <th>Email</th>
-                                    <th>Address</th>
-                                    <th>Gender</th>
-                                    <th>Status</th>
-                                    <th>Faculty</th>
-                                    <th>Department</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for student in students %}
-                                <tr>
-                                    <td>{{student.names}}</td>
-                                    <td>{{student.email}}</td>
-                                    <td>{{student.address}}</td>
-                                    <td>{{student.gender}}</td>
-                                    <td>{{student.status}}</td>
-                                    <td>{{student.faculty}}</td>
-                                    <td>{{student.department}}</td>
-                                    <td>
-                                        <a href="{% url 'student_details' student.pk %}" class="btn btn-secondary btn-sm">Show</a>
-                                        <a href="{% url 'edit_student' student.pk %}" class="btn btn-warning btn-sm">Edit</a>
-                                        <a href="{% url 'delete_student' student.pk%}" class="btn btn-danger btn-sm">Delete</a>
-                                    </td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+    <div class="row mb-2">
+        <div class="col-sm-4">
+            <a href="{% url 'add_student'%}" class="btn btn-primary btn-rounded mb-3"><i class="mdi mdi-plus"></i> Create
+                Student</a>
+        </div>
+        <div class="col-sm-8">
+            <div class="text-sm-right">
+                <div class="btn-group mb-3 d-none d-sm-inline-block">
+                    <a href="{% url 'export_student_pdf'%}" target="_blank" class='btn btn-light mb-2'>
+                        <i class="uil-download-alt"></i>
+                        Export to pdf</a>
                 </div>
             </div>
         </div>
+        <div class="container-fluid p-0">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table id="datatables-reponsive" class="table table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Names</th>
+                                        <th>Email</th>
+                                        <th>Address</th>
+                                        <th>Status</th>
+                                        <th>Department</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for student in students %}
+                                    <tr>
+                                        <td>{{student.student_id}}</td>
+                                        <td>{{student.names}}</td>
+                                        <td>{{student.email}}</td>
+                                        <td>{{student.address}}</td>
+                                        <td>{{student.status}}</td>
+                                        <td>{{student.department}}</td>
+                                        <td>
+                                            <a href="{% url 'student_details' student.pk %}" class="action-icon"> <i
+                                                    class="mdi mdi-eye"></i></a>
+                                            <a href="{% url 'edit_student' student.pk %}" class="action-icon"> <i
+                                                    class="mdi mdi-square-edit-outline"></i></a>
+                                            <a href="{% url 'delete_student' student.pk%}" class="action-icon"> <i
+                                                    class="mdi mdi-delete confirm-delete"></i></a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                    // Datatables Responsive
+                    $("#datatables-reponsive").DataTable({
+                        responsive: true
+                    });
+                });
+                $(document).on('click', '.confirm-delete1', function () {
+                    return confirm('Are you sure you want to delete this?');
+                })
+            </script>
+        </div>
+        <!-- end row-->
     </div>
-</main>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Datatables Responsive
-        $("#datatables-reponsive").DataTable({
-            responsive: true
-        });
-    });
-</script>
-{% endblock %}
+    {% endblock %}

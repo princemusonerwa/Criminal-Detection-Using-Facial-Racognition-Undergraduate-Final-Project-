@@ -1,10 +1,13 @@
 from django.db import models
+from datetime import date
 import uuid
 from PIL import Image
 from datetime import datetime
 from django.core.exceptions import ValidationError
 import re
 from django.core.validators import MinLengthValidator
+from django.conf import settings
+
 
 # Create your models
 
@@ -27,6 +30,11 @@ def validate_mobile(value):
         msg = u"Invalid mobile number."
         raise ValidationError(msg)
 
+def validate_dob(value):
+    today = date.today()
+    if value > today:
+        raise ValidationError('Date of birth cannot be in future.')
+
 class Person(models.Model):
     names = models.CharField(max_length=255, validators=[MinLengthValidator(5)])
     email = models.EmailField(verbose_name='email address', unique=True)
@@ -36,13 +44,16 @@ class Person(models.Model):
         ('Female', 'Female'),
     ]
     gender = models.CharField(max_length=255, choices=GENDER_CHOICES, default="Male")
-    dob = models.DateField(verbose_name="Date of Birth", null="True")
+    dob = models.DateField(verbose_name="Date of Birth", null="True", validators=[validate_dob])
     address = models.CharField(max_length=255)
     STATUS_CHOICES = [
       ('NOT WANTED', 'NOT WANTED'),
       ('WANTED', 'WANTED')
     ]
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="NOT WANTED")
+
+    def __str__(self):
+        return self.names 
 
 
 class Faculty(models.Model):
@@ -65,6 +76,13 @@ def validate_length(value):
 
 class Student(Person):
     student_id = models.IntegerField(primary_key = True, validators=[validate_length])
+    STUDENT_STATUS = [
+        ('Active', 'Active'),
+        ('Inactive', 'Inactive'),
+        ('Graduated', 'Graduated'),
+        ('Suspended', 'Suspended')
+    ]
+    student_status = models.CharField(max_length=100, choices=STUDENT_STATUS, default="Active")
     faculty = models.ForeignKey(Faculty, on_delete=models.SET_NULL, null=True)
     department = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
 
@@ -80,6 +98,12 @@ class Employee(Person):
       ('Administration', 'Administration'),
     ]
     department = models.CharField(max_length=100, choices=DEPARTMENT_CHOICES)
+    EMPLOYEE_STATUS = [
+      ('Active', 'Active'),
+      ('Inactive', 'Inactive'),
+      ('Fired', 'Fired'),
+    ]
+    employee_status = models.CharField(max_length=100, choices=EMPLOYEE_STATUS, default="Active")
 
     def __str__(self):
         self.name
@@ -90,17 +114,21 @@ class Gallery(models.Model):
     photos = models.ImageField(upload_to = get_upload_to)
     
 class Crime(models.Model):
-    person = models.ForeignKey(Person, on_delete=models.CASCADE, default=None)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
     description = models.TextField()
+    recorded_date = models.DateTimeField(auto_now=True)
+    room = models.CharField(max_length=255)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
     STATUS_CHOICES = [
         ('Under Investigation', 'Under Investigation'),
         ('Solved', 'Solved'),
     ]
-    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="Under Investigation")
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="Under Investigation",)
 
     def __str__(self):
-        return self.person.names
+        return self.name
 
 
 class DetectedCriminal(models.Model):

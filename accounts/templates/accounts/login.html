@@ -1,46 +1,114 @@
-{% extends 'base.html'%}
 {% load static%}
-{% load crispy_forms_tags %}
-{% block content %}
-<main class="content d-flex p-0">
-    <div class="container d-flex flex-column">
-        <div class="row h-100">
-            <div class="col-sm-10 col-md-8 col-lg-6 mx-auto d-table h-100">
-                <div class="d-table-cell align-middle">
-                    <div class="card" style="width: 30rem; height: 25rem;">
-                        <div class="card-body">
-                            <div class="m-sm-4">
-                                <div class="text-center mt-4">
-                                    <h1>Sign In</h1>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <title>Log In</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Facial Recognition application, face Detection" name="description" />
+    <meta content="Prince" name="author" />
+
+    <!-- App css -->
+    <link href="{% static 'css/icons.min.css'%}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/app.min.css'%}" rel="stylesheet" type="text/css" id="light-style" />
+
+</head>
+
+<body class="loading authentication-bg"
+    data-layout-config='{"leftSideBarTheme":"dark","layoutBoxed":false, "leftSidebarCondensed":false, "leftSidebarScrollable":false,"darkMode":false, "showRightSidebarOnStart": true}'>
+    <div class="account-pages mt-5 mb-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-5">
+                    <div class="card">
+
+                        <!-- Logo -->
+                        <div class="card-header pt-4 pb-4 text-center bg-primary">
+
+                        </div>
+
+                        <div class="card-body p-4">
+
+                            <div class="text-center w-75 m-auto">
+                                <h4 class="text-dark-50 text-center mt-0 font-weight-bold">Sign In</h4>
+                                <p class="text-muted mb-4">Enter your email address and password to access admin panel.
+                                </p>
+                            </div>
+
+                            <span>
+                                {% if messages %}
+            
+                                {% for message in messages %}
+                                <div style="color: red;">
+                                    {{message}}
                                 </div>
-                                <form method="POST">
-                                    {% csrf_token %}
-                                    <div class="form-group">
-                                        {{form}}  
-                                        <small>
-                                            <a href="{% url 'password_reset'%}">Forgot password?</a>
-                                        </small>                                      
-                                    </div>
-                                    <div>
-                                        <div class="custom-control custom-checkbox align-items-center">
-                                            <!-- add checked  for being checked-->
-                                            <input type="checkbox" class="custom-control-input" value="remember-me"
-                                                name="remember-me">
-                                            <label class="custom-control-label text-small">Remember me next
-                                                time</label>
+                                {% endfor %}
+                                {% endif %}
+                            </span>
+
+                            <form action="{% url 'signin'%}" method="POST">
+                                {% csrf_token %} 
+                                <div class="form-group">
+                                    <label for="emailaddress">Email address</label>
+                                    <input class="form-control" type="email" id="emailaddress" required=""
+                                        name="username" placeholder="Enter your email">
+                                </div>
+
+                                <div class="form-group">
+                                    <a href="{% url 'password_reset'%}" class="text-muted float-right"><small>Forgot
+                                            your password?</small></a>
+                                    <label for="password">Password</label>
+                                    <div class="input-group input-group-merge">
+                                        <input type="password" id="password" class="form-control" name="password"
+                                            placeholder="Enter your password">
+                                        <div class="input-group-append" data-password="false">
                                         </div>
                                     </div>
-                                    <div class="text-center">
-                                        <button type="submit" class="btn btn-lg btn-primary">Sign In</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
+                                </div>
 
-                </div>
+                                <div class="form-group mb-3">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="checkbox-signin"
+                                            checked>
+                                        <label class="custom-control-label" for="checkbox-signin">Remember me</label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group mb-0 text-center">
+                                    <button class="btn btn-primary" type="submit"> Log In </button>
+                                </div>
+
+                            </form>
+                        </div> <!-- end card-body -->
+                    </div>
+                    <!-- end card -->
+
+                    <div class="row mt-3">
+                        <div class="col-12 text-center">
+                            <p class="text-muted">Don't have an account? <a href="{% url 'add_reporter'%}"
+                                    class="text-muted ml-1"><b>Sign Up</b></a></p>
+                        </div> <!-- end col -->
+                    </div>
+                    <!-- end row -->
+
+                </div> <!-- end col -->
             </div>
+            <!-- end row -->
         </div>
+        <!-- end container -->
     </div>
-</main>
-{% endblock %}
+    <!-- end page -->
+
+    <footer class="footer footer-alt">
+        <script>document.write(new Date().getFullYear())</script> © Prince - Criminal Detection using Facial recognition
+    </footer>
+
+    <!-- bundle -->
+    <script src="{% static 'js/vendor.min.js'%}"></script>
+    <script src="{% static 'js/app.min.js'%}"></script>
+
+</body>
+
+
+</html>

@@ -1,56 +1,122 @@
-{% load static%}
-<nav id="sidebar" class="sidebar ">
-    <div class="sidebar-content js-simplebar">
-        <a class="sidebar-brand" href="{% url 'index'%}">
-            <img src="{% static 'img/AucaLogo.jpg'%}" alt="No Image" width="24px" height="24px" style="object-fit: cover;">
+<div class="h-100" id="left-side-menu-container" data-simplebar>
 
-            <span class="align-middle">Detection App</span>
-        </a>
+    <!--- Sidemenu -->
+    <ul class="metismenu side-nav">
 
-        <ul class="sidebar-nav">
-            <li class="sidebar-header">
-            </li>
-            <li class="sidebar-item active">
-                <a href="#students" data-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle fa fa-graduation-cap" ></i> <span class="align-middle">Student</span>
-                </a>
-                <ul id="students" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'add_student'%}">Add
-                            Student</a></li>
-                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'students'%}">All Student</a>
-                    </li>
-                </ul>
-            </li>
-            <li class="sidebar-item active">
-                <a href="#employees" data-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle fa fa-user"></i> <span class="align-middle">employee</span>
-                </a>
-                <ul id="employees" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'add_employee'%}">Add
-                            Employee</a></li>
-                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'employees'%}">All
-                            Employee</a></li>
-                </ul>
-            </li>
-            {% if user.is_admin %}
-            <li class="sidebar-item active">
-                <a href="#users" data-toggle="collapse" class="sidebar-link collapsed">
-                    <i class="align-middle fa fa-user-plus"></i> <span class="align-middle">Users</span>
-                </a>
-                <ul id="users" class="sidebar-dropdown list-unstyled collapse " data-parent="#sidebar">
-                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'register'%}">Add User</a>
-                    </li>
-                    <li class="sidebar-item"><a class="sidebar-link" href="{% url 'users'%}">All User</a>
-                    </li>
-                </ul>
-            </li>
-            {% endif %}
-            <li class="sidebar-item">
-                <a class="sidebar-link" href="{% url 'detect'%}">
-                    <i class="fa fa-camera"></i> <span class="align-middle">Detect
-                        Criminal</span>
-                </a>
-            </li>
-        </ul>
-    </div>
-</nav>
+        {% if user.is_authenticated %}
+        <li class="side-nav-item">
+            <a href="{% url 'index'%}" class="side-nav-link">
+                <i class="uil-home-alt"></i>
+                <span> Dashboard </span>
+            </a>
+        </li>
+        {% endif %}
+
+        {% if user.is_admin %}
+        <li class="side-nav-item">
+            <a href="javascript: void(0);" class="side-nav-link">
+                <i class="uil-store"></i>
+                <span> Faculty </span>
+                <span class="menu-arrow"></span>
+            </a>
+            <ul class="side-nav-second-level" aria-expanded="false">
+                <li>
+                    <a href="{% url 'add_faculty'%}">Create Faculty</a>
+                </li>
+                <li>
+                    <a href="{% url 'faculties'%}">All Faculties</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="side-nav-item">
+            <a href="javascript: void(0);" class="side-nav-link">
+                <i class="uil-envelope"></i>
+                <span> Department </span>
+                <span class="menu-arrow"></span>
+            </a>
+            <ul class="side-nav-second-level" aria-expanded="false">
+                <li>
+                    <a href="{% url 'add_department'%}">Create Department</a>
+                </li>
+                <li>
+                    <a href="{% url 'departments'%}">All Departments</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="side-nav-item">
+            <a href="javascript: void(0);" class="side-nav-link">
+                <i class="uil-user"></i>
+                <span> Users </span>
+                <span class="menu-arrow"></span>
+            </a>
+            <ul class="side-nav-second-level" aria-expanded="false">
+                <li>
+                    <a href="{% url 'register'%}">Create user</a>
+                </li>
+                <li>
+                    <a href="{% url 'users'%}">All Uses</a>
+                </li>
+            </ul>
+        </li>
+        {% endif %}
+
+        {% if user.is_admin or user.is_securityOfficer %}
+        <li class="side-nav-item">
+            <a href="javascript: void(0);" class="side-nav-link">
+                <i class="uil-briefcase"></i>
+                <span> Student </span>
+                <span class="menu-arrow"></span>
+            </a>
+            <ul class="side-nav-second-level" aria-expanded="false">
+                <li>
+                    <a href="{% url 'add_student'%}">Create Student</a>
+                </li>
+                <li>
+                    <a href="{% url 'students'%}">All Student</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="side-nav-item">
+            <a href="javascript: void(0);" class="side-nav-link">
+                <i class="uil-clipboard-alt"></i>
+                <span> Employee </span>
+                <span class="menu-arrow"></span>
+            </a>
+            <ul class="side-nav-second-level" aria-expanded="false">
+                <li>
+                    <a href="{% url 'add_employee'%}">Create Employee</a>
+                </li>
+                <li>
+                    <a href="{% url 'employees'%}">All Employee</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="side-nav-item">
+            <a href="{% url 'detect'%}" class="side-nav-link">
+                <i class="uil-camera"></i>
+                <span> Detect </span>
+            </a>
+        </li>
+        {% endif %}
+        <li class="side-nav-item">
+            <a href="javascript: void(0);" class="side-nav-link">
+                <i class="uil-clipboard-alt"></i>
+                <span> Crimes </span>
+                <span class="menu-arrow"></span>
+            </a>
+            <ul class="side-nav-second-level" aria-expanded="false">
+                <li>
+                    <a href="{% url 'add_crime'%}">Add a Crime</a>
+                </li>
+                <li>
+                    <a href="{% url 'crimes'%}">All Crimes</a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<!-- Sidebar -left -->

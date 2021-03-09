@@ -1,13 +1,12 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import StudentForm, EmployeeForm, CrimeForm
-from .models import Student, Employee, Crime, Department, Faculty, Gallery, Person
+from .forms import StudentForm, EmployeeForm, CrimeForm, DepartmentForm, FacultyForm
+from .models import Student, Employee, Crime, Department, Faculty, Gallery, Person, Faculty, Department
 from django.contrib import messages
 from .detection import train, predictKNN
 from django.core.files.storage import FileSystemStorage
 import cv2
-from .task import detect as notify
-from .task import trainData as trainData
+from .task import detect as notify, trainData
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 import csv
@@ -16,7 +15,7 @@ from django.template.loader import render_to_string
 from io import BytesIO
 import xlwt
 import threading
-
+from datetime import datetime
 # Create your views here.
 
 @login_required
@@ -28,16 +27,16 @@ def addStudent(request):
             form.save()
             for f in files:
                 Gallery.objects.create(person=form.instance.person_ptr,photos=f)  
-
+            trainData.delay()
             messages.success(request, 'Student created Successfully.')   
-            return redirect('students')
-            
+            return redirect('students')            
     else:
         form = StudentForm()
     return render(request, 'students/student_form.html', {'form':form})
 
+@login_required
 def allStudent(request):
-    students = Student.objects.all()
+    students = Student.objects.all().order_by('student_id')
     return render(request, 'students/student_list.html', {'students':students})
 
 @login_required
@@ -53,9 +52,12 @@ def detect(request):
 def studentDetails(request, id):
     student = get_object_or_404(Student, student_id = id)
     gallery = student.gallery_set.all()
+    profile_image = student.gallery_set.first
+    
     context = {
         'student' : student,
         'gallery': gallery,
+        'profile_image' : profile_image
     }
     return render(request, 'students/student_detail.html', context)
 
@@ -68,41 +70,34 @@ def deleteStudent(request, id):
         return redirect('students')
     return render(request, 'students/student_confirm_delete.html', {'student':student})
 
-@login_required
-def deleteImage(request, id):
-    image = Gallery.objects.get(id = id)
-    if request.method == 'POST':
-        image.delete()
-        messages.success(request, 'Image deleted Successfully.')
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
-
-@login_required
-def addImage(request, id):
-    if request.method == 'POST':
-        person = Person.objects.get(id = id)
-        files = request.FILES.getlist('images')        
-        for f in files:
-            Gallery.objects.create(person= person,photos=f)   
-        messages.success(request, 'Image added Successfully.')
-        if(hasattr(person,"student")): 
-            student_id = person.student.student_id 
-            return redirect('student_details',str(student_id))  
-        if(hasattr(person,"employee")): 
-            staff_id = person.employee.staff_id 
-            return redirect('employee_details',str(staff_id))
-    else:
-        return render(request, 'gallery/image_form.html')
-
-@login_required
 def updateStudent(request, id):
     obj = get_object_or_404(Student, student_id = id) 
     # pass the object as instance in form 
-    form = StudentForm(request.POST or None, instance = obj) 
+    form = StudentForm(request.POST or request.FILES or None, instance = obj) 
+    files = request.FILES.getlist('images') 
     if form.is_valid():
         form.save()
+        for f in files:
+                Gallery.objects.create(person=obj,photos=f) 
         messages.success(request, 'Student updated Successfully.')
-        return redirect('/student/'+str(id))
+        return redirect('students')
     return render(request, 'students/student_form.html', {'form':form})
+
+
+
+@login_required
+def updateEmployee(request, id):
+    obj = get_object_or_404(Employee, student_id = id) 
+    # pass the object as instance in form 
+    form = EmployeeForm(request.POST or request.FILES or None, instance = obj) 
+    files = request.FILES.getlist('images') 
+    if form.is_valid():
+        form.save()
+        for f in files:
+                Gallery.objects.create(person=obj,photos=f) 
+        messages.success(request, 'Employee updated Successfully.')
+        return redirect('employees')
+    return render(request, 'employees/employee_form.html', {'form':form})
 
 @login_required
 def addEmployee(request):
@@ -152,16 +147,47 @@ def updateEmployee(request, id):
     if form.is_valid():
         form.save()
         messages.success(request, 'Employee updated Successfully.')
-        return redirect('/employee/'+str(id))
+        return redirect('employees')
     return render(request, 'employees/employee_form.html', {'form':form})
+
+
+@login_required
+def deleteImage(request, id):
+    image = Gallery.objects.get(id = id)
+    if request.method == 'POST':
+        image.delete()
+        messages.success(request, 'Image deleted Successfully.')
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+@login_required
+def addImage(request, id):
+    if request.method == 'POST':
+        person = Person.objects.get(id = id)
+        files = request.FILES.getlist('images')        
+        for f in files:
+            Gallery.objects.create(person= person,photos=f)   
+        messages.success(request, 'Image added Successfully.')
+        if(hasattr(person,"student")): 
+            student_id = person.student.student_id 
+            return redirect('student_details',str(student_id))  
+        if(hasattr(person,"employee")): 
+            staff_id = person.employee.staff_id 
+            return redirect('employee_details',str(staff_id))
+    else:
+        return render(request, 'gallery/image_form.html')
+
 
 def addCrime(request):
     if request.method == 'POST':
         form = CrimeForm(request.POST)
         if form.is_valid():
-            form.save()
+            obj = form.save(commit=False)
+            obj.user_id = request.user.id
+            obj.save()
             return redirect('crimes')
             messages.success(request, 'Crime created Successfully.')
+        else:
+            messages.success(request, "An error occured.")
     else:
         form = CrimeForm()
     return render(request, 'crimes/crime_form.html', {'form':form})
@@ -195,6 +221,87 @@ def updateCrime(request, id):
         return redirect('/crime/'+str(id))
     return render(request, 'crimes/crime_form.html', {'form':form})
 
+
+def addFaculty(request):
+    if request.method == 'POST':
+        form = FacultyForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('faculties')
+            messages.success(request, 'Faculty created Successfully.')
+    else:
+        form = FacultyForm()
+    return render(request, 'faculties/faculty_form.html', {'form':form})
+
+def allFaculty(request):
+    faculties = Faculty.objects.all()
+    return render(request, 'faculties/faculty_list.html', {'faculties':faculties})
+
+def facultyDetails(request, id):
+    faculty= get_object_or_404(Faculty, id = id)
+    context = {
+        'faculty' : faculty
+    }
+    return render(request, 'faculties/faculty_detail.html', context)
+
+def deleteFaculty(request, id):
+    faculty = Faculty.objects.get(id = id)
+    if request.method == 'POST':
+        faculty.delete()
+        messages.success(request, 'Faculty deleted Successfully.')
+        return redirect('faculties')
+    return render(request, 'faculties/faculty_confirm_delete.html', {'faculty':faculty})
+
+def updateFaculty(request, id):
+    obj = get_object_or_404(Faculty, id = id) 
+    # pass the object as instance in form 
+    form = FacultyForm(request.POST or None, instance = obj) 
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Faculty updated Successfully.')
+        return redirect('/faculty/'+str(id))
+    return render(request, 'faculties/faculty_form.html', {'form':form})
+
+def addDepartment(request):
+    if request.method == 'POST':
+        form = DepartmentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('departments')
+            messages.success(request, 'Department created Successfully.')
+    else:
+        form = DepartmentForm()
+    return render(request, 'departements/department_form.html', {'form':form})
+
+def allDepartment(request):
+    departments = Department.objects.all()
+    return render(request, 'departements/department_list.html', {'departments':departments})
+
+def departmentDetails(request, id):
+    department= get_object_or_404(Department, id = id)
+    context = {
+        'department' : department
+    }
+    return render(request, 'departements/department_detail.html', context)
+
+def deleteDepartment(request, id):
+    department = Department.objects.get(id = id)
+    if request.method == 'POST':
+        department.delete()
+        messages.success(request, 'Department deleted Successfully.')
+        return redirect('departments')
+    return render(request, 'departements/department_confirm_delete.html', {'department':department})
+
+def updateDepartment(request, id):
+    obj = get_object_or_404(Department, id = id) 
+    # pass the object as instance in form 
+    form = DepartmentForm(request.POST or None, instance = obj) 
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Department updated Successfully.')
+        return redirect("departments")
+    return render(request, 'departements/department_form.html', {'form':form})
+
 def loadDepartments(request):
     faculty_id = request.GET.get('faculty')
     departments = Department.objects.filter(faculty_id=faculty_id).order_by('name')
@@ -206,13 +313,23 @@ class camThread(threading.Thread):
         self.previewName = previewName
         self.camID = camID
     def run(self):
-        print("Starting " + self.previewName)
+        date = datetime.now() 
+        print(date)
+        print(f'Starting at {self.previewName}')
         camPreview(self.previewName, self.camID)
 
 def camPreview(previewName, camID):
+    start_time = datetime.now()
+    start_time = f'{start_time.year}-{start_time.month}-{start_time.day}-{start_time.hour}-{start_time.minute}-{start_time.second}'
+    end_time = None
     cv2.namedWindow(previewName)
     cam = cv2.VideoCapture(camID)
+    fourcc = cv2.VideoWriter_fourcc(*'XVID')
+    save_path = f'/media/{start_time}__{end_time}.avi'
+
+    out = cv2.VideoWriter(save_path, fourcc, 20.0, (640, 480)) 
     if cam.isOpened():
+        print(f'The time the camera went on is {start_time}')
         ret, frame = cam.read()
     else:
         ret = False
@@ -228,7 +345,8 @@ def camPreview(previewName, camID):
         
         for name,loc in predictions:
             if name != "unknown":
-                notify.delay(name,"gishushu")
+                if camID == 0:
+                    notify.delay(name,"1st Flow")
 
             y1,x2,y2,x1 = loc
             y1,x2,y2,x1 = y1*4,x2*4,y2*4,x1*4
@@ -236,10 +354,17 @@ def camPreview(previewName, camID):
             cv2.rectangle(frame, (x1,y2-20), (x2,y2), (255,0,0), cv2.FILLED)
             cv2.putText(frame, name, (x1+6, y2-6), cv2.FONT_HERSHEY_COMPLEX, 1,(255,255,0), 2)
         cv2.imshow(previewName, frame)
-            
+        # Converts to HSV color space, OCV reads colors as BGR 
+        # frame is converted to hsv 
+       
+        out.write(frame)  
+
         key = cv2.waitKey(20)
         if key == 27:  # exit on ESC
             break
+    end_time = datetime.now()
+    end_time = f'{end_time.year}-{end_time.month}-{end_time.day}-{end_time.hour}-{end_time.minute}-{end_time.second}'
+    print(f'The time the camera went off is {end_time}')
     cv2.destroyWindow(previewName)
 
 def detect_criminal(request):

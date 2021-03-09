@@ -29,7 +29,7 @@ SECRET_KEY = '_r_ain6y4%=5us^z3ftm$()+af^!0f_ro4d+ptz7e1$ypt5u=)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS =  ['*']  
 
 CELERY_IMPORTS = ('detect.task',)
 
@@ -92,7 +92,7 @@ DATABASES = {
         'NAME': 'final_project',
         'USER': 'postgres',
         'PORT': '5432',
-        'PASSWORD': 'Prince@1997',
+        'PASSWORD': '19974',
         'HOST': 'localhost',
     }
 }
@@ -143,15 +143,13 @@ MEDIA_ROOT =  os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-EMAIL_BACKEND="django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST="smtp.gmail.com"
-EMAIL_PORT=587
-EMAIL_USE_TLS= True
+EMAIL_BACKEND ="django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST ="smtp.gmail.com"
+EMAIL_PORT =587
+EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'princeshema19974@gmail.com'
 EMAIL_HOST_PASSWORD = 'nhhrekbkpuffgmda'
 
 AUTH_USER_MODEL = 'accounts.User'
 
-LOGIN_REDIRECT_URL = 'index'
-
-LOGIN_URL = 'login'
+LOGIN_URL = 'signin'
