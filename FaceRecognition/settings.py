@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
-import dj_database_url 
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,12 +27,12 @@ TRAIN_ROOT=os.path.join(BASE_DIR,'media/images/training')
 SECRET_KEY = '_r_ain6y4%=5us^z3ftm$()+af^!0f_ro4d+ptz7e1$ypt5u=)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS =  ['finalprince.herokuapp.com']  
+ALLOWED_HOSTS =  ['https://finalprince.herokuapp.com','127.0.0.1']  
 
 CELERY_IMPORTS = ('detect.task',)
-
+ 
 # Application definition
 
 INSTALLED_APPS = [
@@ -97,8 +97,6 @@ DATABASES = {
         'HOST': 'localhost',
     }
 }
-
-
 
 
 
