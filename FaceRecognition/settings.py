@@ -29,7 +29,7 @@ SECRET_KEY = '_r_ain6y4%=5us^z3ftm$()+af^!0f_ro4d+ptz7e1$ypt5u=)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS =  ['https://finalprince.herokuapp.com','127.0.0.1']  
+ALLOWED_HOSTS =  ['https://final-project-prince.herokuapp.com','127.0.0.1']  
 
 CELERY_IMPORTS = ('detect.task',)
  
