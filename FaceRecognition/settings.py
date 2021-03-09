@@ -27,12 +27,12 @@ TRAIN_ROOT=os.path.join(BASE_DIR,'media/images/training')
 SECRET_KEY = '_r_ain6y4%=5us^z3ftm$()+af^!0f_ro4d+ptz7e1$ypt5u=)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS =  ['https://final-project-prince.herokuapp.com','127.0.0.1']  
+ALLOWED_HOSTS =  ['*']  
 
 CELERY_IMPORTS = ('detect.task',)
- 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -140,8 +140,6 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR,'assets')
 
-
-
 MEDIA_ROOT =  os.path.join(BASE_DIR, 'media') 
 MEDIA_URL = '/media/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -159,5 +157,6 @@ LOGIN_URL = 'signin'
 
 STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
 
+import dj_database_url 
 prod_db  =  dj_database_url.config(conn_max_age=500)
 DATABASES['default'].update(prod_db)
