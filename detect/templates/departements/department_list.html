@@ -1,9 +1,24 @@
 {% extends 'base.html'%}
 {% block content %}
-<main class="content">
-    <div class="container-fluid p-0">
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Departments</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
 
-        <h1 class="h3 mb-3">Department List</h1>
+    <div class="row mb-2">
+        <div class="col-sm-4">
+            <a href="{% url 'add_department'%}" class="btn btn-primary btn-rounded mb-3"><i class="mdi mdi-plus"></i>
+                Create
+                Department</a>
+        </div>
+    </div>
+    <div class="container-fluid p-0">
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -36,15 +51,16 @@
             </div>
         </div>
 
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Datatables Responsive
+                $("#datatables-reponsive").DataTable({
+                    responsive: true
+                });
+            });
+        </script>
     </div>
-</main>
+    <!-- end row-->
+</div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Datatables Responsive
-        $("#datatables-reponsive").DataTable({
-            responsive: true
-        });
-    });
-</script>
 {% endblock %}

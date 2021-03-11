@@ -6,7 +6,7 @@ class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = ('student_id', 'names', 'email', 'phone', 'gender',
-                  'dob', 'address', 'status', 'faculty', 'department')
+                  'dob', 'address', 'status', 'student_status','faculty', 'department')
 
         widgets = {
             'student_id': forms.TextInput(attrs={'class': 'form-control'}),
@@ -18,7 +18,8 @@ class StudentForm(forms.ModelForm):
             'address': forms.TextInput(attrs={'class': 'form-control'}),
             'faculty': forms.Select(attrs={'class': 'form-control'}),
             'department': forms.Select(attrs={'class': 'form-control'}),
-            'status': forms.Select(attrs={'class': 'form-control'})
+            'status': forms.Select(attrs={'class': 'form-control'}),
+            'student_status': forms.Select(attrs={'class': 'form-control'})
         }
 
     def __init__(self, *args, **kwargs):
@@ -83,11 +84,22 @@ class DepartmentForm(forms.ModelForm):
 class CrimeForm(forms.ModelForm):
     start_time = forms.TimeField()
     end_time = forms.TimeField()
+    STATUS_CHOICES = [
+        ('Under Investigation' , 'Under Investigation'),
+        ('Solved' , 'Solved'),
+
+    ]
+    status = forms.ChoiceField(choices=STATUS_CHOICES, initial="Under Investigation")
 
     class Meta:
-        model = Crime
-        exclude = ['user',]
-
+        model = Crime        
+        fields = ('name','description','start_time','end_time','room','status')
+        
         widgets = {
-            'description' : forms.Textarea(attrs={'class': 'form-control', 'rows':3})
+            'name' : forms.TextInput(attrs={'class': 'form-control'}),
+            'description' : forms.Textarea(attrs={'class': 'form-control', 'rows':3}),
         }
+
+class DownloadForm(forms.Form):
+    from_date = forms.CharField(widget=forms.HiddenInput)
+    to_date = forms.CharField(widget=forms.HiddenInput)
