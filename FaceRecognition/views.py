@@ -33,7 +33,7 @@ def index(request):
     return render(request, "index.html", context)
 
 def home(request):
-    crimes = Crime.objects.all().order_by('-recorded_date')[:3]
+    crimes = Crime.objects.all().order_by('-updated_at')[:3]
     return render(request, "home.html", {'crimes':crimes})
 
 def error_404_view(request, exception):

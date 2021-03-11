@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
-from .forms import StudentForm, EmployeeForm, CrimeForm, DepartmentForm, FacultyForm
+from .forms import StudentForm, EmployeeForm, CrimeForm, DepartmentForm, FacultyForm, DownloadForm
 from .models import Student, Employee, Crime, Department, Faculty, Gallery, Person, Faculty, Department
 from django.contrib import messages
 from .detection import train, predictKNN
@@ -367,6 +367,7 @@ def camPreview(previewName, camID):
     print(f'The time the camera went off is {end_time}')
     cv2.destroyWindow(previewName)
 
+
 def detect_criminal(request):
     if  request.method == 'POST':
         thread1 = camThread("Camera 1", 0)
@@ -494,7 +495,109 @@ def exportEmployeeListExcel(request):
         row_num += 1
         for col_num in range(len(row)):
             ws.write(row_num, col_num, str(row[col_num]), font_style)
-        
     wb.save(response)
 
     return response
+
+
+def pendingCrimesReport(request):
+    if request.POST:
+        from_date = request.POST.get('from_date')
+        to_date = request.POST.get('to_date')
+        searchResult = Crime.objects.filter(status="Pending", updated_at__gte=from_date,updated_at__lte=to_date)
+        download_form = DownloadForm(initial={
+                'from_date': from_date,
+                'to_date': to_date
+            })
+        return render(request, "reports/pending_crimes.html", {'pending_crimes':searchResult, 'download_form':download_form })
+    else:
+        pending_crimes = Crime.objects.filter(status="Pending")
+        return render(request, "reports/pending_crimes.html", {'pending_crimes': pending_crimes})
+
+def solvedCrimesReport(request):
+    if request.POST:
+        from_date = request.POST.get('from_date')
+        to_date = request.POST.get('to_date')
+        searchResult = Crime.objects.filter(status="Solved", updated_at__gte=from_date,updated_at__lte=to_date) 
+        download_form = DownloadForm(initial={
+                'from_date': from_date,
+                'to_date': to_date
+            })
+        return render(request, "reports/solved_crimes.html", {'solved_crimes':searchResult, 'download_form':download_form })
+    else:
+        solved_crimes = Crime.objects.filter(status="Solved")
+        return render(request, "reports/solved_crimes.html", {'solved_crimes': solved_crimes})
+
+def UnderInvestigationCrimesReport(request):
+    if request.POST:
+        from_date = request.POST.get('from_date')
+        to_date = request.POST.get('to_date')
+        searchResult = Crime.objects.filter(status="Under Investigation", updated_at__gte=from_date,updated_at__lte=to_date)
+        download_form = DownloadForm(initial={
+                'from_date': from_date,
+                'to_date': to_date
+            })
+        return render(request, "reports/under_investigation_crimes.html", {'underInv_crimes':searchResult, 'download_form':download_form })
+    else:
+        underInv_crimes = Crime.objects.filter(status="Under Investigation")
+        return render(request, "reports/under_investigation_crimes.html", {'underInv_crimes': underInv_crimes})
+
+def downloadUnderInvestigation(request):
+    if request.POST: 
+        form = DownloadForm(request.POST)
+        if form.is_valid():
+            from_date = form.cleaned_data.get('from_date')
+            to_date= form.cleaned_data.get('to_date')
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition']= 'attachement; filename=Crimes Under Investigation '+ str(datetime.now())+'.csv'
+            writer = csv.writer(response)
+            writer.writerow(['name', 'description', 'status', 'updated_at'])
+            crimes = Crime.objects.filter(status="Under Investigation", updated_at__gte=from_date,updated_at__lte=to_date)
+            for crime in crimes:
+                writer.writerow([crime.name, crime.description, crime.status,crime.updated_at])
+
+            return response
+        else:
+            DownloadForm(request.POST)
+    else:
+        return redirect('under_inv_crimes')
+
+def downloadSolved(request):
+    if request.POST: 
+        form = DownloadForm(request.POST)
+        if form.is_valid():
+            from_date = form.cleaned_data.get('from_date')
+            to_date= form.cleaned_data.get('to_date')
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition']= 'attachement; filename=Solved Crimes '+ str(datetime.now())+'.csv'
+            writer = csv.writer(response)
+            writer.writerow(['name', 'description', 'status', 'updated_at'])
+            crimes = Crime.objects.filter(status="Solved", updated_at__gte=from_date,updated_at__lte=to_date)
+            for crime in crimes:
+                writer.writerow([crime.name, crime.description, crime.status,crime.updated_at])
+
+            return response
+        else:
+            DownloadForm(request.POST)
+    else:
+        return redirect('solved_crimes')
+
+def downloadPending(request):
+    if request.POST: 
+        form = DownloadForm(request.POST)
+        if form.is_valid():
+            from_date = form.cleaned_data.get('from_date')
+            to_date= form.cleaned_data.get('to_date')
+            response = HttpResponse(content_type='text/csv')
+            response['Content-Disposition']= 'attachement; filename=Pending Crimes '+ str(datetime.now())+'.csv'
+            writer = csv.writer(response)
+            writer.writerow(['name', 'description', 'status', 'updated_at'])
+            crimes = Crime.objects.filter(status="Pending", updated_at__gte=from_date,updated_at__lte=to_date)
+            for crime in crimes:
+                writer.writerow([crime.name, crime.description, crime.status,crime.updated_at])
+
+            return response
+        else:
+            DownloadForm(request.POST)
+    else:
+        return redirect('pending_crimes')

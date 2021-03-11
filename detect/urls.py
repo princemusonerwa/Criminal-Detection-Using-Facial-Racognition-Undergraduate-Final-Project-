@@ -23,6 +23,13 @@ urlpatterns = [
     path('crime/<int:id>', views.crimeDetails, name='crime_details'),
     path('crime/<int:id>/delete', views.deleteCrime, name='delete_crime'),
     path('crime/<int:id>/edit', views.updateCrime, name='edit_crime'),
+    path('crime/pending-report', views.pendingCrimesReport, name='pending_crimes'),
+    path('crime/solved-report', views.solvedCrimesReport, name='solved_crimes'),
+    path('crime/under-inv-report', views.UnderInvestigationCrimesReport, name='under_inv_crimes'),
+    path('crime/download/underinv', views.downloadUnderInvestigation, name='download_under_inv'),
+    path('crime/download/solved', views.downloadSolved, name='download_solved_crime'),
+    path('crime/download/pending', views.downloadPending, name='download_pending_crime'),
+
 
     path('faculty/create', views.addFaculty, name='add_faculty'),
     path('faculty', views.allFaculty, name='faculties'),
@@ -48,4 +55,6 @@ urlpatterns = [
     path('export-employee-csv', views.exportEmployeeListCsv, name='export_employee_csv'),
     path('export-employee-excel', views.exportEmployeeListExcel, name='export_employee_excel'),
     path('export-employee-pdf', views.exportEmployeeListPdf, name='export_employee_pdf'),
+
+    
 ]

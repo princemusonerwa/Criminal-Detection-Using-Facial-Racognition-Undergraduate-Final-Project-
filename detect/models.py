@@ -117,11 +117,12 @@ class Crime(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
     description = models.TextField()
-    recorded_date = models.DateTimeField(auto_now=True)
+    updated_at = models.DateTimeField(auto_now=True)
     room = models.CharField(max_length=255)
     start_time = models.TimeField()
     end_time = models.TimeField()
     STATUS_CHOICES = [
+        ('Pending', 'Pending'),
         ('Under Investigation', 'Under Investigation'),
         ('Solved', 'Solved'),
     ]

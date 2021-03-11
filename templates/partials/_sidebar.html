@@ -10,8 +10,6 @@
                 <span> Dashboard </span>
             </a>
         </li>
-        {% endif %}
-
         {% if user.is_admin %}
         <li class="side-nav-item">
             <a href="javascript: void(0);" class="side-nav-link">
@@ -60,9 +58,6 @@
                 </li>
             </ul>
         </li>
-        {% endif %}
-
-        {% if user.is_admin or user.is_securityOfficer %}
         <li class="side-nav-item">
             <a href="javascript: void(0);" class="side-nav-link">
                 <i class="uil-briefcase"></i>
@@ -96,12 +91,26 @@
         </li>
 
         <li class="side-nav-item">
-            <a href="{% url 'detect'%}" class="side-nav-link">
-                <i class="uil-camera"></i>
-                <span> Detect </span>
+            <a href="javascript: void(0);" class="side-nav-link">
+                <i class="uil-clipboard-alt"></i>
+                <span> Reports </span>
+                <span class="menu-arrow"></span>
             </a>
+            <ul class="side-nav-second-level" aria-expanded="false">
+                <li>
+                    <a href="{% url 'pending_crimes'%}">Pending crimes</a>
+                </li>
+                <li>
+                    <a href="{% url 'solved_crimes'%}">Solved Crimes</a>
+                </li>
+                <li>
+                    <a href="{% url 'under_inv_crimes'%}">Under Investigation Crimes</a>
+                </li>
+            </ul>
         </li>
+
         {% endif %}
+    
         <li class="side-nav-item">
             <a href="javascript: void(0);" class="side-nav-link">
                 <i class="uil-clipboard-alt"></i>
@@ -117,6 +126,13 @@
                 </li>
             </ul>
         </li>
+        <li class="side-nav-item">
+            <a href="{% url 'detect'%}" class="side-nav-link">
+                <i class="uil-camera"></i>
+                <span> Detect </span>
+            </a>
+        </li>
+        {% endif %}
     </ul>
 </div>
 <!-- Sidebar -left -->
