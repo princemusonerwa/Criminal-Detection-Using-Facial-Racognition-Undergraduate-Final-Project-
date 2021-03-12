@@ -33,6 +33,7 @@
                             <table id="datatables-reponsive" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr>
+                                        <th>Staff Id</th>
                                         <th>Names</th>
                                         <th>Email</th>
                                         <th>Address</th>
@@ -44,6 +45,7 @@
                                 <tbody>
                                     {% for employee in employees %}
                                     <tr>
+                                        <td>{{employee.staff_id}}</td>
                                         <td>{{employee.names}}</td>
                                         <td>{{employee.email}}</td>
                                         <td>{{employee.address}}</td>

@@ -9,6 +9,7 @@ from django.core.validators import MinLengthValidator
 from django.conf import settings
 
 
+
 # Create your models
 
 def get_upload_to(instance,filename):
@@ -24,21 +25,25 @@ def get_upload_to(instance,filename):
 def validate_mobile(value):
     """ Raise a ValidationError if the value looks like a mobile telephone number.
     """
-    rule = re.compile(r'^(?:\+?250)?[0]\d{9,13}$')
+    rule = re.compile(r'^07[238]\d{7}$')
 
     if not rule.search(value):
-        msg = u"Invalid mobile number."
-        raise ValidationError(msg)
+        msg = u"Invalid mobile number. Phone must be made with 07 followed by 2,3,8 which is also followed by 7 numbers."
+        raise ValidationError(msg) 
 
 def validate_dob(value):
     today = date.today()
-    if value > today:
+    if today < value:
         raise ValidationError('Date of birth cannot be in future.')
 
+def validate_names(value):
+    if len(value) < 5:
+        raise ValidationError("Names should have atleast 5 characters")
+
 class Person(models.Model):
-    names = models.CharField(max_length=255, validators=[MinLengthValidator(5)])
+    names = models.CharField(max_length=255, validators=[validate_names])
     email = models.EmailField(verbose_name='email address', unique=True)
-    phone = models.CharField(verbose_name="Phone Number", max_length=15)
+    phone = models.CharField(verbose_name="Phone Number", max_length=15, validators=[validate_mobile])
     GENDER_CHOICES = [
         ('Male', 'Male'),
         ('Female', 'Female'),

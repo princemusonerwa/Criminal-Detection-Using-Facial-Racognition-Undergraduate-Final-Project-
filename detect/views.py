@@ -7,7 +7,7 @@ from .detection import train, predictKNN
 from django.core.files.storage import FileSystemStorage
 import cv2
 from .task import detect as notify, trainData
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from datetime import datetime
 import csv
 from xhtml2pdf import pisa
@@ -19,6 +19,7 @@ from datetime import datetime
 # Create your views here.
 
 @login_required
+@user_passes_test(lambda u: u.is_admin)
 def addStudent(request):
     if request.method == 'POST':
         form = StudentForm(request.POST , request.FILES)
@@ -29,7 +30,9 @@ def addStudent(request):
                 Gallery.objects.create(person=form.instance.person_ptr,photos=f)  
             trainData.delay()
             messages.success(request, 'Student created Successfully.')   
-            return redirect('students')            
+            return redirect('students')
+        else:
+            print(form.errors)            
     else:
         form = StudentForm()
     return render(request, 'students/student_form.html', {'form':form})
