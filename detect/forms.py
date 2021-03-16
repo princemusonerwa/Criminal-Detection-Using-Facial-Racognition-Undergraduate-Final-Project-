@@ -92,11 +92,12 @@ class CrimeForm(forms.ModelForm):
     start_time = forms.TimeField()
     end_time = forms.TimeField()
     STATUS_CHOICES = [
+        ('Pending' , 'Pending'),
         ('Under Investigation' , 'Under Investigation'),
         ('Solved' , 'Solved'),
 
     ]
-    status = forms.ChoiceField(choices=STATUS_CHOICES, initial="Under Investigation")
+    status = forms.ChoiceField(choices=STATUS_CHOICES, initial="Pending")
 
     class Meta:
         model = Crime        
@@ -106,6 +107,13 @@ class CrimeForm(forms.ModelForm):
             'name' : forms.TextInput(attrs={'class': 'form-control'}),
             'description' : forms.Textarea(attrs={'class': 'form-control', 'rows':3}),
         }
+    
+    def clean_end_time(self):
+        start_time = self.cleaned_data.get("start_time")
+        end_time = self.cleaned_data.get("end_time")
+        if start_time and end_time and end_time > start_time:
+            raise forms.ValidationError("Enter the valid start and end time")
+        return end_time
 
 class DownloadForm(forms.Form):
     from_date = forms.CharField(widget=forms.HiddenInput)

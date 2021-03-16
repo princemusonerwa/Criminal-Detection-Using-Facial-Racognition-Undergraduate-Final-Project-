@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import StudentForm, EmployeeForm, CrimeForm, DepartmentForm, FacultyForm, DownloadForm
-from .models import Student, Employee, Crime, Department, Faculty, Gallery, Person, Faculty, Department
+from .models import Student, Employee, Crime, Department, Faculty, Gallery, Person, Faculty, Department, DetectedCriminal
 from django.contrib import messages
 from .detection import train, predictKNN
 from django.core.files.storage import FileSystemStorage
@@ -190,7 +190,7 @@ def addCrime(request):
             return redirect('crimes')
             messages.success(request, 'Crime created Successfully.')
         else:
-            messages.success(request, "An error occured.")
+            print(form.errors)
     else:
         form = CrimeForm()
     return render(request, 'crimes/crime_form.html', {'form':form})
@@ -604,3 +604,7 @@ def downloadPending(request):
             DownloadForm(request.POST)
     else:
         return redirect('pending_crimes')
+
+def DetectedCriminalReport(request):
+    detectedCriminals = DetectedCriminal.objects.all()
+    return render(request, 'reports/detectedCriminal.html', {'detectedCriminals': detectedCriminals})

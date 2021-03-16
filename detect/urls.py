@@ -26,6 +26,7 @@ urlpatterns = [
     path('crime/pending-report', views.pendingCrimesReport, name='pending_crimes'),
     path('crime/solved-report', views.solvedCrimesReport, name='solved_crimes'),
     path('crime/under-inv-report', views.UnderInvestigationCrimesReport, name='under_inv_crimes'),
+    path('crime/detected-criminals', views.DetectedCriminalReport, name='detected_criminals'),
     path('crime/download/underinv', views.downloadUnderInvestigation, name='download_under_inv'),
     path('crime/download/solved', views.downloadSolved, name='download_solved_crime'),
     path('crime/download/pending', views.downloadPending, name='download_pending_crime'),

@@ -24,6 +24,9 @@ urlpatterns = [
     path('', views.home, name="home"),
     path('', include('detect.urls')),
     path('index', views.index, name="index"),
+    path('person_status_summary', views.person_status_summary, name="person_status_summary"),
+    path('person_gender_summary', views.person_gender_summary, name="person_gender_summary"),
+    path('crime_status_summary', views.crime_status_summary, name="crime_status_summary"),
     path('admin/', admin.site.urls),
 ]
 

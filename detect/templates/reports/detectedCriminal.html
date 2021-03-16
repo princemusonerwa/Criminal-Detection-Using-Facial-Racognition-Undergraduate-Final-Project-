@@ -1,0 +1,68 @@
+{% extends 'base.html'%}
+{% block title %}{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <!-- start page title -->
+    <div class="row">
+        <div class="col-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Detect Criminal Data</h4>
+            </div>
+        </div>
+    </div>
+    <!-- end page title -->
+
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <form method="post">
+                {% csrf_token %}
+                From: <input type="date" name="from_date" required>
+                To: <input type="date" name="to_date" required>
+                <input type="submit" value="Search">
+            </form>
+        </div>
+        <div class="col-sm-6">
+            <div class="text-sm-right">
+                {% if download_form %}
+                <form action="{% url 'download_pending_crime' %}" method="POST">
+                    {% csrf_token %}
+                    {{ download_form.as_p }}
+                    <p>
+                        <input type="submit" class="btn" name="submit" value="Download" />
+                    </p>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+        <div class="container-fluid p-0">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table class="table table-striped" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>Detected Person</th>
+                                        <th>time</th>
+                                        <th>location</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for detectedCriminal in detectedCriminals %}
+                                    <tr>
+                                        <td>{{detectedCriminal.person.names}}</td>
+                                        <td>{{detectedCriminal.time}</td>
+                                        <td>{{detectedCriminal.location}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- end row-->
+    </div>
+
+    {% endblock %}

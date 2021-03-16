@@ -51,11 +51,13 @@ class Person(models.Model):
     gender = models.CharField(max_length=255, choices=GENDER_CHOICES, default="Male")
     dob = models.DateField(verbose_name="Date of Birth", null="True", validators=[validate_dob])
     address = models.CharField(max_length=255)
+    updated_at = models.DateField(auto_now=True)
     STATUS_CHOICES = [
       ('NOT WANTED', 'NOT WANTED'),
       ('WANTED', 'WANTED')
     ]
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="NOT WANTED")
+
 
     def __str__(self):
         return self.names 
@@ -122,7 +124,7 @@ class Crime(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=255)
     description = models.TextField()
-    updated_at = models.DateTimeField(auto_now=True)
+    updated_at = models.DateField(auto_now=True)
     room = models.CharField(max_length=255)
     start_time = models.TimeField()
     end_time = models.TimeField()
@@ -131,7 +133,7 @@ class Crime(models.Model):
         ('Under Investigation', 'Under Investigation'),
         ('Solved', 'Solved'),
     ]
-    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="Under Investigation",)
+    status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="Pending",)
 
     def __str__(self):
         return self.name
