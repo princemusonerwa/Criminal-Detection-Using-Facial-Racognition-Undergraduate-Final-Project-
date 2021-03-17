@@ -184,9 +184,7 @@ def addCrime(request):
     if request.method == 'POST':
         form = CrimeForm(request.POST)
         if form.is_valid():
-            obj = form.save(commit=False)
-            obj.user_id = request.user.id
-            obj.save()
+            form.save()
             return redirect('crimes')
             messages.success(request, 'Crime created Successfully.')
         else:

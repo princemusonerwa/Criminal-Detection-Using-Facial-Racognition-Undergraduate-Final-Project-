@@ -105,15 +105,27 @@ class CrimeForm(forms.ModelForm):
 
     class Meta:
         model = Crime
-        fields = ('name', 'description', 'start_time',
-                  'end_time', 'room', 'status')
+        fields = ('victim','description', 'start_time',
+                  'end_time', 'room', 'status', 'suspect', 'comment')
 
         widgets = {
-            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'victim': forms.Select(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'status': forms.Select(attrs={'class': 'form-control'}),
-            'room': forms.TextInput(attrs={'class': 'form-control'})
+            'room': forms.TextInput(attrs={'class': 'form-control'}),
+            'suspect' : forms.Select(attrs={'class': 'form-control'}),
+            'comment' : forms.Textarea(attrs={'class': 'form-control', 'rows': 3})
         }
+
+    def __init__(self, *args, **kwargs):
+        super(CrimeForm, self).__init__(*args, **kwargs)
+        if self.instance.pk:
+            self.fields['suspect'].required = True
+            self.fields['comment'].required = True
+        else:
+            self.fields['suspect'].required = False
+            self.fields['comment'].required = False
+        
 
     def clean_end_time(self):
         start_time = self.cleaned_data.get("start_time")

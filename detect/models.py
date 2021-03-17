@@ -121,8 +121,13 @@ class Gallery(models.Model):
     photos = models.ImageField(upload_to = get_upload_to)
     
 class Crime(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True)
-    name = models.CharField(max_length=255)
+    victim = models.ForeignKey(Person, on_delete=models.CASCADE, related_name="crime_victim")
+    CRIME_CHOICE = [
+        ('Phone Robbery','Phone Robbery'),
+        ('cabble Robbery', 'cabble Robbery'),
+        ('computer Robbery', 'computer Robbery'),
+    ]
+    crime_type = models.CharField(max_length=100, choices= CRIME_CHOICE, default="Phone robbery")
     description = models.TextField()
     updated_at = models.DateField(auto_now=True)
     room = models.CharField(max_length=255)
@@ -134,6 +139,8 @@ class Crime(models.Model):
         ('Solved', 'Solved'),
     ]
     status = models.CharField(max_length=100, choices=STATUS_CHOICES, default="Pending",)
+    suspect = models.ForeignKey(Person, on_delete=models.CASCADE, related_name="crime_suspect", null=True)
+    comment = models.TextField(max_length=255, null=True)
 
     def __str__(self):
         return self.name

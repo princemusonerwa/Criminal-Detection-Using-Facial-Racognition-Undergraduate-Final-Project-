@@ -32,20 +32,24 @@
                             <table id="datatables-reponsive" class="table table-striped" style="width:100%">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
+                                        <th>Victim</th>
                                         <th>Description</th>
                                         <th>Status</th>
-                                        <th>Reporter</th>
+                                        <th>Suspect</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for crime in crimes %}
                                     <tr>
-                                        <td>{{crime.name}}</td>
+                                        <td>{{crime.victim.names}}</td>
                                         <td>{{crime.description}}</td>
                                         <td>{{crime.status}}</td>
-                                        <td>{{crime.user.names}}</td>
+                                        {% if crime.suspect.names %}
+                                            <td>{{crime.suspect.names}}</td>
+                                        {% else %}
+                                            <td><span style="color: black; background-color: yellow;">No suspect recorded yet</span></td>
+                                        {% endif %}
                                         <td>
 
                                             <a href="{% url 'crime_details' crime.pk %}" class="action-icon"> <i

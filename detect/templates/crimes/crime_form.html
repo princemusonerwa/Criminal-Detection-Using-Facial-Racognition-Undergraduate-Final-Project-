@@ -11,10 +11,11 @@
         <form method="post" novalidate enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-row">
+
                 <div class="form-group col-md-6">
-                    {{form.name.label_tag}}
-                    {{form.name}}
-                    {{form.name.errors}}
+                    {{form.victim.label_tag}}
+                    {{form.victim}}
+                    {{form.victim.errors}}
                 </div>
                 <div class="form-group col-md-6">
                     {{form.description.label_tag}}
@@ -47,7 +48,20 @@
                 </div>
                 {% endif %}
             </div>
-
+            {% if form.instance.id %}
+            <div class="form-row">
+                <div class="form-check col-md-6">
+                    {{form.suspect.label_tag}}
+                    {{form.suspect}}
+                    {{form.suspect.errors}}
+                </div>
+                <div class="form-check col-md-6">
+                    {{form.comment.label_tag}}
+                    {{form.comment}}
+                    {{form.comment.errors}}
+                </div>
+            </div>
+            {% endif %}
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>
