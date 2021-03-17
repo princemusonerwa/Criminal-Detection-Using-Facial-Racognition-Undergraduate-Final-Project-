@@ -217,6 +217,12 @@ def updateCrime(request, id):
     # pass the object as instance in form 
     form = CrimeForm(request.POST or None, instance = obj) 
     if form.is_valid():
+        name = form.cleaned_data.get("suspect")
+        status = form.cleaned_data.get("status")
+        if status == "Under Investigation":
+            Person.objects.filter(names=name).update(status='WANTED')
+        elif status == "Solved":
+            Person.objects.filter(names=name).update(status='NOT WANTED')
         form.save()
         messages.success(request, 'Crime updated Successfully.')
         return redirect('/crime/'+str(id))

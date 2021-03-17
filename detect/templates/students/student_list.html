@@ -51,7 +51,11 @@
                                     <td>{{student.names}}</td>
                                     <td>{{student.email}}</td>
                                     <td>{{student.address}}</td>
-                                    <td>{{student.status}}</td>
+                                    {% if student.status == "WANTED" %}
+                                        <td><span style="color: black; background-color: red;">{{student.status}}</span></td>
+                                    {% else %}  
+                                        <td><span style="color: black; background-color: yellow;">{{student.status}}</span></td>
+                                    {% endif %}                              
                                     <td>{{student.department}}</td>
                                     <td>
                                         <a href="{% url 'student_details' student.pk %}" class="action-icon"> <i
