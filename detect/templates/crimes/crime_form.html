@@ -23,32 +23,31 @@
                 </div>
             </div>
             <div class="form-row">
-                <div class="form-check col-md-6">
+                <div class="form-check col-md-3">
                     {{form.start_time.label_tag}}
                     {{form.start_time}}
                     {{form.start_time.errors}}
                 </div>
-                <div class="form-group col-md-6">
+                <div class="form-group col-md-3">
                     {{form.end_time.label_tag}}
                     {{form.end_time}}
                     {{form.end_time.errors}}
                 </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
+
+                <div class="form-group col-md-3">
                     {{form.room.label_tag}}
                     {{form.room}}
                 </div>
-            </div>
-            {% if user.is_admin %}
-            <div class="form-row">
-                <div class="form-group col-md-6">
+
+                {% if user.is_admin %}
+                <div class="form-group col-md-3">
                     {{form.status.label_tag}}
                     {{form.status}}
                     {{form.status.errors}}
                 </div>
+                {% endif %}
             </div>
-            {% endif %}
+
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
     </div>

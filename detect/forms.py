@@ -13,7 +13,7 @@ class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
         fields = ('student_id', 'names', 'email', 'phone', 'gender',
-                  'dob', 'address', 'status', 'student_status','faculty', 'department')
+                  'dob', 'address', 'status', 'student_status', 'faculty', 'department')
 
         widgets = {
             'student_id': forms.TextInput(attrs={'class': 'form-control'}),
@@ -64,9 +64,10 @@ class EmployeeForm(forms.ModelForm):
 
         def get_form(self, request, obj=None, **kwargs):
             if obj:
-                if obj.get_profile().type==1:
+                if obj.get_profile().type == 1:
                     self.exclude = ('user_permissions',)
             return super(EmployeeForm, self).get_form(request, obj=None, **kwargs)
+
 
 class GalleryForm(forms.ModelForm):
     photos = forms.ImageField(label='Photos')
@@ -89,31 +90,38 @@ class DepartmentForm(forms.ModelForm):
 
 
 class CrimeForm(forms.ModelForm):
-    start_time = forms.TimeField()
-    end_time = forms.TimeField()
-    STATUS_CHOICES = [
-        ('Pending' , 'Pending'),
-        ('Under Investigation' , 'Under Investigation'),
-        ('Solved' , 'Solved'),
-
-    ]
-    status = forms.ChoiceField(choices=STATUS_CHOICES, initial="Pending")
+    start_time = forms.TimeField(
+        input_formats=['%H:%M'],
+        widget=forms.DateTimeInput(attrs={
+            'class': 'form-control',
+        })
+    )
+    end_time = forms.TimeField(
+        input_formats=['%H:%M'],
+        widget=forms.DateTimeInput(attrs={
+            'class': 'form-control',
+        })
+    )
 
     class Meta:
-        model = Crime        
-        fields = ('name','description','start_time','end_time','room','status')
-        
+        model = Crime
+        fields = ('name', 'description', 'start_time',
+                  'end_time', 'room', 'status')
+
         widgets = {
-            'name' : forms.TextInput(attrs={'class': 'form-control'}),
-            'description' : forms.Textarea(attrs={'class': 'form-control', 'rows':3}),
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+            'status': forms.Select(attrs={'class': 'form-control'}),
+            'room': forms.TextInput(attrs={'class': 'form-control'})
         }
-    
+
     def clean_end_time(self):
         start_time = self.cleaned_data.get("start_time")
         end_time = self.cleaned_data.get("end_time")
-        if start_time and end_time and end_time > start_time:
+        if start_time and end_time and end_time < start_time:
             raise forms.ValidationError("Enter the valid start and end time")
         return end_time
+
 
 class DownloadForm(forms.Form):
     from_date = forms.CharField(widget=forms.HiddenInput)
