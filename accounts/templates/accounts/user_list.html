@@ -16,7 +16,7 @@
             <a href="{% url 'register'%}" class="btn btn- btn-primary rounded mb-3"><i class="mdi mdi-plus"></i> Create
                 User</a>
         </div>
-       
+
         <div class="col-sm-8">
             <div class="text-sm-right">
                 <div class="btn-group mb-3 d-none d-sm-inline-block">
@@ -53,7 +53,7 @@
                                         <td>
                                             <a href="{% url 'edit_user' user.pk %}" class="action-icon"> <i
                                                     class="mdi mdi-square-edit-outline"></i></a>
-                                            <a href="{% url 'delete_user' user.pk%}" class="action-icon"> <i
+                                            <a href="{% url 'delete_user' user.pk%}" class="action-icon alert"> <i
                                                     class="mdi mdi-delete"></i></a>
                                         </td>
                                     </tr>
@@ -65,16 +65,21 @@
                 </div>
             </div>
 
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    // Datatables Responsive
-                    $("#datatables-reponsive").DataTable({
-                        responsive: true
-                    });
-                });
-            </script>
         </div>
         <!-- end row-->
     </div>
-
-    {% endblock %}
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Datatables Responsive
+        $("#datatables-reponsive").DataTable({
+            responsive: true
+        });
+    });
+    $(function () {
+        $('.alert').click(function () {
+            return window.confirm("Are you sure you want to delete this?");
+        });
+    });
+</script>
+{% endblock %}

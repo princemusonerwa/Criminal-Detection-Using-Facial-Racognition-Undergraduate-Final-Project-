@@ -52,18 +52,20 @@
                                     <td>{{student.email}}</td>
                                     <td>{{student.address}}</td>
                                     {% if student.status == "WANTED" %}
-                                        <td><span style="color: black; background-color: red;">{{student.status}}</span></td>
-                                    {% else %}  
-                                        <td><span style="color: black; background-color: yellow;">{{student.status}}</span></td>
-                                    {% endif %}                              
+                                    <td><span style="color: black; background-color: red;">{{student.status}}</span>
+                                    </td>
+                                    {% else %}
+                                    <td><span style="color: black; background-color: yellow;">{{student.status}}</span>
+                                    </td>
+                                    {% endif %}
                                     <td>{{student.department}}</td>
                                     <td>
                                         <a href="{% url 'student_details' student.pk %}" class="action-icon"> <i
                                                 class="mdi mdi-eye"></i></a>
                                         <a href="{% url 'edit_student' student.pk %}" class="action-icon"> <i
                                                 class="mdi mdi-square-edit-outline"></i></a>
-                                        <a href="{% url 'delete_student' student.pk%}" class="action-icon"> <i
-                                                class="mdi mdi-delete confirm-delete"></i></a>
+                                        <a href="{% url 'delete_student' student.pk%}" class="action-icon alert"> <i
+                                                class="mdi mdi-delete"></i></a>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -73,20 +75,22 @@
                 </div>
             </div>
         </div>
-
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                // Datatables Responsive
-                $("#datatables-reponsive").DataTable({
-                    responsive: true
-                });
-            });
-            $(document).on('click', '.confirm-delete1', function () {
-                return confirm('Are you sure you want to delete this?');
-            })
-        </script>
     </div>
     <!-- end row-->
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Datatables Responsive
+        $("#datatables-reponsive").DataTable({
+            responsive: true
+        });
+    });
 
+    $(function () {
+        $('.alert').click(function () {
+            return window.confirm("Are you sure?");
+        });
+    });
+
+</script>
 {% endblock %}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Student List</title>
+    <style>
+        @page {
+            size: "A3";
+            margin: 0.5cm;
+
+            @top-left {
+                content: "COMPANY NAME";
+            }
+
+            @bottom-right {
+                content: "Page "counter(page)" of "counter(pages);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <img src="https://pbs.twimg.com/profile_images/1169176570461925381/4tdyHpZp_400x400.jpg" alt="No Image"
+        style="object-fit: cover;" width="500" height="600">
+    <h3 style="text-align: center;">Crime List</h3>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Victim</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Suspect</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for crime in crimes %}
+            <tr>
+                <td>{{crime.victim.names}}</td>
+                <td>{{crime.description}}</td>
+                <td>{{crime.status}}</td>
+                {% if crime.suspect.names %}
+                    <td>{{crime.suspect.names}}</td>
+                {% else %}
+                    <td><span style="color: black; background-color: yellow;">No suspect recorded yet</span></td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+</html>

@@ -1,30 +1,76 @@
-{% extends 'base.html'%}
-{% block title %}employee {{employee.staff_id}}{% endblock %}
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title%} student {{student.student_id}} {% endblock%}
 {% block content %}
-<main class="content">
-    <div class="container-fluid p-0">
+<!-- Start Content-->
+<div class="container-fluid">
 
-        <a href="{% url 'add_image' employee.person_ptr.id %}" class="btn btn-primary float-right mt-n1"><i class="fas fa-plus"></i> New Image</a>
-        <h1 class="h3 mb-3">Gallery</h1>
+    <div class="row">
+        <div class="col-xl-4 col-lg-5">
+            <div class="card text-center">
+                <div class="card-body">
+                    {% if profile_image %}
+                    <img src="{{profile_image.photos.url}}" class="rounded-circle avatar-lg img-thumbnail"
+                        alt="profile-image">
+                    {% else %}
+                    <img src="/media/default.jpg" class="rounded-circle avatar-lg img-thumbnail"
+                        alt="profile-image">
 
-        <div class="row">
-            {% for photo in gallery%}
-            <div class="col-12 col-md-6 col-lg-3">
-                <div class="card">
-                    <img src="{{photo.photos.url}}" alt="Smiley face" class="card-img-top" style="object-fit: cover; width: 350px; height: 350px;">
-                        <div class="card-body">
-                            <form action="{% url 'delete_image' photo.id %}" method="post">
-                                {% csrf_token %}
-                                <button class="alert" type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
+                    {% endif %}
+
+                    <h4 class="mb-0 mt-2">{{ employee.names }}</h4>
+
+                    <a href="{% url 'employees'%}" class="btn btn-success btn-sm mb-2">Back</a>
+                    <a href="{% url 'add_image' employee.person_ptr.pk %}" class="btn btn-primary btn-sm mb-2">Add Images</a>
+
+                    <div class="text-left mt-3">
+
+                        <p class="text-muted mb-2 font-13"><strong>Full Name :</strong>
+                            <span class="ml-2">{{ employee.names }}</span>
+                        </p>
+
+                        <p class="text-muted mb-2 font-13"><strong>Mobile :</strong>
+                            <span class="ml-2">{{ employee.phone }}</span>
+                        </p>
+
+                        <p class="text-muted mb-2 font-13"><strong>Email :</strong>
+                            <span class="ml-2 ">{{ employee.email }}</span>
+                        </p>
+
+                        <p class="text-muted mb-1 font-13"><strong>Gender :</strong>
+                            <span class="ml-2">{{ employee.gender }}</span>
+                        </p>
+                    </div>
+                </div> <!-- end card-body -->
+            </div> <!-- end card -->
+        </div> <!-- end col-->
+
+        <div class="col-xl-8 col-lg-7">
+            <div class="card" width=10rem>
+                <h5 style="text-align: center;">List of Image</h5>
+                <div class="row ml-2">
+                    {% for photo in gallery%}
+                    <div class="col-3">
+                        <div class="card">
+                            <img src="{{photo.photos.url}}" alt="Smiley face" class="card-img-top"
+                                style="object-fit: cover; " height="180px">
+                            <div class="card-body">
+                                <form action="{% url 'delete_image' photo.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button class="alert btn-sm btn-danger" type="submit">Delete</button>
+                                </form>
+                            </div>
                         </div>
+                    </div>
+                    {% endfor %}
                 </div>
-            </div>
-            {% endfor %} 
-        </div>
+            </div> <!-- end card -->
+        </div> <!-- end col -->
     </div>
+    <!-- end row-->
 
-</main>
+</div>
+<!-- container -->
 <script>
     $(function() {
         $('.alert').click(function() {
@@ -32,5 +78,4 @@
         });
     });
 </script>
-
 {% endblock %}

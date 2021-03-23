@@ -13,7 +13,8 @@
 
     <div class="row mb-2">
         <div class="col-sm-4">
-            <a href="{% url 'add_employee'%}" class="btn btn-primary btn-rounded mb-3"><i class="mdi mdi-plus"></i> Create
+            <a href="{% url 'add_employee'%}" class="btn btn-primary btn-rounded mb-3"><i class="mdi mdi-plus"></i>
+                Create
                 Employee</a>
         </div>
         <div class="col-sm-8">
@@ -50,14 +51,22 @@
                                         <td>{{employee.email}}</td>
                                         <td>{{employee.address}}</td>
                                         <td>{{employee.phone}}</td>
-                                        <td>{{employee.status}}</td>
+                                        {% if employee.status == "WANTED" %}
+                                        <td><span
+                                                style="color: black; background-color: red;">{{employee.status}}</span>
+                                        </td>
+                                        {% else %}
+                                        <td><span
+                                                style="color: black; background-color: yellow;">{{employee.status}}</span>
+                                        </td>
+                                        {% endif %}
                                         <td>
                                             <a href="{% url 'employee_details' employee.pk%}" class="action-icon"> <i
-                                                class="mdi mdi-eye"></i></a>
+                                                    class="mdi mdi-eye"></i></a>
                                             <a href="{% url 'edit_employee' employee.pk %}" class="action-icon"> <i
                                                     class="mdi mdi-square-edit-outline"></i></a>
-                                            <a href="{% url 'delete_employee' employee.pk%}" class="action-icon"> <i
-                                                    class="mdi mdi-delete"></i></a>
+                                            <a href="{% url 'delete_employee' employee.pk%}" class="action-icon alert">
+                                                <i class="mdi mdi-delete"></i></a>
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -67,17 +76,23 @@
                     </div>
                 </div>
             </div>
-
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    // Datatables Responsive
-                    $("#datatables-reponsive").DataTable({
-                        responsive: true
-                    });
-                });
-            </script>
         </div>
         <!-- end row-->
     </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Datatables Responsive
+        $("#datatables-reponsive").DataTable({
+            responsive: true
+        });
+    });
 
-    {% endblock %}
+    $(function () {
+        $('.alert').click(function () {
+            return window.confirm("Are you sure?");
+        });
+    });
+</script>
+
+{% endblock %}

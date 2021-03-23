@@ -26,8 +26,8 @@ def index(request):
     return render(request, "index.html", context)
 
 def home(request):
-    crimes = Crime.objects.all().order_by('-updated_at')[:3]
-    return render(request, "home.html", {'crimes':crimes})
+    recent_crimes = Crime.objects.all().order_by('-updated_at')[:3]
+    return render(request, "home.html", {'recent_crimes':recent_crimes})
 
 def error_404_view(request, exception):
     return render(request,'404.html')

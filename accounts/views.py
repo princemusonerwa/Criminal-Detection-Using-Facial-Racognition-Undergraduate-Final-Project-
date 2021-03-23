@@ -62,11 +62,9 @@ def updateUser(request, id):
 
 def deleteUser(request, id):
     user = User.objects.get(id = id)
-    if request.method == 'POST':
-        user.delete()
-        messages.success(request, 'User deleted Successfully.')
-        return redirect('users')
-    return render(request, 'accounts/user_confirm_delete.html', {'user':user})
+    user.delete()
+    messages.success(request, 'User deleted Successfully.')
+    return redirect('users')
 
 @login_required
 @check_is_admin

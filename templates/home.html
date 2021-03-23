@@ -1,213 +1,203 @@
 <!DOCTYPE html>
-{% load static%}
-<html lang="en">
-
-
-<!-- Mirrored from coderthemes.com/hyper/saas/landing.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 20 Feb 2021 10:14:53 GMT -->
+{% load static %}
+<html lang="en" dir="ltr">
 
 <head>
-    <meta charset="utf-8" />
-    <title>Home page</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="Face recognition app, detection application" name="description" />
-    <meta content="Coderthemes" name="author" />
+    <title>AUCA</title>
 
-    <!-- App css -->
+    <link href="{% static 'css/homepage.css'%}" rel="stylesheet" type="text/css" />
+    <script src="https://kit.fontawesome.com/472ee2df72.js" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet"
+        crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
     <link href="{% static 'css/icons.min.css'%}" rel="stylesheet" type="text/css" />
     <link href="{% static 'css/app.min.css'%}" rel="stylesheet" type="text/css" id="light-style" />
-
 </head>
 
-<body class="loading">
-
-    <!-- NAVBAR START -->
-    <nav class="navbar navbar-expand-lg py-lg-3 navbar-dark">
-        <div class="container">
-
-            <!-- logo -->
-            <a href="index.html" class="navbar-brand mr-lg-5">
-                <img src="assets/images/logo.png" alt="" class="logo-dark" height="18" />
-            </a>
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
-                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="mdi mdi-menu"></i>
-            </button>
-
-            <!-- menus -->
-            <div class="collapse navbar-collapse" id="navbarNavDropdown">
-
-                <!-- left menu -->
-                <ul class="navbar-nav mr-auto align-items-center">
-                    <li class="nav-item mx-lg-2">
-                        <a class="nav-link active" href="{% url 'home'%}">Home</a>
-                    </li>
-                    {% if not user.is_authenticated %}
-                    <li class="nav-item mx-lg-2">
-                        <a class="nav-link active" href="{% url 'index'%}">Dashboard</a>
-                    </li>
-                    {% endif %}
-                </ul>
-
-                <!-- right menu -->
-                <ul class="navbar-nav ml-auto align-items-center">
-                    <li class="nav-item mr-0">
+<body>
+    <div class="shadow bg-white px-0">
+        <div class="container row justify-content-between align-items-center">
+            <div class="col-md-5 py-4 ">
+                <img src="{% static 'images/auca logo.png'%}" alt="AUCA Logo" class="img-fit">
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-main-color">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#about" style="margin-left: 20px;">About</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="{% url 'index'%}">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#crimes">Latest Crimes</a>
+                        </li>
+                    </ul>
+                    <div style="margin-right: 50px;">
                         {% if not user.is_authenticated %}
-                        <a href="{% url 'signin'%}" class="btn btn-sm btn-light btn-rounded d-none d-lg-inline-flex">
-                            <i class="mdi mdi-login mr-2"></i> Sign In
-                        </a>
+                        <a href="{% url 'signin'%}" class="text-white text-decoration-none">Sign In</a>
                         {% else %}
-                    <li class="nav-item mr-0">
-                        <a href="{% url 'logout'%}" class="btn btn-sm btn-light btn-rounded d-none d-lg-inline-flex">
-                            <i class="mdi mdi-login mr-2"></i> Logout
-                        </a>
-                    </li>
-                    {% endif %}
-                    </li>
-                </ul>
-
-            </div>
-        </div>
-    </nav>
-    <!-- NAVBAR END -->
-
-    <!-- START HERO -->
-    <section class="hero-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-5">
-                    <div class="mt-md-4">
-                        <h2 class="text-white font-weight-normal mb-4 mt-3 hero-title">
-                            Criminal Detection using Facial Recognition
-                        </h2>
-
-                        <p class="mb-4 font-16 text-white-50">Criminal detection using facial recognition is a web
-                            application that will be used to detect suspects of crimes done inside AUCA.</p>
-
-                        <a href="{% url 'signin'%}" class="btn btn-success">Report a Crime<i
-                                class="mdi mdi-arrow-right ml-1"></i></a>
+                        <a href="{% url 'logout'%}" class="text-white text-decoration-none">Sign Out</a>
+                        {% endif %}
                     </div>
-                </div>
-                <div class="col-md-5 offset-md-2">
-                    <div class="text-md-right mt-3 mt-md-0">
-                        <img src="assets/images/startup.svg" alt="" class="img-fluid" />
-                    </div>
+
                 </div>
             </div>
-        </div>
-    </section>
-    <!-- END HERO -->
-
-    <!-- START SERVICES -->
-    <section class="py-3">
-        <div class="container">
-            <div class="row py-4">
-                <div class="col-lg-12">
-                    <div class="text-center">
-                        <h1 class="mt-0"><i class="mdi mdi-infinity"></i></h1>
-                        <h3>The Latest crime <span class="text-primary">made</span> Inside AUCA</h3>
-                    </div>
+        </nav>
+        <main class="">
+            <div class="autoplay">
+                <div class="w-full">
+                    <img src="{% static 'images/auca.jpg'%}" alt="masters" class="img-carousel">
+                </div>
+                <div class="w-full">
+                    <img src="{% static 'images/auca2c.jpg'%}" alt="masters" class="img-carousel">
+                </div>
+                <div class="w-full">
+                    <img src="{% static 'images/auca.jpg'%}" alt="masters" class="img-carousel">
                 </div>
             </div>
-            <div class="row">
-                {% for crime in crimes %}
-                <div class="col-lg-4">
-                    <div class="text-center p-3">
-                        <h4 class="mt-3">{{crime.name}}</h4>
-                        <p class="text-muted mt-2 mb-0">{{crime.description}}
+            <!-- START SERVICES -->
+            <section class="py-2" id="crimes">
+                <div class="container">
+                    <div class="row py-4">
+                        <div class="col-lg-12">
+                            <div class="text-center">
+                                <h1 class="mt-0"><i class="mdi mdi-infinity"></i></h1>
+                                <h3>Recent Crimes made inside AUCA</h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        {% for crime in recent_crimes %}
+                        <div class="col-lg-4">
+                            <div class="text-center p-1">
+                                <h4 class="mt-3">{{ crime.crime_type }}</h4>
+                                <p class="text mt-2 mb-0">
+                                    {{crime.description}}
+
+                                </p>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+
+                </div>
+            </section>
+            <!-- END SERVICES -->
+        </main>
+        <!-- START FOOTER -->
+        <footer class="py-5" style="background-color: #003366;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <img src="assets/images/logo.png" alt="" class="logo-dark" height="18" />
+                        <p class="text-white-50 mt-4">
+                            Criminal Detection using Face Recognition is an application that will help Auca to detect
+                            criminal suspects easily and quickly.
                         </p>
+
+                        <ul class="social-list list-inline mt-3">
+                            <li class="list-inline-item text-center">
+                                <a href="javascript: void(0);" class="social-list-item border-primary text-primary"><i
+                                        class="mdi mdi-facebook"></i></a>
+                            </li>
+                            <li class="list-inline-item text-center">
+                                <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i
+                                        class="mdi mdi-google"></i></a>
+                            </li>
+                            <li class="list-inline-item text-center">
+                                <a href="javascript: void(0);" class="social-list-item border-info text-info"><i
+                                        class="mdi mdi-twitter"></i></a>
+                            </li>
+                            <li class="list-inline-item text-center">
+                                <a href="javascript: void(0);"
+                                    class="social-list-item border-secondary text-secondary"><i
+                                        class="mdi mdi-github"></i></a>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <div class="col-lg-2 mt-3 mt-lg-0">
+                        <h5 class="text-white">Company</h5>
+
+                        <ul class="list-unstyled pl-0 mb-0 mt-3">
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">About Us</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Documentation</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Blog</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Affiliate Program</a>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <div class="col-lg-2 mt-3 mt-lg-0">
+                        <h5 class="text-white">Apps</h5>
+
+                        <ul class="list-unstyled pl-0 mb-0 mt-3">
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Ecommerce Pages</a>
+                            </li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Email</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Social Feed</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Projects</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Tasks Management</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col-lg-2 mt-3 mt-lg-0">
+                        <h5 class="text-white">Discover</h5>
+
+                        <ul class="list-unstyled pl-0 mb-0 mt-3">
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Help Center</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Our Products</a></li>
+                            <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Privacy</a></li>
+                        </ul>
                     </div>
                 </div>
-                {% endfor %}
-            </div>
 
-        </div>
-    </section>
-    <!-- END SERVICES -->
-
-    <!-- START FOOTER -->
-    <footer class="bg-dark py-5">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6">
-                    <img src="assets/images/logo.png" alt="" class="logo-dark" height="18" />
-                    <p class="text-white-50 mt-4">Criminal Detection using Facial Recognition
-                        <br> is an application that will help to improve
-                        <br> the security of auca.
-                    </p>
-
-                    <ul class="social-list list-inline mt-3">
-                        <li class="list-inline-item text-center">
-                            <a href="javascript: void(0);" class="social-list-item border-primary text-primary"><i
-                                    class="mdi mdi-facebook"></i></a>
-                        </li>
-                        <li class="list-inline-item text-center">
-                            <a href="javascript: void(0);" class="social-list-item border-danger text-danger"><i
-                                    class="mdi mdi-google"></i></a>
-                        </li>
-                        <li class="list-inline-item text-center">
-                            <a href="javascript: void(0);" class="social-list-item border-info text-info"><i
-                                    class="mdi mdi-twitter"></i></a>
-                        </li>
-                        <li class="list-inline-item text-center">
-                            <a href="javascript: void(0);" class="social-list-item border-secondary text-secondary"><i
-                                    class="mdi mdi-github"></i></a>
-                        </li>
-                    </ul>
-
-                </div>
-
-                <div class="col-lg-2 mt-3 mt-lg-0">
-                    <h5 class="text-white">Company</h5>
-
-                    <ul class="list-unstyled pl-0 mb-0 mt-3">
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">About Us</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Documentation</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Blog</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Affiliate Program</a></li>
-                    </ul>
-
-                </div>
-
-                <div class="col-lg-2 mt-3 mt-lg-0">
-                    <h5 class="text-white">Apps</h5>
-
-                    <ul class="list-unstyled pl-0 mb-0 mt-3">
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Ecommerce Pages</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Email</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Social Feed</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Projects</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Tasks Management</a></li>
-                    </ul>
-                </div>
-
-                <div class="col-lg-2 mt-3 mt-lg-0">
-                    <h5 class="text-white">Discover</h5>
-
-                    <ul class="list-unstyled pl-0 mb-0 mt-3">
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Help Center</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Our Products</a></li>
-                        <li class="mt-2"><a href="javascript: void(0);" class="text-white-50">Privacy</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="mt-5">
-                        <p class="text-white-50 mt-4 text-center mb-0">© 2021 Prince. Criminal Detection using facial
-                            recognition
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="mt-5">
+                            <script>document.write(new Date().getFullYear())</script> © Prince - Criminal Detection
+                            using Facial recognition
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </footer>
-    <!-- END FOOTER -->
+        </footer>
+        <!-- END FOOTER -->
+    </div>
 
-    <!-- bundle -->
-    <script src="{% static 'js/vendor.min.js'%}"></script>
-    <script src="{% static 'js/app.min.js'%}"></script>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.autoplay').slick({
+                infinite: true,
+                speed: 500,
+                fade: true,
+                autoplay: true,
+                cssEase: 'linear',
+                prevArrow: false,
+                nextArrow: false
+            });
+        });
+    </script>
 </body>
 
 </html>
