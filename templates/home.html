@@ -83,8 +83,8 @@
                                 <h4 class="mt-3">{{ crime.crime_type }}</h4>
                                 <p class="text mt-2 mb-0">
                                     {{crime.description}}
-
                                 </p>
+                                <a href="{% url 'crime_details' crime.pk%}">Read More</a>
                             </div>
                         </div>
                         {% endfor %}

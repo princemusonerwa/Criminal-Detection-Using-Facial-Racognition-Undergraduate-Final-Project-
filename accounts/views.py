@@ -15,7 +15,9 @@ from xhtml2pdf import pisa
 from django.contrib.auth import authenticate, login, logout
 from weasyprint import HTML
 import tempfile
+
 # Create your views here.
+
 
 
 def check_is_admin(func):

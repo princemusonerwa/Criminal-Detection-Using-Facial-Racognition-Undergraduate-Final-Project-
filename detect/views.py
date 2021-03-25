@@ -195,6 +195,7 @@ def addImage(request, id):
         return render(request, 'gallery/image_form.html')
 
 
+@login_required
 def addCrime(request):
     if request.method == 'POST':
         form = CrimeForm(request.POST)
@@ -209,11 +210,13 @@ def addCrime(request):
     return render(request, 'crimes/crime_form.html', {'form': form})
 
 
+@login_required
 def allCrime(request):
     crimes = Crime.objects.all()
     return render(request, 'crimes/crime_list.html', {'crimes': crimes})
 
 
+@login_required
 def crimeDetails(request, id):
     crime = get_object_or_404(Crime, id=id)
     context = {
@@ -222,6 +225,7 @@ def crimeDetails(request, id):
     return render(request, 'crimes/crime_detail.html', context)
 
 
+@login_required
 def deleteCrime(request, id):
     crime = Crime.objects.get(id=id)
     if request.method == 'POST':
@@ -231,6 +235,7 @@ def deleteCrime(request, id):
     return render(request, 'crimes/crime_confirm_delete.html', {'crime': crime})
 
 
+@login_required
 def updateCrime(request, id):
     obj = get_object_or_404(Crime, id=id)
     # pass the object as instance in form
@@ -248,6 +253,7 @@ def updateCrime(request, id):
     return render(request, 'crimes/crime_form.html', {'form': form})
 
 
+@login_required
 def addFaculty(request):
     if request.method == 'POST':
         form = FacultyForm(request.POST)
@@ -260,11 +266,13 @@ def addFaculty(request):
     return render(request, 'faculties/faculty_form.html', {'form': form})
 
 
+@login_required
 def allFaculty(request):
     faculties = Faculty.objects.all()
     return render(request, 'faculties/faculty_list.html', {'faculties': faculties})
 
 
+@login_required
 def facultyDetails(request, id):
     faculty = get_object_or_404(Faculty, id=id)
     context = {
@@ -273,6 +281,7 @@ def facultyDetails(request, id):
     return render(request, 'faculties/faculty_detail.html', context)
 
 
+@login_required
 def deleteFaculty(request, id):
     faculty = Faculty.objects.get(id=id)
     if request.method == 'POST':
@@ -282,6 +291,7 @@ def deleteFaculty(request, id):
     return render(request, 'faculties/faculty_confirm_delete.html', {'faculty': faculty})
 
 
+@login_required
 def updateFaculty(request, id):
     obj = get_object_or_404(Faculty, id=id)
     # pass the object as instance in form
@@ -293,6 +303,7 @@ def updateFaculty(request, id):
     return render(request, 'faculties/faculty_form.html', {'form': form})
 
 
+@login_required
 def addDepartment(request):
     if request.method == 'POST':
         form = DepartmentForm(request.POST)
@@ -305,11 +316,13 @@ def addDepartment(request):
     return render(request, 'departements/department_form.html', {'form': form})
 
 
+@login_required
 def allDepartment(request):
     departments = Department.objects.all()
     return render(request, 'departements/department_list.html', {'departments': departments})
 
 
+@login_required
 def departmentDetails(request, id):
     department = get_object_or_404(Department, id=id)
     context = {
@@ -318,6 +331,7 @@ def departmentDetails(request, id):
     return render(request, 'departements/department_detail.html', context)
 
 
+@login_required
 def deleteDepartment(request, id):
     department = Department.objects.get(id=id)
     if request.method == 'POST':
@@ -327,6 +341,7 @@ def deleteDepartment(request, id):
     return render(request, 'departements/department_confirm_delete.html', {'department': department})
 
 
+@login_required
 def updateDepartment(request, id):
     obj = get_object_or_404(Department, id=id)
     # pass the object as instance in form
@@ -424,18 +439,21 @@ def detect_image(request):
     # Load a sample picture and learn how to recognize it.
 
     # upload image
+    img_format = {'png', 'jpg', 'bmp', 'jpeg'}
     name = ""
     if request.method == 'POST' and request.FILES['file']:
         myfile = request.FILES['file']
         fs = FileSystemStorage()
         filename = fs.save(myfile.name, myfile)
         uploaded_file_url = fs.url(filename)
-        image = cv2.imread(uploaded_file_url[1:])
-        print(uploaded_file_url[1:])
-        predictions = predictKNN(image)
-
-        for pred_name, loc in predictions:
-            name = pred_name
+        if uploaded_file_url[1:].split(".")[-1] in img_format:
+            image = cv2.imread(uploaded_file_url[1:])
+            predictions = predictKNN(image)
+            for pred_name, loc in predictions:
+                name = pred_name
+            name = name.split("_", 1)[1]
+        else:
+            messages.error(request, f"The file provided is not an image file.")
 
     return render(request, 'detect.html', {'name': name})
 
