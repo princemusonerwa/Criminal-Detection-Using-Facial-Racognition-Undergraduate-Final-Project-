@@ -16,9 +16,17 @@
         <div class="col-sm-6">
             <form action="" method="post">
                 {% csrf_token %}
-                From: <input type="date" name="from_date" required>
-                To: <input type="date" name="to_date" required>
-                <input type="submit" value="Search">
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        From: <input type="date" class="form-control" name="from_date" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        To: <input type="date" class="form-control" name="to_date" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <input type="submit" value="Search" style="margin-top: 28px;">
+                    </div>
+                </div>
             </form>
         </div>
         <div class="col-sm-6">
@@ -43,10 +51,11 @@
                                 <thead>
                                     <tr>
                                         <th>Victim</th>
+                                        <th>Crime Type</th>
                                         <th>Description</th>
                                         <th>Status</th>
-                                        <th>Suspect</th>
                                         <th>Updated_at</th>
+                                        <th>Suspect</th>
                                     </tr>
                                 </thead>
 
@@ -54,16 +63,17 @@
                                     {% for crime in underInv_crimes %}
                                     <tr>
                                         <td>{{crime.victim.names}}</td>
+                                        <td>{{crime.crime_type}}</td>
                                         <td>{{crime.description}}</td>
                                         <td>{{crime.status}}</td>
+                                        <td>{{crime.updated_at}}</td>
                                         {% if crime.suspect.names %}
-                                            <td>{{crime.suspect.names}}</td>
+                                        <td>{{crime.suspect.names}}</td>
                                         {% else %}
-                                            <td><span style="color: black; background-color: yellow;">No suspect
-                                                recorded yet</span></td>
+                                        <td><span style="color: black; background-color: yellow;">No suspect recorded
+                                                yet</span></td>
                                         {% endif %}
                                         <td>
-                                        <td>{{crime.updated_at}}</td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>

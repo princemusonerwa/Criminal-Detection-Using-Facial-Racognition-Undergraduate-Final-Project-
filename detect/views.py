@@ -454,25 +454,50 @@ def exportStudentListCsv(request):
     return response
 
 
+# def exportStudentListPdf(request):
+#     path = "students/pdf_page.html"
+#     students = Student.objects.all()
+#     context = {"students": students}
+
+#     html = render_to_string('students/pdf_page.html', context)
+#     io_bytes = BytesIO()
+
+#     pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), io_bytes)
+
+#     if not pdf.err:
+#         # we can just return the HttpResponse
+#         response = HttpResponse(io_bytes.getvalue(),
+#                                 content_type='application/pdf')
+#         response['Content-Disposition'] = 'inline; filename=StudentList' + \
+#             str(datetime.now())+'.pdf'
+#         return response
+#     else:
+#         return HttpResponse("Error while rendering PDF", status=400)
+
 def exportStudentListPdf(request):
-    path = "students/pdf_page.html"
-    students = Student.objects.all()
-    context = {"students": students}
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; attachement; filename=StudentList' + \
+        str(datetime.now())+'.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
 
-    html = render_to_string('students/pdf_page.html', context)
-    io_bytes = BytesIO()
+    students = Student.objects.all().order_by('student_id')
+    # render the html page
+    html_string = render_to_string(
+        'students/pdf_page.html', {'students': students})
 
-    pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), io_bytes)
+    # transfort to html content
+    html = HTML(string=html_string)
+    result = html.write_pdf()
 
-    if not pdf.err:
-        # we can just return the HttpResponse
-        response = HttpResponse(io_bytes.getvalue(),
-                                content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename=StudentList' + \
-            str(datetime.now())+'.pdf'
-        return response
-    else:
-        return HttpResponse("Error while rendering PDF", status=400)
+    # preview the content in the memory
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        # open the pdf and read it for reading
+        output.seek(0)
+        response.write(output.read())
+
+    return response
 
 
 def exportStudentListexcel(request):
@@ -502,6 +527,32 @@ def exportStudentListexcel(request):
     return redirect("/index")
 
 
+def exportCrimeListPdf(request):
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; attachement; filename=CrimeList' + \
+        str(datetime.now())+'.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
+
+    crimes = Crime.objects.all().order_by('updated_at')
+    # render the html page
+    html_string = render_to_string(
+        'crimes/pdf_page.html', {'crimes': crimes})
+
+    # transfort to html content
+    html = HTML(string=html_string)
+    result = html.write_pdf()
+
+    # preview the content in the memory
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        # open the pdf and read it for reading
+        output.seek(0)
+        response.write(output.read())
+
+    return response
+
+
 def exportEmployeeListCsv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachement; filename=TeacherList' + \
@@ -517,24 +568,50 @@ def exportEmployeeListCsv(request):
 
 
 def exportEmployeeListPdf(request):
-    path = "employees/pdf_page.html"
-    employees = Employee.objects.all()
-    context = {"employees": employees}
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'inline; attachement; filename=EmployeeList' + \
+        str(datetime.now())+'.pdf'
+    response['Content-Transfer-Encoding'] = 'binary'
 
-    html = render_to_string('employees/pdf_page.html', context)
-    io_bytes = BytesIO()
+    employees = Employee.objects.all().order_by('staff_id')
+    # render the html page
+    html_string = render_to_string(
+        'employees/pdf_page.html', {'employees': employees})
 
-    pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), io_bytes)
+    # transfort to html content
+    html = HTML(string=html_string)
+    result = html.write_pdf()
 
-    if not pdf.err:
-        # we can just return the HttpResponse
-        response = HttpResponse(io_bytes.getvalue(),
-                                content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename=EmployeeList' + \
-            str(datetime.now())+'.pdf'
-        return response
-    else:
-        return HttpResponse("Error while rendering PDF", status=400)
+    # preview the content in the memory
+    with tempfile.NamedTemporaryFile(delete=True) as output:
+        output.write(result)
+        output.flush()
+        # open the pdf and read it for reading
+        output.seek(0)
+        response.write(output.read())
+
+    return response
+
+
+# def exportEmployeeListPdf(request):
+#     path = "employees/pdf_page.html"
+#     employees = Employee.objects.all()
+#     context = {"employees": employees}
+
+#     html = render_to_string('employees/pdf_page.html', context)
+#     io_bytes = BytesIO()
+
+#     pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), io_bytes)
+
+#     if not pdf.err:
+#         # we can just return the HttpResponse
+#         response = HttpResponse(io_bytes.getvalue(),
+#                                 content_type='application/pdf')
+#         response['Content-Disposition'] = 'inline; filename=EmployeeList' + \
+#             str(datetime.now())+'.pdf'
+#         return response
+#     else:
+#         return HttpResponse("Error while rendering PDF", status=400)
 
 
 def exportEmployeeListExcel(request):
@@ -617,7 +694,7 @@ def downloadUnderInvestigation(request):
             to_date = form.cleaned_data.get('to_date')
 
             response = HttpResponse(content_type='application/pdf')
-            response['Content-Disposition'] = 'attachement; filename=Crime under Inv' + \
+            response['Content-Disposition'] = 'inline; filename=Crime under Inv' + \
                 str(datetime.now())+'.pdf'
             response['Content-Transfer-Encoding'] = 'binary'
 
@@ -646,46 +723,35 @@ def downloadUnderInvestigation(request):
         return redirect('under_inv_crimes')
 
 
-def downloadUnderInvestigation1(request):
-    if request.POST:
-        form = DownloadForm(request.POST)
-        if form.is_valid():
-            from_date = form.cleaned_data.get('from_date')
-            to_date = form.cleaned_data.get('to_date')
-            response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = 'attachement; filename=Crimes Under Investigation ' + \
-                str(datetime.now())+'.csv'
-            writer = csv.writer(response)
-            writer.writerow(['name', 'description', 'status', 'updated_at'])
-            crimes = Crime.objects.filter(
-                status="Under Investigation", updated_at__gte=from_date, updated_at__lte=to_date)
-            for crime in crimes:
-                writer.writerow([crime.name, crime.description,
-                                crime.status, crime.updated_at])
-
-            return response
-        else:
-            DownloadForm(request.POST)
-    else:
-        return redirect('under_inv_crimes')
-
-
 def downloadSolved(request):
     if request.POST:
         form = DownloadForm(request.POST)
         if form.is_valid():
             from_date = form.cleaned_data.get('from_date')
             to_date = form.cleaned_data.get('to_date')
-            response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = 'attachement; filename=Solved Crimes ' + \
-                str(datetime.now())+'.csv'
-            writer = csv.writer(response)
-            writer.writerow(['name', 'description', 'status', 'updated_at'])
+
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'inline; filename=Crime under Inv' + \
+                str(datetime.now())+'.pdf'
+            response['Content-Transfer-Encoding'] = 'binary'
+
             crimes = Crime.objects.filter(
                 status="Solved", updated_at__gte=from_date, updated_at__lte=to_date)
-            for crime in crimes:
-                writer.writerow([crime.name, crime.description,
-                                crime.status, crime.updated_at])
+            # render the html page
+            html_string = render_to_string(
+                'crimes/pdf_page.html', {'crimes': crimes})
+
+            # transfort to html content
+            html = HTML(string=html_string)
+            result = html.write_pdf()
+
+            # preview the content in the memory
+            with tempfile.NamedTemporaryFile(delete=True) as output:
+                output.write(result)
+                output.flush()
+                # open the pdf and read it for reading
+                output.seek(0)
+                response.write(output.read())
 
             return response
         else:
@@ -700,16 +766,29 @@ def downloadPending(request):
         if form.is_valid():
             from_date = form.cleaned_data.get('from_date')
             to_date = form.cleaned_data.get('to_date')
-            response = HttpResponse(content_type='text/csv')
-            response['Content-Disposition'] = 'attachement; filename=Pending Crimes ' + \
-                str(datetime.now())+'.csv'
-            writer = csv.writer(response)
-            writer.writerow(['name', 'description', 'status', 'updated_at'])
+
+            response = HttpResponse(content_type='application/pdf')
+            response['Content-Disposition'] = 'inline; filename=Crime under Inv' + \
+                str(datetime.now())+'.pdf'
+            response['Content-Transfer-Encoding'] = 'binary'
+
             crimes = Crime.objects.filter(
                 status="Pending", updated_at__gte=from_date, updated_at__lte=to_date)
-            for crime in crimes:
-                writer.writerow([crime.name, crime.description,
-                                crime.status, crime.updated_at])
+            # render the html page
+            html_string = render_to_string(
+                'crimes/pdf_page.html', {'crimes': crimes})
+
+            # transfort to html content
+            html = HTML(string=html_string)
+            result = html.write_pdf()
+
+            # preview the content in the memory
+            with tempfile.NamedTemporaryFile(delete=True) as output:
+                output.write(result)
+                output.flush()
+                # open the pdf and read it for reading
+                output.seek(0)
+                response.write(output.read())
 
             return response
         else:
@@ -721,29 +800,3 @@ def downloadPending(request):
 def DetectedCriminalReport(request):
     detectedCriminals = DetectedCriminal.objects.all()
     return render(request, 'reports/detectedCriminal.html', {'detectedCriminals': detectedCriminals})
-
-
-def export_to_pdf(request):
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'inline; attachement; filename=StudentList' + \
-        str(datetime.now())+'.pdf'
-    response['Content-Transfer-Encoding'] = 'binary'
-
-    students = Student.objects.all()
-    # render the html page
-    html_string = render_to_string(
-        'students/pdf_page.html', {'students': students})
-
-    # transfort to html content
-    html = HTML(string=html_string)
-    result = html.write_pdf()
-
-    # preview the content in the memory
-    with tempfile.NamedTemporaryFile(delete=True) as output:
-        output.write(result)
-        output.flush()
-        # open the pdf and read it for reading
-        output.seek(0)
-        response.write(output.read())
-
-    return response

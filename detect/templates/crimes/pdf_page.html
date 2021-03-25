@@ -5,32 +5,44 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Student List</title>
+    <title>Crime List</title>
     <style>
         @page {
             size: "A3";
             margin: 0.5cm;
 
-            @top-left {
-                content: "COMPANY NAME";
-            }
+            /* @top-right {
+                content: "AUCA";
+            } */
 
             @bottom-right {
                 content: "Page "counter(page)" of "counter(pages);
             }
         }
+
+        table,
+        td,
+        th {
+            border: 0.5px solid black;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
     </style>
 </head>
 
 <body>
-    <img src="https://pbs.twimg.com/profile_images/1169176570461925381/4tdyHpZp_400x400.jpg" alt="No Image"
-        style="object-fit: cover;" width="500" height="600">
-    <h3 style="text-align: center;">Crime List</h3>
-
+    <img src="http://www.auca.ac.rw/wp-content/uploads/2017/03/auca.png" alt="No Image" class="auca_logo">
+    <h5 style="text-align: center;">Crime List</h5>
     <table>
         <thead>
             <tr>
                 <th>Victim</th>
+                <th>Crime Type</th>
                 <th>Description</th>
                 <th>Status</th>
                 <th>Suspect</th>
@@ -40,12 +52,13 @@
             {% for crime in crimes %}
             <tr>
                 <td>{{crime.victim.names}}</td>
+                <td>{{crime.crime_type}}</td>
                 <td>{{crime.description}}</td>
                 <td>{{crime.status}}</td>
                 {% if crime.suspect.names %}
-                    <td>{{crime.suspect.names}}</td>
+                <td>{{crime.suspect.names}}</td>
                 {% else %}
-                    <td><span style="color: black; background-color: yellow;">No suspect recorded yet</span></td>
+                <td><span style="color: black; background-color: yellow;">No suspect recorded yet</span></td>
                 {% endif %}
             </tr>
             {% endfor %}
