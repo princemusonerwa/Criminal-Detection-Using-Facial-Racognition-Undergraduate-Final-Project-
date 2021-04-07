@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 
 <head>
@@ -36,7 +37,11 @@
 </head>
 
 <body>
-    <img src="http://www.auca.ac.rw/wp-content/uploads/2017/03/auca.png" alt="No Image" class="auca_logo">
+    <img
+      src="{% static 'images/aucaLogoWithTitle.png'%}"
+      alt="No Image"
+      class="auca_logo"
+    />
     <h5 style="text-align: center;">Crime List</h5>
     <table>
         <thead>

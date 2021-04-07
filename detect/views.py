@@ -499,12 +499,13 @@ def exportStudentListPdf(request):
     response['Content-Transfer-Encoding'] = 'binary'
 
     students = Student.objects.all().order_by('student_id')
+    date = datetime.now()
     # render the html page
     html_string = render_to_string(
-        'students/pdf_page.html', {'students': students})
+        'students/pdf_page.html', {'students': students, 'date': date, 'user': request.user})
 
     # transfort to html content
-    html = HTML(string=html_string)
+    html = HTML(string=html_string, base_url=request.build_absolute_uri())
     result = html.write_pdf()
 
     # preview the content in the memory
@@ -557,7 +558,7 @@ def exportCrimeListPdf(request):
         'crimes/pdf_page.html', {'crimes': crimes})
 
     # transfort to html content
-    html = HTML(string=html_string)
+    html = HTML(string=html_string, base_url=request.build_absolute_uri())
     result = html.write_pdf()
 
     # preview the content in the memory
@@ -597,7 +598,7 @@ def exportEmployeeListPdf(request):
         'employees/pdf_page.html', {'employees': employees})
 
     # transfort to html content
-    html = HTML(string=html_string)
+    html = HTML(string=html_string, base_url=request.build_absolute_uri())
     result = html.write_pdf()
 
     # preview the content in the memory
@@ -723,7 +724,7 @@ def downloadUnderInvestigation(request):
                 'crimes/pdf_page.html', {'crimes': crimes})
 
             # transfort to html content
-            html = HTML(string=html_string)
+            html = HTML(string=html_string, base_url=request.build_absolute_uri())
             result = html.write_pdf()
 
             # preview the content in the memory
@@ -760,7 +761,7 @@ def downloadSolved(request):
                 'crimes/pdf_page.html', {'crimes': crimes})
 
             # transfort to html content
-            html = HTML(string=html_string)
+            html = HTML(string=html_string, base_url=request.build_absolute_uri())
             result = html.write_pdf()
 
             # preview the content in the memory
@@ -797,7 +798,7 @@ def downloadPending(request):
                 'crimes/pdf_page.html', {'crimes': crimes})
 
             # transfort to html content
-            html = HTML(string=html_string)
+            html = HTML(string=html_string, base_url=request.build_absolute_uri())
             result = html.write_pdf()
 
             # preview the content in the memory
