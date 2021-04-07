@@ -1,309 +1,344 @@
-{% extends 'base.html'%}
-{% load mathfilters %}
-{% block content %}
+{% extends 'base.html'%} {% load mathfilters %} {% block content %}
 <div class="container-fluid">
-
-    <!-- start page title -->
-    <div class="row">
-        <div class="col-12">
-            <div class="page-title-box">
-                <h4 class="page-title">Dashboard</h4>
-            </div>
-        </div>
+  <!-- start page title -->
+  <div class="row">
+    <div class="col-12">
+      <div class="page-title-box">
+        <h4 class="page-title">Dashboard</h4>
+      </div>
     </div>
-    <!-- end page title -->
+  </div>
+  <!-- end page title -->
 
-    <div class="row">
+  <div class="row">
+    <div class="col-lg-6 col-xl-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-6">
+              <h5
+                class="text-muted font-weight-normal mt-0 text-truncate"
+                title="Campaign Sent"
+              >
+                Total Registered Person
+              </h5>
+              <h3 class="my-2 py-1">{{numberOfPeople}}</h3>
+              <p class="mb-0 text-muted"></p>
+            </div>
+            <div class="col-6">
+              <div class="text-right">
+                <div id="campaign-sent-chart" data-colors="#727cf5"></div>
+              </div>
+            </div>
+          </div>
+          <!-- end row-->
+        </div>
+        <!-- end card-body -->
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
 
-        <div class="col-lg-6 col-xl-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-6">
-                            <h5 class="text-muted font-weight-normal mt-0 text-truncate" title="Campaign Sent">Total
-                                Registered Person</h5>
-                            <h3 class="my-2 py-1">{{numberOfPeople}}</h3>
-                            <p class="mb-0 text-muted">
+    <div class="col-lg-6 col-xl-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-6">
+              <h5
+                class="text-muted font-weight-normal mt-0 text-truncate"
+                title="New Leads"
+              >
+                Total Employee
+              </h5>
+              <h3 class="my-2 py-1">{{numberOfEmployees}}</h3>
+              <p class="mb-0 text-muted">
+                <span class="text-danger mr-2"
+                  ><i class="mdi mdi-arrow-down-bold"></i>
+                  {{numberOfEmployees|div:numberOfPeople|mul:100|stringformat:".0f"}}%</span
+                >
+              </p>
+            </div>
+            <div class="col-6">
+              <div class="text-right">
+                <div id="new-leads-chart" data-colors="#0acf97"></div>
+              </div>
+            </div>
+          </div>
+          <!-- end row-->
+        </div>
+        <!-- end card-body -->
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
 
-                            </p>
-                        </div>
-                        <div class="col-6">
-                            <div class="text-right">
-                                <div id="campaign-sent-chart" data-colors="#727cf5"></div>
-                            </div>
-                        </div>
-                    </div> <!-- end row-->
-                </div> <!-- end card-body -->
-            </div> <!-- end card -->
-        </div> <!-- end col -->
+    <div class="col-lg-6 col-xl-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-6">
+              <h5
+                class="text-muted font-weight-normal mt-0 text-truncate"
+                title="Deals"
+              >
+                Total Student
+              </h5>
+              <h3 class="my-2 py-1">{{numberOfStudents}}</h3>
+              <p class="mb-0 text-muted">
+                <span class="text-success mr-2"
+                  ><i class="mdi mdi-arrow-up-bold"></i>
+                  {{numberOfStudents|div:numberOfPeople|mul:100|stringformat:".0f"}}%</span
+                >
+              </p>
+            </div>
+            <div class="col-6">
+              <div class="text-right">
+                <div id="deals-chart" data-colors="#727cf5"></div>
+              </div>
+            </div>
+          </div>
+          <!-- end row-->
+        </div>
+        <!-- end card-body -->
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
 
-        <div class="col-lg-6 col-xl-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-6">
-                            <h5 class="text-muted font-weight-normal mt-0 text-truncate" title="New Leads">Total
-                                Employee
-                            </h5>
-                            <h3 class="my-2 py-1">{{numberOfEmployees}}</h3>
-                            <p class="mb-0 text-muted">
-                                <span class="text-danger mr-2"><i class="mdi mdi-arrow-down-bold"></i>
-                                    {{numberOfEmployees|div:numberOfPeople|mul:100|stringformat:".0f" }}%</span>
-                            </p>
-                        </div>
-                        <div class="col-6">
-                            <div class="text-right">
-                                <div id="new-leads-chart" data-colors="#0acf97"></div>
-                            </div>
-                        </div>
-                    </div> <!-- end row-->
-                </div> <!-- end card-body -->
-            </div> <!-- end card -->
-        </div> <!-- end col -->
+    <div class="col-lg-6 col-xl-3">
+      <div class="card">
+        <div class="card-body">
+          <div class="row align-items-center">
+            <div class="col-6">
+              <h5
+                class="text-muted font-weight-normal mt-0 text-truncate"
+                title="Booked Revenue"
+              >
+                Pending Crimes
+              </h5>
+              <h3 class="my-2 py-1">{{numberOfCriminals}}</h3>
+              <p class="mb-0 text-muted">
+                <span class="text-success mr-2"
+                  ><i class="mdi mdi-arrow-up-bold"></i>
+                  {{numberOfCriminals|div:numberOfPeople|mul:100|stringformat:".0f"}}%</span
+                >
+              </p>
+            </div>
+            <div class="col-6">
+              <div class="text-right">
+                <div id="booked-revenue-chart" data-colors="#0acf97"></div>
+              </div>
+            </div>
+          </div>
+          <!-- end row-->
+        </div>
+        <!-- end card-body -->
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
+  </div>
 
-        <div class="col-lg-6 col-xl-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-6">
-                            <h5 class="text-muted font-weight-normal mt-0 text-truncate" title="Deals">
-                                Total Student</h5>
-                            <h3 class="my-2 py-1">{{numberOfStudents}}</h3>
-                            <p class="mb-0 text-muted">
-                                <span class="text-success mr-2"><i class="mdi mdi-arrow-up-bold"></i>
-                                    {{numberOfStudents|div:numberOfPeople|mul:100|stringformat:".0f"}}%</span>
-                            </p>
-                        </div>
-                        <div class="col-6">
-                            <div class="text-right">
-                                <div id="deals-chart" data-colors="#727cf5"></div>
-                            </div>
-                        </div>
-                    </div> <!-- end row-->
-                </div> <!-- end card-body -->
-            </div> <!-- end card -->
-        </div> <!-- end col -->
-
-        <div class="col-lg-6 col-xl-3">
-            <div class="card">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-6">
-                            <h5 class="text-muted font-weight-normal mt-0 text-truncate" title="Booked Revenue">
-                                Pending Crimes</h5>
-                            <h3 class="my-2 py-1">{{numberOfCriminals}}</h3>
-                            <p class="mb-0 text-muted">
-                                <span class="text-success mr-2"><i class="mdi mdi-arrow-up-bold"></i>
-                                    {{numberOfCriminals|div:numberOfPeople|mul:100|stringformat:".0f"}}%</span>
-                            </p>
-                        </div>
-                        <div class="col-6">
-                            <div class="text-right">
-                                <div id="booked-revenue-chart" data-colors="#0acf97"></div>
-                            </div>
-                        </div>
-                    </div> <!-- end row-->
-                </div> <!-- end card-body -->
-            </div> <!-- end card -->
-        </div> <!-- end col -->
+  <div class="row">
+    <div class="col-12 col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <div class="chart chart-sm">
+            <canvas id="myChart" width="15" height=""></canvas>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="row">
-
-        <div class="col-12 col-lg-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="chart chart-sm">
-                        <canvas id="myChart" width="15" height=""></canvas>
-                    </div>
-                </div>
-            </div>
+    <div class="col-12 col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <div class="chart chart-sm">
+            <canvas id="myChart2" width="15" height=""></canvas>
+          </div>
         </div>
-
-        <div class="col-12 col-lg-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="chart chart-sm">
-                        <canvas id="myChart2" width="15" height=""></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-12 col-lg-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="chart chart-sm">
-                        <canvas id="myChart1" width="15" height=""></canvas>
-                    </div>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
-</div> <!-- container -->
+
+    <div class="col-12 col-lg-6">
+      <div class="card">
+        <div class="card-body">
+          <div class="chart chart-sm">
+            <canvas id="myChart1" width="15" height=""></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- container -->
 
 <script>
-    const renderChat = (data, labels) => {
-        var ctx = document.getElementById('myChart').getContext('2d');
-        var myChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Last 6 months person status',
-                    data: data,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: 'Person status summary'
-                }
-            }
-        });
-    }
+  const renderChat = (data, labels) => {
+    var ctx = document.getElementById("myChart").getContext("2d");
+    var myChart = new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Last 6 months person status",
+            data: data,
+            backgroundColor: [
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(255, 159, 64, 0.2)",
+            ],
+            borderColor: [
+              "rgba(54, 162, 235, 1)",
+              "rgba(255, 99, 132, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(75, 192, 192, 1)",
+              "rgba(153, 102, 255, 1)",
+              "rgba(255, 159, 64, 1)",
+            ],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Person status summary",
+        },
+      },
+    });
+  };
 
-    const getChartData = () => {
-        fetch("/person_status_summary")
-            .then((res) => res.json())
-            .then((results) => {
-                console.log("results", results);
-                const status_data = results.person_status_data;
-                const [labels, data] = [
-                    Object.keys(status_data),
-                    Object.values(status_data)
-                ];
+  const getChartData = () => {
+    fetch("/person_status_summary")
+      .then((res) => res.json())
+      .then((results) => {
+        console.log("results", results);
+        const status_data = results.person_status_data;
+        const [labels, data] = [
+          Object.keys(status_data),
+          Object.values(status_data),
+        ];
 
-                renderChat(data, labels);
-            });
-    };
+        renderChat(data, labels);
+      });
+  };
 
+  const renderChat1 = (data, labels) => {
+    var ctx = document.getElementById("myChart1").getContext("2d");
+    var myChart1 = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Last 6 months person status",
+            data: data,
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(255, 159, 64, 0.2)",
+            ],
+            borderColor: [
+              "rgba(255, 99, 132, 1)",
+              "rgba(54, 162, 235, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(75, 192, 192, 1)",
+              "rgba(153, 102, 255, 1)",
+              "rgba(255, 159, 64, 1)",
+            ],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Person Gender summary",
+        },
+      },
+    });
+  };
 
-    const renderChat1 = (data, labels) => {
-        var ctx = document.getElementById('myChart1').getContext('2d');
-        var myChart1 = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Last 6 months person status',
-                    data: data,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: 'Person Gender summary'
-                }
-            }
-        });
-    }
+  const getChartData1 = () => {
+    fetch("/person_gender_summary")
+      .then((res) => res.json())
+      .then((results) => {
+        console.log("results", results);
+        const status_data = results.person_gender_data;
+        const [labels, data] = [
+          Object.keys(status_data),
+          Object.values(status_data),
+        ];
 
-    const getChartData1 = () => {
-        fetch("/person_gender_summary")
-            .then((res) => res.json())
-            .then((results) => {
-                console.log("results", results);
-                const status_data = results.person_gender_data;
-                const [labels, data] = [
-                    Object.keys(status_data),
-                    Object.values(status_data)
-                ];
+        renderChat1(data, labels);
+      });
+  };
 
-                renderChat1(data, labels);
-            });
-    };
+  const renderChat2 = (data, labels) => {
+    var ctx = document.getElementById("myChart2").getContext("2d");
+    var myChart2 = new Chart(ctx, {
+      type: "doughnut",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Last 6 months person status",
+            data: data,
+            backgroundColor: [
+              "rgba(255, 99, 132, 0.2)",
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(255, 206, 86, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(153, 102, 255, 0.2)",
+              "rgba(255, 159, 64, 0.2)",
+            ],
+            borderColor: [
+              "rgba(255, 99, 132, 1)",
+              "rgba(54, 162, 235, 1)",
+              "rgba(255, 206, 86, 1)",
+              "rgba(75, 192, 192, 1)",
+              "rgba(153, 102, 255, 1)",
+              "rgba(255, 159, 64, 1)",
+            ],
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        title: {
+          display: true,
+          text: "Crime status summary",
+        },
+      },
+    });
+  };
 
+  const getChartData2 = () => {
+    fetch("/crime_status_summary")
+      .then((res) => res.json())
+      .then((results) => {
+        console.log("results", results);
+        const status_data = results.crime_status_data;
+        const [labels, data] = [
+          Object.keys(status_data),
+          Object.values(status_data),
+        ];
 
-    const renderChat2 = (data, labels) => {
-        var ctx = document.getElementById('myChart2').getContext('2d');
-        var myChart2 = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: labels,
-                datasets: [{
-                    label: 'Last 6 months person status',
-                    data: data,
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.2)',
-                        'rgba(54, 162, 235, 0.2)',
-                        'rgba(255, 206, 86, 0.2)',
-                        'rgba(75, 192, 192, 0.2)',
-                        'rgba(153, 102, 255, 0.2)',
-                        'rgba(255, 159, 64, 0.2)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                title: {
-                    display: true,
-                    text: 'Crime status summary'
-                }
-            }
-        });
-    }
+        renderChat2(data, labels);
+      });
+  };
 
-    const getChartData2 = () => {
-        fetch("/crime_status_summary")
-            .then((res) => res.json())
-            .then((results) => {
-                console.log("results", results);
-                const status_data = results.crime_status_data;
-                const [labels, data] = [
-                    Object.keys(status_data),
-                    Object.values(status_data)
-                ];
-
-                renderChat2(data, labels);
-            });
-    };
-
-    document.onload = getChartData2()
-    document.onload = getChartData1()
-    document.onload = getChartData()
+  document.onload = getChartData2();
+  document.onload = getChartData1();
+  document.onload = getChartData();
 </script>
 
 {% endblock %}
