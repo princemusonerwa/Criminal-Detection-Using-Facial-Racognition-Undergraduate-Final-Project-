@@ -1,46 +1,75 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>User List</title>
     <style>
-        @page {
-            size: "A3";
-            margin: 0.5cm;
+      @page {
+        size: "A3";
+        margin: 0.5cm;
 
-            /* @top-right {
+        /* @top-right {
                 content: "AUCA";
             } */
 
-            @bottom-right {
-                content: "Page "counter(page)" of "counter(pages);
-            }
+        @bottom-right {
+          content: "Page " counter(page) " of " counter(pages);
         }
+      }
 
-        table,
-        td,
-        th {
-            border: 0.5px solid black;
-            text-align: left;
-            font-size: 12px;
-        }
+      table,
+      td,
+      th {
+        border: 0.5px solid black;
+        text-align: left;
+        font-size: 12px;
+      }
 
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      .thead {
+        height: 30px;
+      }
+      .summary{
+          margin-top: 10px;
+          margin-bottom: 10px;
+          float: right;
+          font-size: small;
+      }
+      .title{
+          text-align: center;
+          font-weight: bold;
+          margin-top: 60px;
+          margin-bottom: 10px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-    <img src="http://www.auca.ac.rw/wp-content/uploads/2017/03/auca.png" alt="No Image" class="auca_logo">
-    <h5 style="text-align: center;">User List</h5>
+  <body>
+    <img
+      src="{% static 'images/aucaLogoWithTitle.png'%}"
+      alt="No Image"
+      class="auca_logo"
+    />
+
+    <div class="summary">
+      Printed By {{ user.names }}
+      <br />
+      On {{ date }}
+    </div>
+    <div class="title">
+        User List
+    </div>
     <table>
-        <thead>
-            <tr>
+      <thead>
+        <tr class="thead">
                 <th>Names</th>
                 <th>Email</th>
                 <th>Phone</th>

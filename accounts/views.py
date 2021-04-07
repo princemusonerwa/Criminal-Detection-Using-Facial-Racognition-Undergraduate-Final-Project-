@@ -169,10 +169,10 @@ def exportUserListPdf(request):
     users = User.objects.all().order_by('names')
     # render the html page
     html_string = render_to_string(
-        'accounts/pdf_page.html', {'users': users})
+        'accounts/pdf_page.html', {'users': users, 'date': datetime.now(), 'user': request.user})
 
     # transfort to html content
-    html = HTML(string=html_string)
+    html = HTML(string=html_string, base_url= request.build_absolute_uri())
     result = html.write_pdf()
 
     # preview the content in the memory

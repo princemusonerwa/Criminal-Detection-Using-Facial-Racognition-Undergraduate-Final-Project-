@@ -499,10 +499,9 @@ def exportStudentListPdf(request):
     response['Content-Transfer-Encoding'] = 'binary'
 
     students = Student.objects.all().order_by('student_id')
-    date = datetime.now()
     # render the html page
     html_string = render_to_string(
-        'students/pdf_page.html', {'students': students, 'date': date, 'user': request.user})
+        'students/pdf_page.html', {'students': students, 'date': datetime.now(), 'user': request.user})
 
     # transfort to html content
     html = HTML(string=html_string, base_url=request.build_absolute_uri())
@@ -555,7 +554,7 @@ def exportCrimeListPdf(request):
     crimes = Crime.objects.all().order_by('updated_at')
     # render the html page
     html_string = render_to_string(
-        'crimes/pdf_page.html', {'crimes': crimes})
+        'crimes/pdf_page.html', {'crimes': crimes, 'date': datetime.now(), 'user': request.user})
 
     # transfort to html content
     html = HTML(string=html_string, base_url=request.build_absolute_uri())
@@ -595,7 +594,7 @@ def exportEmployeeListPdf(request):
     employees = Employee.objects.all().order_by('staff_id')
     # render the html page
     html_string = render_to_string(
-        'employees/pdf_page.html', {'employees': employees})
+        'employees/pdf_page.html', {'employees': employees, 'date': datetime.now(), 'user': request.user})
 
     # transfort to html content
     html = HTML(string=html_string, base_url=request.build_absolute_uri())
@@ -721,7 +720,7 @@ def downloadUnderInvestigation(request):
                 status="Under Investigation", updated_at__gte=from_date, updated_at__lte=to_date)
             # render the html page
             html_string = render_to_string(
-                'crimes/pdf_page.html', {'crimes': crimes})
+                'crimes/pdf_page.html', {'crimes': crimes, 'date': datetime.now(), 'user': request.user})
 
             # transfort to html content
             html = HTML(string=html_string, base_url=request.build_absolute_uri())
@@ -758,7 +757,7 @@ def downloadSolved(request):
                 status="Solved", updated_at__gte=from_date, updated_at__lte=to_date)
             # render the html page
             html_string = render_to_string(
-                'crimes/pdf_page.html', {'crimes': crimes})
+                'crimes/pdf_page.html', {'crimes': crimes, 'date': datetime.now(), 'user': request.user})
 
             # transfort to html content
             html = HTML(string=html_string, base_url=request.build_absolute_uri())
@@ -795,7 +794,7 @@ def downloadPending(request):
                 status="Pending", updated_at__gte=from_date, updated_at__lte=to_date)
             # render the html page
             html_string = render_to_string(
-                'crimes/pdf_page.html', {'crimes': crimes})
+                'crimes/pdf_page.html', {'crimes': crimes, 'date': datetime.now(), 'user': request.user})
 
             # transfort to html content
             html = HTML(string=html_string, base_url=request.build_absolute_uri())
