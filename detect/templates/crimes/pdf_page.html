@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,17 +36,21 @@
       .thead {
         height: 30px;
       }
-      .summary{
-          margin-top: 10px;
-          margin-bottom: 10px;
-          float: right;
-          font-size: small;
+      .summary {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        float: right;
+        font-size: small;
       }
-      .title{
-          text-align: center;
-          font-weight: bold;
-          margin-top: 60px;
-          margin-bottom: 10px;
+      .title {
+        text-align: center;
+        font-weight: bold;
+        margin-top: 60px;
+        margin-bottom: 10px;
+      }
+      .wrap_data {
+        word-break: break-all;
+        width: 200px;
       }
     </style>
   </head>
@@ -60,13 +63,12 @@
     />
 
     <div class="summary">
-      <span style="font-weight: bold; margin-bottom: 15px;">Printed on</span> {{ date }}
+      <span style="font-weight: bold; margin-bottom: 15px">Printed on</span> {{
+      date }}
       <br />
-      <span style="font-weight: bold;">By</span> {{ user.names }}
+      <span style="font-weight: bold">By</span> {{ user.names }}
     </div>
-    <div class="title">
-        Crime List
-    </div>
+    <div class="title">Crime List</div>
     <table>
       <thead>
         <tr class="thead">
@@ -82,7 +84,7 @@
         <tr>
           <td>{{crime.victim.names}}</td>
           <td>{{crime.crime_type}}</td>
-          <td>{{crime.description}}</td>
+          <td class="wrap_data">{{crime.description}}</td>
           <td>{{crime.status}}</td>
           {% if crime.suspect.names %}
           <td>{{crime.suspect.names}}</td>

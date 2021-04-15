@@ -124,8 +124,8 @@ class Crime(models.Model):
     victim = models.ForeignKey(Person, on_delete=models.CASCADE, related_name="crime_victim")
     CRIME_CHOICE = [
         ('Phone Robbery','Phone Robbery'),
-        ('cabble Robbery', 'cabble Robbery'),
-        ('computer Robbery', 'computer Robbery'),
+        ('Cabble Robbery', 'Cabble Robbery'),
+        ('Computer Robbery', 'Computer Robbery'),
     ]
     crime_type = models.CharField(max_length=100, choices= CRIME_CHOICE, default="Phone robbery")
     description = models.TextField()
@@ -143,7 +143,7 @@ class Crime(models.Model):
     comment = models.TextField(max_length=255, null=True)
 
     def __str__(self):
-        return self.name
+        return self.crime_type
 
 
 class DetectedCriminal(models.Model):

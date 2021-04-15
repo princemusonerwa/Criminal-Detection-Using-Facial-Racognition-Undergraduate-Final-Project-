@@ -1,4 +1,8 @@
-.custom-radio-list{
-    text-align: left;
-    list-style: none;
+.custom-radio-list {
+  text-align: left;
+  list-style: none;
+}
+.wrap_data {
+  word-break: break-all;
+  width: 400px;
 }

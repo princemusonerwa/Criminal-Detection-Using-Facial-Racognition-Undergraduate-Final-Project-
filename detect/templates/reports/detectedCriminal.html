@@ -1,76 +1,76 @@
-{% extends 'base.html'%}
-{% block title %}{% endblock %}
-{% block content %}
+{% extends 'base.html'%} {% block title %}{% endblock %} {% block content %}
 <div class="container-fluid">
-    <!-- start page title -->
-    <div class="row">
+  <!-- start page title -->
+  <div class="row">
+    <div class="col-12">
+      <div class="page-title-box">
+        <h4 class="page-title">Detect Criminal Data</h4>
+      </div>
+    </div>
+  </div>
+  <!-- end page title -->
+
+  <div class="row mb-2">
+    <div class="col-sm-6">
+      <form action="" method="post">
+        {% csrf_token %}
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            From:
+            <input type="date" class="form-control" name="from_date" required />
+          </div>
+          <div class="form-group col-md-4">
+            To:
+            <input type="date" class="form-control" name="to_date" required />
+          </div>
+          <div class="form-group col-md-4">
+            <input type="submit" value="Search" style="margin-top: 28px" />
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="col-sm-6">
+      <div class="text-sm-right">
+        {% if download_form %}
+        <form action="{% url 'download_pending_crime' %}" method="POST">
+          {% csrf_token %} {{ download_form.as_p }}
+          <p>
+            <input type="submit" class="btn" name="submit" value="Download" />
+          </p>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+    <div class="container-fluid p-0">
+      <div class="row">
         <div class="col-12">
-            <div class="page-title-box">
-                <h4 class="page-title">Detect Criminal Data</h4>
+          <div class="card">
+            <div class="card-body">
+              <table class="table table-striped" style="width: 100%">
+                <thead>
+                  <tr>
+                    <th>Detected Person</th>
+                    <th>time</th>
+                    <th>location</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for detectedCriminal in detectedCriminals %}
+                  <tr>
+                    <td>{{detectedCriminal.person.names}}</td>
+                    <td>{{detectedCriminal.time}</td>
+                    <td>{{detectedCriminal.location}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-    <!-- end page title -->
+    <!-- end row-->
+  </div>
 
-    <div class="row mb-2">
-        <div class="col-sm-6">
-            <form action="" method="post">
-                {% csrf_token %}
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        From: <input type="date" class="form-control" name="from_date" required>
-                    </div>
-                    <div class="form-group col-md-4">
-                        To: <input type="date" class="form-control" name="to_date" required>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <input type="submit" value="Search" style="margin-top: 28px;">
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="col-sm-6">
-            <div class="text-sm-right">
-                {% if download_form %}
-                <form action="{% url 'download_pending_crime' %}" method="POST">
-                    {% csrf_token %}
-                    {{ download_form.as_p }}
-                    <p>
-                        <input type="submit" class="btn" name="submit" value="Download" />
-                    </p>
-                </form>
-                {% endif %}
-            </div>
-        </div>
-        <div class="container-fluid p-0">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <table class="table table-striped" style="width:100%">
-                                <thead>
-                                    <tr>
-                                        <th>Detected Person</th>
-                                        <th>time</th>
-                                        <th>location</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for detectedCriminal in detectedCriminals %}
-                                    <tr>
-                                        <td>{{detectedCriminal.person.names}}</td>
-                                        <td>{{detectedCriminal.time}</td>
-                                        <td>{{detectedCriminal.location}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- end row-->
-    </div>
-
-    {% endblock %}
+  {% endblock %}
+</div>
