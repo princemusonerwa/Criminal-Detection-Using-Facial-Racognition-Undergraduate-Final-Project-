@@ -10,7 +10,9 @@ def index(request):
     numberOfStudents = Student.objects.count()
     numberOfEmployees = Employee.objects.count()
     numberOfCriminals = Person.objects.filter(status = 'WANTED').count()
-    numberOfPeople = Person.objects.count()
+    studentNumber = Student.objects.count()
+    employeeNumber = Employee.objects.count()
+    numberOfPeople = studentNumber + employeeNumber
     people = Person.objects.all()
     detectedCriminal = DetectedCriminal.objects.all()
 
