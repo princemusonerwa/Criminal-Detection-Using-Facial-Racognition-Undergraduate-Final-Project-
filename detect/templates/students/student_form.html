@@ -1,10 +1,8 @@
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
-{% block title%} create student {% endblock%}
-{% block content %}
+{% extends 'base.html' %} {% load crispy_forms_tags %} {% block title%} create
+student {% endblock%} {% block content %}
 
 <style>
-  .error{
+  .error {
     color: red;
   }
 </style>
@@ -112,7 +110,7 @@
               </div>
               <div class="form-group">
                 <label for="note-image">Images</label>
-                <input type="file" name="images" class="form-control-file" id="note-image" multiple>
+                <input type="file" name="images" class="form-control-file" id="note-image" multiple />
               </div>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
@@ -130,13 +128,12 @@
     $.ajax({
       url: url,
       data: {
-        'faculty': facultyId
+        faculty: facultyId,
       },
       success: function (data) {
         $("#id_department").html(data);
-      }
+      },
     });
-
   });
 </script>
 

@@ -1,8 +1,10 @@
-{% extends 'base.html' %}
-{% load crispy_forms_tags %}
-{% block title%} create user {% endblock%}
-{% block content %}
-
+{% extends 'base.html' %} {% load crispy_forms_tags %} {% block title%} create
+user {% endblock%} {% block content %}
+<style>
+  .error {
+    color: red;
+  }
+</style>
 <main class="content">
   <div class="container-fluid p-0">
     <div class="row justify-content-center">
@@ -23,38 +25,62 @@
                 <div class="form-group col-md-6">
                   {{form.names.label_tag}}
                   {{form.names}}
+                  {% for error in form.names.errors %}
+                  <p class="error"><small>{{ error }}</small></p>
+                  {% endfor %}
                 </div>
                 <div class="form-group col-md-6">
                   {{form.email.label_tag}}
                   {{form.email}}
+                  {% for error in form.email.errors %}
+                  <p class="error"><small>{{ error }}</small></p>
+                  {% endfor %}
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
                   {{form.phone.label_tag}}
                   {{form.phone}}
+                  {% for error in form.phone.errors %}
+                  <p class="error"><small>{{ error }}</small></p>
+                  {% endfor %}
                 </div>
                 <div class="form-check col-md-6">
                   {{form.gender.label_tag}}
                   {{form.gender}}
+                  {% for error in form.gender.errors %}
+                  <p class="error"><small>{{ error }}</small></p>
+                  {% endfor %}
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
                   {{form.dob.label_tag}}
                   {{form.dob}}
+                  {% for error in form.dob.errors %}
+                  <p class="error"><small>{{ error }}</small></p>
+                  {% endfor %}
                 </div>
                 <div class="form-group col-md-6">
                   {{form.address.label_tag}}
                   {{form.address}}
+                  {% for error in form.address.errors %}
+                  <p class="error"><small>{{ error }}</small></p>
+                  {% endfor %}
                 </div>
                 <div class="form-group col-md-6">
                   {{form.password1.label_tag}}
                   {{form.password1}}
+                  {% for error in form.password1.errors %}
+                  <p class="error"><small>{{ error }}</small></p>
+                  {% endfor %}
                 </div>
                 <div class="form-group col-md-6">
                   {{form.password2.label_tag}}
                   {{form.password2}}
+                  {% for error in form.password2.errors %}
+                  <p class="error"><small>{{ error }}</small></p>
+                  {% endfor %}
                 </div>
               </div>
               <button type="submit" class="btn btn-primary">Submit</button>
