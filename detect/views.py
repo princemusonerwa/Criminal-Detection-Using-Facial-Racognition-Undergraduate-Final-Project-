@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from .forms import StudentForm, EmployeeForm, CrimeForm, DepartmentForm, FacultyForm, DownloadForm
-from .models import Student, Employee, Crime, Department, Faculty, Gallery, Person, Faculty, Department, DetectedCriminal
+from .models import Student, Employee, Crime, Department, Faculty, Images, Person, Faculty, Department, DetectedCriminal
 from django.contrib import messages
 from .detection import train, predictKNN
 from django.core.files.storage import FileSystemStorage
@@ -31,7 +31,7 @@ def addStudent(request):
         if form.is_valid():
             form.save()
             for f in files:
-                Gallery.objects.create(
+                Images.objects.create(
                     person=form.instance.person_ptr, photos=f)
             trainData.delay()
             messages.success(request, 'Student created Successfully.')
@@ -63,12 +63,12 @@ def detect(request):
 @login_required
 def studentDetails(request, id):
     student = get_object_or_404(Student, student_id=id)
-    gallery = student.gallery_set.all()
-    profile_image = student.gallery_set.first
+    images = student.images_set.all()
+    profile_image = student.images_set.first
 
     context = {
         'student': student,
-        'gallery': gallery,
+        'images': images,
         'profile_image': profile_image
     }
     return render(request, 'students/student_detail.html', context)
@@ -90,7 +90,7 @@ def updateStudent(request, id):
     if form.is_valid():
         form.save()
         for f in files:
-            Gallery.objects.create(person=obj, photos=f)
+            Images.objects.create(person=obj, photos=f)
         messages.success(request, 'Student updated Successfully.')
         return redirect('students')
     return render(request, 'students/student_form.html', {'form': form})
@@ -105,7 +105,7 @@ def updateEmployee(request, id):
     if form.is_valid():
         form.save()
         for f in files:
-            Gallery.objects.create(person=obj, photos=f)
+            Images.objects.create(person=obj, photos=f)
         messages.success(request, 'Employee updated Successfully.')
         return redirect('employees')
     return render(request, 'employees/employee_form.html', {'form': form})
@@ -119,7 +119,7 @@ def addEmployee(request):
         if form.is_valid():
             form.save()
             for f in files:
-                Gallery.objects.create(
+                Images.objects.create(
                     person=form.instance.person_ptr, photos=f)
 
             messages.success(request, 'Employee created Successfully.')
@@ -138,11 +138,11 @@ def allEmployee(request):
 @login_required
 def employeeDetails(request, id):
     employee = get_object_or_404(Employee, staff_id=id)
-    gallery = employee.gallery_set.all()
-    profile_image = employee.gallery_set.first
+    images = employee.images_set.all()
+    profile_image = employee.images_set.first
     context = {
         'employee': employee,
-        'gallery': gallery,
+        'images': images,
         'profile_image': profile_image
     }
     return render(request, 'employees/employee_detail.html', context)
@@ -170,7 +170,7 @@ def updateEmployee(request, id):
 
 @login_required
 def deleteImage(request, id):
-    image = Gallery.objects.get(id=id)
+    image = Images.objects.get(id=id)
     if request.method == 'POST':
         image.delete()
         messages.success(request, 'Image deleted Successfully.')
@@ -183,7 +183,7 @@ def addImage(request, id):
         person = Person.objects.get(id=id)
         files = request.FILES.getlist('images')
         for f in files:
-            Gallery.objects.create(person=person, photos=f)
+            Images.objects.create(person=person, photos=f)
         messages.success(request, 'Image added Successfully.')
         if(hasattr(person, "student")):
             student_id = person.student.student_id
@@ -192,7 +192,7 @@ def addImage(request, id):
             staff_id = person.employee.staff_id
             return redirect('employee_details', str(staff_id))
     else:
-        return render(request, 'gallery/image_form.html')
+        return render(request, 'images/image_form.html')
 
 
 @login_required
@@ -406,8 +406,6 @@ def camPreview(previewName, camID):
             y1, x2, y2, x1 = loc
             y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
             cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
-            cv2.rectangle(frame, (x1, y2-20), (x2, y2),
-                          (255, 0, 0), cv2.FILLED)
             cv2.putText(frame, name, (x1+6, y2-6),
                         cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 0), 2)
         cv2.imshow(previewName, frame)
@@ -723,7 +721,8 @@ def downloadUnderInvestigation(request):
                 'crimes/pdf_page.html', {'crimes': crimes, 'date': datetime.now(), 'user': request.user})
 
             # transfort to html content
-            html = HTML(string=html_string, base_url=request.build_absolute_uri())
+            html = HTML(string=html_string,
+                        base_url=request.build_absolute_uri())
             result = html.write_pdf()
 
             # preview the content in the memory
@@ -760,7 +759,8 @@ def downloadSolved(request):
                 'crimes/pdf_page.html', {'crimes': crimes, 'date': datetime.now(), 'user': request.user})
 
             # transfort to html content
-            html = HTML(string=html_string, base_url=request.build_absolute_uri())
+            html = HTML(string=html_string,
+                        base_url=request.build_absolute_uri())
             result = html.write_pdf()
 
             # preview the content in the memory
@@ -797,7 +797,8 @@ def downloadPending(request):
                 'crimes/pdf_page.html', {'crimes': crimes, 'date': datetime.now(), 'user': request.user})
 
             # transfort to html content
-            html = HTML(string=html_string, base_url=request.build_absolute_uri())
+            html = HTML(string=html_string,
+                        base_url=request.build_absolute_uri())
             result = html.write_pdf()
 
             # preview the content in the memory

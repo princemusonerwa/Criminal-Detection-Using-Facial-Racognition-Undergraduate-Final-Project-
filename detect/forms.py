@@ -1,5 +1,5 @@
 from django import forms
-from .models import Student, Employee, Gallery, Crime, Department, Person, Faculty, Department
+from .models import Student, Employee, Images, Crime, Department, Person, Faculty, Department
 
 
 class StudentForm(forms.ModelForm):
@@ -69,11 +69,11 @@ class EmployeeForm(forms.ModelForm):
             return super(EmployeeForm, self).get_form(request, obj=None, **kwargs)
 
 
-class GalleryForm(forms.ModelForm):
+class ImagesForm(forms.ModelForm):
     photos = forms.ImageField(label='Photos')
 
     class Meta:
-        model = Gallery
+        model = Images
         fields = ('photos', )
 
 

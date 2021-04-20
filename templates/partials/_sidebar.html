@@ -87,7 +87,23 @@
         </li>
       </ul>
     </li>
+    {% endif %}
 
+    <li class="side-nav-item">
+      <a href="javascript: void(0);" class="side-nav-link">
+        <i class="fas fa-skull-crossbones"></i>
+        <span> Crimes </span>
+        <span class="menu-arrow"></span>
+      </a>
+      <ul class="side-nav-second-level" aria-expanded="false">
+        <li>
+          <a href="{% url 'add_crime'%}">Add a Crime</a>
+        </li>
+        <li>
+          <a href="{% url 'crimes'%}">All Crimes</a>
+        </li>
+      </ul>
+    </li>
     <li class="side-nav-item">
       <a href="javascript: void(0);" class="side-nav-link">
         <i class="uil-chart"></i>
@@ -106,24 +122,6 @@
         </li>
         <li>
           <a href="{% url 'detected_criminals'%}">Detected Criminals</a>
-        </li>
-      </ul>
-    </li>
-
-    {% endif %}
-
-    <li class="side-nav-item">
-      <a href="javascript: void(0);" class="side-nav-link">
-        <i class="fas fa-skull-crossbones"></i>
-        <span> Crimes </span>
-        <span class="menu-arrow"></span>
-      </a>
-      <ul class="side-nav-second-level" aria-expanded="false">
-        <li>
-          <a href="{% url 'add_crime'%}">Add a Crime</a>
-        </li>
-        <li>
-          <a href="{% url 'crimes'%}">All Crimes</a>
         </li>
       </ul>
     </li>

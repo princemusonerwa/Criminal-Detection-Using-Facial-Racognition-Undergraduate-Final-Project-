@@ -13,15 +13,15 @@
                     <img src="{{profile_image.photos.url}}" class="rounded-circle avatar-lg img-thumbnail"
                         alt="profile-image">
                     {% else %}
-                    <img src="/media/default.jpg" class="rounded-circle avatar-lg img-thumbnail"
-                        alt="profile-image">
+                    <img src="/media/default.jpg" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
 
                     {% endif %}
 
                     <h4 class="mb-0 mt-2">{{ student.names }}</h4>
 
                     <a href="{% url 'students'%}" class="btn btn-success btn-sm mb-2">Back</a>
-                    <a href="{% url 'add_image' student.person_ptr.pk %}" class="btn btn-primary btn-sm mb-2">Add Images</a>
+                    <a href="{% url 'add_image' student.person_ptr.pk %}" class="btn btn-primary btn-sm mb-2">Add
+                        Images</a>
 
                     <div class="text-left mt-3">
 
@@ -49,7 +49,7 @@
             <div class="card" width=10rem>
                 <h5 style="text-align: center;">List of Image</h5>
                 <div class="row ml-2">
-                    {% for photo in gallery%}
+                    {% for photo in images %}
                     <div class="col-3">
                         <div class="card">
                             <img src="{{photo.photos.url}}" alt="Smiley face" class="card-img-top"
@@ -72,8 +72,8 @@
 </div>
 <!-- container -->
 <script>
-    $(function() {
-        $('.alert').click(function() {
+    $(function () {
+        $('.alert').click(function () {
             return window.confirm("Are you sure?");
         });
     });

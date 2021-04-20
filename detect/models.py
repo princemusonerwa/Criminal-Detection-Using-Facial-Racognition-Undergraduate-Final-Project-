@@ -116,7 +116,7 @@ class Employee(Person):
         self.name
 
 
-class Gallery(models.Model):
+class Images(models.Model):
     person = models.ForeignKey(Person, on_delete=models.CASCADE)
     photos = models.ImageField(upload_to = get_upload_to)
     
