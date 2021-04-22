@@ -104,11 +104,12 @@ class CrimeForm(forms.ModelForm):
 
     class Meta:
         model = Crime
-        fields = ('victim', 'description', 'start_time',
+        fields = ('victim', 'crime_type', 'description', 'start_time',
                   'end_time', 'room', 'status', 'suspect', 'comment')
 
         widgets = {
             'victim': forms.Select(attrs={'class': 'form-control'}),
+            'crime_type': forms.Select(attrs={'class': 'form-control'}),
             'description': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
             'status': forms.Select(attrs={'class': 'form-control'}),
             'room': forms.TextInput(attrs={'class': 'form-control'}),

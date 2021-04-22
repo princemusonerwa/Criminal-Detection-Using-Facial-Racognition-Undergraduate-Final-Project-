@@ -16,8 +16,8 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-MODEL_ROOT=os.path.join(BASE_DIR,'model')
-TRAIN_ROOT=os.path.join(BASE_DIR,'media/images/training')
+MODEL_ROOT = os.path.join(BASE_DIR, 'model')
+TRAIN_ROOT = os.path.join(BASE_DIR, 'media/images/training')
 
 
 # Quick-start development settings - unsuitable for production
@@ -29,7 +29,7 @@ SECRET_KEY = '_r_ain6y4%=5us^z3ftm$()+af^!0f_ro4d+ptz7e1$ypt5u=)'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS =  ['*']  
+ALLOWED_HOSTS = ['*']
 
 CELERY_IMPORTS = ('detect.task',)
 
@@ -91,12 +91,11 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'final_project',
         'USER': 'postgres',
-        'PORT': '5432',
+        'PORT': '5433',
         'PASSWORD': '19974',
         'HOST': 'localhost',
     }
 }
-
 
 
 # Password validation
@@ -137,15 +136,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATIC_ROOT = os.path.join(BASE_DIR,'assets')
+STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 
-MEDIA_ROOT =  os.path.join(BASE_DIR, 'media') 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-EMAIL_BACKEND ="django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST ="smtp.gmail.com"
-EMAIL_PORT =587
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'princeshema19974@gmail.com'
 EMAIL_HOST_PASSWORD = 'nhhrekbkpuffgmda'

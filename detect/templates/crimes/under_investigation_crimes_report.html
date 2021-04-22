@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Pending crime List</title>
+    <style>
+        @page {
+            size: "A3";
+            margin: 0.5cm;
+
+            /* @top-right {
+                content: "AUCA";
+            } */
+
+            @bottom-right {
+                content: "Page "counter(page) " of "counter(pages);
+            }
+        }
+
+        table,
+        td,
+        th {
+            border: 0.5px solid black;
+            text-align: left;
+            font-size: 12px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .thead {
+            height: 30px;
+        }
+
+        .summary {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            float: right;
+            font-size: small;
+        }
+
+        .title {
+            text-align: center;
+            font-weight: bold;
+            margin-top: 60px;
+            margin-bottom: 10px;
+        }
+
+        .wrap_data {
+            word-break: break-all;
+            width: 150px;
+        }
+    </style>
+</head>
+
+<body>
+    <img src="{% static 'images/aucaLogoWithTitle.png'%}" alt="No Image" class="auca_logo" />
+
+    <div class="summary">
+        <span style="font-weight: bold; margin-bottom: 15px">Printed on</span>
+        {{ date }}
+        <br />
+        <span style="font-weight: bold">By</span> {{ user.names }}
+    </div>
+    <div class="title">Under Investigation Crimes Report</div>
+    <table>
+        <thead>
+            <tr class="thead">
+                <th>Victim</th>
+                <th>Crime Type</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>Suspect</th>
+                <th>Comment</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for crime in crimes %}
+            <tr>
+                <td>{{crime.victim.names}}</td>
+                <td>{{crime.crime_type}}</td>
+                <td class="wrap_data">{{crime.description}}</td>
+                <td>{{crime.status}}</td>
+                {% if crime.suspect.names %}
+                <td>{{crime.suspect.names}}</td>
+                {% else %}
+                <td>
+                    <span style="color: black; background-color: yellow">No suspect</span>
+                </td>
+                {% endif %} {% if not crime.comment%}
+                <td class="wrap_data">No comment</td>
+                {% else %}
+                <td class="wrap_data">{{ crime.comment }}</td>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+
+</html>

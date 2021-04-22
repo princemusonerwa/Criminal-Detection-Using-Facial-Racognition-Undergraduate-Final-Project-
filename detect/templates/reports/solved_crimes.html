@@ -31,14 +31,12 @@
     </div>
     <div class="col-sm-6">
       <div class="text-sm-right">
-        {% if download_form %}
         <form action="{% url 'download_solved_crime' %}" method="POST">
           {% csrf_token %} {{ download_form.as_p }}
           <p>
             <input type="submit" class="btn" name="submit" value="Download" />
           </p>
         </form>
-        {% endif %}
       </div>
     </div>
     <div class="container-fluid p-0">
@@ -67,9 +65,7 @@
                     <td>{{crime.suspect.names}}</td>
                     {% else %}
                     <td>
-                      <span style="color: black; background-color: yellow"
-                        >No suspect recorded yet</span
-                      >
+                      <span style="color: black; background-color: yellow">No suspect recorded yet</span>
                     </td>
                     {% endif %}
                     <td></td>

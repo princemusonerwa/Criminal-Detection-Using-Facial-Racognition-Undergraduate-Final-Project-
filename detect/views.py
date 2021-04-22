@@ -406,6 +406,8 @@ def camPreview(previewName, camID):
             y1, x2, y2, x1 = loc
             y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
             cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
+            cv2.rectangle(frame, (x1, y2-20), (x2, y2),
+                          (255, 0, 0), cv2.FILLED)
             cv2.putText(frame, name, (x1+6, y2-6),
                         cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 0), 2)
         cv2.imshow(previewName, frame)
@@ -449,7 +451,6 @@ def detect_image(request):
             predictions = predictKNN(image)
             for pred_name, loc in predictions:
                 name = pred_name
-            name = name.split("_", 1)[1]
         else:
             messages.error(request, f"The file provided is not an image file.")
 
@@ -552,7 +553,7 @@ def exportCrimeListPdf(request):
     crimes = Crime.objects.all().order_by('updated_at')
     # render the html page
     html_string = render_to_string(
-        'crimes/pdf_page.html', {'crimes': crimes, 'date': datetime.now(), 'user': request.user})
+        'crimes/all_crimes_report.html', {'crimes': crimes, 'date': datetime.now(), 'user': request.user})
 
     # transfort to html content
     html = HTML(string=html_string, base_url=request.build_absolute_uri())
@@ -659,14 +660,15 @@ def pendingCrimesReport(request):
         from_date = request.POST.get('from_date')
         to_date = request.POST.get('to_date')
         searchResult = Crime.objects.filter(
-            status="Pending", updated_at__gte=from_date, updated_at__lte=to_date)
+            status="Pending", updated_at__gte=from_date, updated_at__lte=to_date).order_by("updated_at")
         download_form = DownloadForm(initial={
             'from_date': from_date,
             'to_date': to_date
         })
         return render(request, "reports/pending_crimes.html", {'pending_crimes': searchResult, 'download_form': download_form})
     else:
-        pending_crimes = Crime.objects.filter(status="Pending")
+        pending_crimes = Crime.objects.filter(
+            status="Pending").order_by("updated_at")
         return render(request, "reports/pending_crimes.html", {'pending_crimes': pending_crimes})
 
 
@@ -675,14 +677,15 @@ def solvedCrimesReport(request):
         from_date = request.POST.get('from_date')
         to_date = request.POST.get('to_date')
         searchResult = Crime.objects.filter(
-            status="Solved", updated_at__gte=from_date, updated_at__lte=to_date)
+            status="Solved", updated_at__gte=from_date, updated_at__lte=to_date).order_by("updated_at")
         download_form = DownloadForm(initial={
             'from_date': from_date,
             'to_date': to_date
         })
         return render(request, "reports/solved_crimes.html", {'solved_crimes': searchResult, 'download_form': download_form})
     else:
-        solved_crimes = Crime.objects.filter(status="Solved")
+        solved_crimes = Crime.objects.filter(
+            status="Solved").order_by("updated_at")
         return render(request, "reports/solved_crimes.html", {'solved_crimes': solved_crimes})
 
 
@@ -708,34 +711,36 @@ def downloadUnderInvestigation(request):
         if form.is_valid():
             from_date = form.cleaned_data.get('from_date')
             to_date = form.cleaned_data.get('to_date')
-
-            response = HttpResponse(content_type='application/pdf')
-            response['Content-Disposition'] = 'inline; filename=Crime under Inv' + \
-                str(datetime.now())+'.pdf'
-            response['Content-Transfer-Encoding'] = 'binary'
-
-            crimes = Crime.objects.filter(
-                status="Under Investigation", updated_at__gte=from_date, updated_at__lte=to_date)
-            # render the html page
-            html_string = render_to_string(
-                'crimes/pdf_page.html', {'crimes': crimes, 'date': datetime.now(), 'user': request.user})
-
-            # transfort to html content
-            html = HTML(string=html_string,
-                        base_url=request.build_absolute_uri())
-            result = html.write_pdf()
-
-            # preview the content in the memory
-            with tempfile.NamedTemporaryFile(delete=True) as output:
-                output.write(result)
-                output.flush()
-                # open the pdf and read it for reading
-                output.seek(0)
-                response.write(output.read())
-
-            return response
         else:
-            DownloadForm(request.POST)
+            from_date = Crime.objects.filter(status="Pending").values_list(
+                "updated_at", flat=True).order_by("updated_at").first()
+            to_date = Crime.objects.filter(status="Pending").values_list(
+                "updated_at", flat=True).order_by("updated_at").last()
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename=Crime under Inv' + \
+            str(datetime.now())+'.pdf'
+        response['Content-Transfer-Encoding'] = 'binary'
+
+        crimes = Crime.objects.filter(
+            status="Under Investigation", updated_at__gte=from_date, updated_at__lte=to_date)
+        # render the html page
+        html_string = render_to_string(
+            'crimes/under_investigation_crimes_report.html', {'crimes': crimes, 'date': datetime.now(), 'user': request.user})
+
+        # transfort to html content
+        html = HTML(string=html_string,
+                    base_url=request.build_absolute_uri())
+        result = html.write_pdf()
+
+        # preview the content in the memory
+        with tempfile.NamedTemporaryFile(delete=True) as output:
+            output.write(result)
+            output.flush()
+            # open the pdf and read it for reading
+            output.seek(0)
+            response.write(output.read())
+
+        return response
     else:
         return redirect('under_inv_crimes')
 
@@ -746,34 +751,37 @@ def downloadSolved(request):
         if form.is_valid():
             from_date = form.cleaned_data.get('from_date')
             to_date = form.cleaned_data.get('to_date')
-
-            response = HttpResponse(content_type='application/pdf')
-            response['Content-Disposition'] = 'inline; filename=Crime under Inv' + \
-                str(datetime.now())+'.pdf'
-            response['Content-Transfer-Encoding'] = 'binary'
-
-            crimes = Crime.objects.filter(
-                status="Solved", updated_at__gte=from_date, updated_at__lte=to_date)
-            # render the html page
-            html_string = render_to_string(
-                'crimes/pdf_page.html', {'crimes': crimes, 'date': datetime.now(), 'user': request.user})
-
-            # transfort to html content
-            html = HTML(string=html_string,
-                        base_url=request.build_absolute_uri())
-            result = html.write_pdf()
-
-            # preview the content in the memory
-            with tempfile.NamedTemporaryFile(delete=True) as output:
-                output.write(result)
-                output.flush()
-                # open the pdf and read it for reading
-                output.seek(0)
-                response.write(output.read())
-
-            return response
         else:
-            DownloadForm(request.POST)
+            from_date = Crime.objects.filter(status="Pending").values_list(
+                "updated_at", flat=True).order_by("updated_at").first()
+            to_date = Crime.objects.filter(status="Pending").values_list(
+                "updated_at", flat=True).order_by("updated_at").last()
+
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename=Crime under Inv' + \
+            str(datetime.now())+'.pdf'
+        response['Content-Transfer-Encoding'] = 'binary'
+
+        crimes = Crime.objects.filter(
+            status="Solved", updated_at__gte=from_date, updated_at__lte=to_date)
+        # render the html page
+        html_string = render_to_string(
+            'crimes/solved_crimes_report.html', {'crimes': crimes, 'date': datetime.now(), 'user': request.user})
+
+        # transfort to html content
+        html = HTML(string=html_string,
+                    base_url=request.build_absolute_uri())
+        result = html.write_pdf()
+
+        # preview the content in the memory
+        with tempfile.NamedTemporaryFile(delete=True) as output:
+            output.write(result)
+            output.flush()
+            # open the pdf and read it for reading
+            output.seek(0)
+            response.write(output.read())
+
+        return response
     else:
         return redirect('solved_crimes')
 
@@ -784,34 +792,37 @@ def downloadPending(request):
         if form.is_valid():
             from_date = form.cleaned_data.get('from_date')
             to_date = form.cleaned_data.get('to_date')
-
-            response = HttpResponse(content_type='application/pdf')
-            response['Content-Disposition'] = 'inline; filename=Crime under Inv' + \
-                str(datetime.now())+'.pdf'
-            response['Content-Transfer-Encoding'] = 'binary'
-
-            crimes = Crime.objects.filter(
-                status="Pending", updated_at__gte=from_date, updated_at__lte=to_date)
-            # render the html page
-            html_string = render_to_string(
-                'crimes/pdf_page.html', {'crimes': crimes, 'date': datetime.now(), 'user': request.user})
-
-            # transfort to html content
-            html = HTML(string=html_string,
-                        base_url=request.build_absolute_uri())
-            result = html.write_pdf()
-
-            # preview the content in the memory
-            with tempfile.NamedTemporaryFile(delete=True) as output:
-                output.write(result)
-                output.flush()
-                # open the pdf and read it for reading
-                output.seek(0)
-                response.write(output.read())
-
-            return response
         else:
-            DownloadForm(request.POST)
+            from_date = Crime.objects.filter(status="Pending").values_list(
+                "updated_at", flat=True).order_by("updated_at").first()
+            to_date = Crime.objects.filter(status="Pending").values_list(
+                "updated_at", flat=True).order_by("updated_at").last()
+
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename=Pending Crimes Inv' + \
+            str(datetime.now())+'.pdf'
+        response['Content-Transfer-Encoding'] = 'binary'
+
+        crimes = Crime.objects.filter(
+            status="Pending", updated_at__gte=from_date, updated_at__lte=to_date)
+        # render the html page
+        html_string = render_to_string(
+            'crimes/pending_crimes_report.html', {'crimes': crimes, 'date': datetime.now(), 'user': request.user})
+
+        # transfort to html content
+        html = HTML(string=html_string,
+                    base_url=request.build_absolute_uri())
+        result = html.write_pdf()
+
+        # preview the content in the memory
+        with tempfile.NamedTemporaryFile(delete=True) as output:
+            output.write(result)
+            output.flush()
+            # open the pdf and read it for reading
+            output.seek(0)
+            response.write(output.read())
+
+        return response
     else:
         return redirect('pending_crimes')
 
