@@ -5,6 +5,7 @@ from FaceRecognition.settings import EMAIL_HOST_USER
 import datetime
 import pytz
 import requests
+from playsound import playsound
 
 utc=pytz.UTC
 
@@ -13,9 +14,9 @@ def send_notify(id,location):
     phoneNumbers = []
     userEmails = []
     person = Person.objects.get(id=splited_id)
-    if person.status == 'WANTED':
+    if person.status == 'Wanted':
         latest = person.detectedcriminal_set.all().last()
-        if (latest is None) or ((datetime.datetime.now().replace(tzinfo=utc)-latest.time).total_seconds()>60):
+        if (latest is None) or ((datetime.datetime.now().replace(tzinfo=utc)-latest.time).total_seconds()>30):
             DetectedCriminal.objects.create(person=person, location=location)
             message = ""
             userPhones = User.objects.all().values_list('phone', flat=True)
@@ -25,7 +26,8 @@ def send_notify(id,location):
                message = f'Criminal(student) by names of {person.student.names} has been detected {location} in Auca premises.'             
             if(hasattr(person,"employee")): 
                message = f'Criminal(employee) by names of {person.employee.names} has been detected {location} in Auca premises.'
-            send_sms(phoneNumbers, message)
+            # send_sms(phoneNumbers, message)
+            playsound("C:/Users/Emery Musonerwa/Downloads/sound.WAV")
             send_mail_to('Detected', message ,['shemusopri@gmail.com','musonerwaprince@gmail.com'])
             
         

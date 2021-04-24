@@ -122,9 +122,11 @@ class CrimeForm(forms.ModelForm):
         if self.instance.pk:
             self.fields['suspect'].required = True
             self.fields['comment'].required = True
+            self.fields['status'].required = True
         else:
             self.fields['suspect'].required = False
             self.fields['comment'].required = False
+            self.fields['status'].required = False
 
     def clean_end_time(self):
         start_time = self.cleaned_data.get("start_time")

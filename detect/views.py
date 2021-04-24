@@ -6,18 +6,20 @@ from django.contrib import messages
 from .detection import train, predictKNN
 from django.core.files.storage import FileSystemStorage
 import cv2
-from .task import detect as notify, trainData
+from .task import detect as notify
+from .task import trainData as trainData
 from django.contrib.auth.decorators import login_required, user_passes_test
 from datetime import datetime
 import csv
 from xhtml2pdf import pisa
 from django.template.loader import render_to_string
 from io import BytesIO
-import xlwt
 import threading
 from datetime import datetime
 from weasyprint import HTML
 import tempfile
+from playsound import playsound
+
 
 # Create your views here.
 
@@ -219,8 +221,13 @@ def allCrime(request):
 @login_required
 def crimeDetails(request, id):
     crime = get_object_or_404(Crime, id=id)
+    suspect_id = crime.suspect.id
+    person = Person.objects.get(id=suspect_id)
+    profile_image = person.images_set.first()
     context = {
-        'crime': crime
+        'crime': crime,
+        'person': person,
+        'profile_image': profile_image
     }
     return render(request, 'crimes/crime_detail.html', context)
 
@@ -244,9 +251,9 @@ def updateCrime(request, id):
         name = form.cleaned_data.get("suspect")
         status = form.cleaned_data.get("status")
         if status == "Under Investigation":
-            Person.objects.filter(names=name).update(status='WANTED')
+            Person.objects.filter(names=name).update(status='Wanted')
         elif status == "Solved":
-            Person.objects.filter(names=name).update(status='NOT WANTED')
+            Person.objects.filter(names=name).update(status='Not Wanted')
         form.save()
         messages.success(request, 'Crime updated Successfully.')
         return redirect('crimes')
@@ -372,17 +379,18 @@ class camThread(threading.Thread):
         print(f'Starting at {self.previewName}')
         camPreview(self.previewName, self.camID)
 
-
 def camPreview(previewName, camID):
     start_time = datetime.now()
+    count = 0
     start_time = f'{start_time.year}-{start_time.month}-{start_time.day}-{start_time.hour}-{start_time.minute}-{start_time.second}'
     end_time = None
     cv2.namedWindow(previewName)
     cam = cv2.VideoCapture(camID)
+    # Define the codec and create VideoWriter object
     fourcc = cv2.VideoWriter_fourcc(*'XVID')
-    save_path = f'/media/{start_time}__{end_time}.avi'
+    path = f"media/videos/{start_time}.avi"
+    out = cv2.VideoWriter(path, fourcc, 20.0, (640, 480))
 
-    out = cv2.VideoWriter(save_path, fourcc, 20.0, (640, 480))
     if cam.isOpened():
         print(f'The time the camera went on is {start_time}')
         ret, frame = cam.read()
@@ -394,6 +402,8 @@ def camPreview(previewName, camID):
         # to speed up the process, we will resize the image captured
         image_small = cv2.resize(frame, (0, 0), None, 0.25, 0.25)
         # convert the frame image to RGB
+        # save the video captured
+        out.write(frame)
 
         # create uncodings for our faces in the image
         predictions = predictKNN(image_small)
@@ -402,19 +412,24 @@ def camPreview(previewName, camID):
             if name != "unknown":
                 if camID == 0:
                     notify.delay(name, "1st Flow")
+                    # playing sound
+                    # playsound("C:/Users/Emery Musonerwa/Downloads/sound.WAV")
+            else:
+                unknown_images_screenshots = "media/screenshots/image_{}.png".format(count)
+                cv2.imwrite(unknown_images_screenshots, frame)
+                name = ""
 
+
+            id = name.split("_")[-1]
+            
             y1, x2, y2, x1 = loc
             y1, x2, y2, x1 = y1*4, x2*4, y2*4, x1*4
-            cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 0, 0), 2)
-            cv2.rectangle(frame, (x1, y2-20), (x2, y2),
-                          (255, 0, 0), cv2.FILLED)
-            cv2.putText(frame, name, (x1+6, y2-6),
+            cv2.rectangle(frame, (x1, y1), (x2, y2), (255, 255, 254), 1)
+            cv2.putText(frame, id, (x1+6, y2-6),
                         cv2.FONT_HERSHEY_COMPLEX, 1, (255, 255, 0), 2)
         cv2.imshow(previewName, frame)
         # Converts to HSV color space, OCV reads colors as BGR
         # frame is converted to hsv
-
-        out.write(frame)
 
         key = cv2.waitKey(20)
         if key == 27:  # exit on ESC
@@ -422,6 +437,11 @@ def camPreview(previewName, camID):
     end_time = datetime.now()
     end_time = f'{end_time.year}-{end_time.month}-{end_time.day}-{end_time.hour}-{end_time.minute}-{end_time.second}'
     print(f'The time the camera went off is {end_time}')
+
+    cam.release()
+  
+    # After we release our webcam, we also release the output
+    out.release() 
     cv2.destroyWindow(previewName)
 
 
@@ -470,26 +490,6 @@ def exportStudentListCsv(request):
 
     return response
 
-
-# def exportStudentListPdf(request):
-#     path = "students/pdf_page.html"
-#     students = Student.objects.all()
-#     context = {"students": students}
-
-#     html = render_to_string('students/pdf_page.html', context)
-#     io_bytes = BytesIO()
-
-#     pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), io_bytes)
-
-#     if not pdf.err:
-#         # we can just return the HttpResponse
-#         response = HttpResponse(io_bytes.getvalue(),
-#                                 content_type='application/pdf')
-#         response['Content-Disposition'] = 'inline; filename=StudentList' + \
-#             str(datetime.now())+'.pdf'
-#         return response
-#     else:
-#         return HttpResponse("Error while rendering PDF", status=400)
 
 def exportStudentListPdf(request):
     response = HttpResponse(content_type='application/pdf')
@@ -609,28 +609,6 @@ def exportEmployeeListPdf(request):
 
     return response
 
-
-# def exportEmployeeListPdf(request):
-#     path = "employees/pdf_page.html"
-#     employees = Employee.objects.all()
-#     context = {"employees": employees}
-
-#     html = render_to_string('employees/pdf_page.html', context)
-#     io_bytes = BytesIO()
-
-#     pdf = pisa.pisaDocument(BytesIO(html.encode("UTF-8")), io_bytes)
-
-#     if not pdf.err:
-#         # we can just return the HttpResponse
-#         response = HttpResponse(io_bytes.getvalue(),
-#                                 content_type='application/pdf')
-#         response['Content-Disposition'] = 'inline; filename=EmployeeList' + \
-#             str(datetime.now())+'.pdf'
-#         return response
-#     else:
-#         return HttpResponse("Error while rendering PDF", status=400)
-
-
 def exportEmployeeListExcel(request):
     response = HttpResponse(content_type='application/ms-excel')
     response['Content-Disposition'] = 'attachement; filename=EmployeeList' + \
@@ -712,9 +690,9 @@ def downloadUnderInvestigation(request):
             from_date = form.cleaned_data.get('from_date')
             to_date = form.cleaned_data.get('to_date')
         else:
-            from_date = Crime.objects.filter(status="Pending").values_list(
+            from_date = Crime.objects.filter(status="Under Investigation").values_list(
                 "updated_at", flat=True).order_by("updated_at").first()
-            to_date = Crime.objects.filter(status="Pending").values_list(
+            to_date = Crime.objects.filter(status="Under Investigation").values_list(
                 "updated_at", flat=True).order_by("updated_at").last()
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'inline; filename=Crime under Inv' + \
@@ -752,9 +730,9 @@ def downloadSolved(request):
             from_date = form.cleaned_data.get('from_date')
             to_date = form.cleaned_data.get('to_date')
         else:
-            from_date = Crime.objects.filter(status="Pending").values_list(
+            from_date = Crime.objects.filter(status="Solved").values_list(
                 "updated_at", flat=True).order_by("updated_at").first()
-            to_date = Crime.objects.filter(status="Pending").values_list(
+            to_date = Crime.objects.filter(status="Solved").values_list(
                 "updated_at", flat=True).order_by("updated_at").last()
 
         response = HttpResponse(content_type='application/pdf')

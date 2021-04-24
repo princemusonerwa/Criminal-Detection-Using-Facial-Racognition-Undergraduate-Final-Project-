@@ -45,7 +45,7 @@
                     {{form.room}}
                 </div>
 
-                {% if user.is_admin %}
+                {% if user.is_admin and form.instance.id %}
                 <div class="form-group col-md-3">
                     {{form.status.label_tag}}
                     {{form.status}}

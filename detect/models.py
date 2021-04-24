@@ -39,7 +39,7 @@ def validate_dob(value):
 
 
 def validate_names(value):
-    if len(value) < 5:
+    if len(value) < 5 and not value in int:
         raise ValidationError("Names should have atleast 5 characters")
 
 
@@ -63,7 +63,7 @@ class Person(models.Model):
         ('Wanted', 'Wanted')
     ]
     status = models.CharField(
-        max_length=100, choices=STATUS_CHOICES, default="NOT WANTED")
+        max_length=100, choices=STATUS_CHOICES, default="Not Wanted")
 
     def __str__(self):
         return self.names

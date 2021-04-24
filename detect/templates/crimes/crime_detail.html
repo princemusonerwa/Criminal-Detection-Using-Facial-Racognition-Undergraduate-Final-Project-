@@ -1,7 +1,84 @@
-{% extends 'base.html'%}
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block title%} student {{student.student_id}} {% endblock%}
 {% block content %}
-    <h6>Crime Name: {{crime.name}}</h6>
-    <h6>Crime Details: {{crime.description}}</h6>
-    <h6>Crime Status: {{crime.status}}</h6>  
-    <a href="{% url 'crimes'%}" >Back</a>
+<!-- Start Content-->
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-xl-10 col-lg-5">
+            <div class="card text-center">
+                <div class="card-body" style="width: 100%;">
+                    {% if profile_image %}
+                    <img src="{{profile_image.photos.url}}" class="rounded-circle avatar-lg img-thumbnail"
+                        alt="profile-image">
+                    {% else %}
+                    <img src="/media/default.jpg" class="rounded-circle avatar-lg img-thumbnail" alt="profile-image">
+
+                    {% endif %}
+
+                    <div class="text-left mt-3">
+
+                        <p class="mb-2"><strong>Victim :</strong>
+                            <span class="ml-2">{{ crime.victim.names }}</span>
+                        </p>
+
+                        <p><strong>Description :</strong>
+                            <span class="ml-2">{{ crime.description }}</span>
+                        </p>
+
+                        <p><strong>Updated_at :</strong>
+                            <span class="ml-2">{{ crime.updated_at }}</span>
+                        </p>
+
+                        <p><strong>Roon :</strong>
+                            <span class="ml-2 ">{{ crime.room }}</span>
+                        </p>
+
+                        <p><strong>Start Time Suspected :</strong>
+                            <span class="ml-2">{{ crime.start_time }}</span>
+                        </p>
+                        <p><strong>End Time Suspected :</strong>
+                            <span class="ml-2">{{ crime.end_time }}</span>
+                        </p>
+                        <p ><strong>Status :</strong>
+                            <span class="ml-2">{{ crime.status }}</span>
+                        </p>
+                        {% if crime.suspect %}
+                        <p><strong>Suspect :</strong>
+                            <span class="ml-2">{{ crime.suspect.names }}</span>
+                        </p>
+                        {% else %}
+                        <p class="text-muted mb-1 font-13"><strong>Suspect :</strong>
+                            <span class="ml-2">{{ crime.suspect.names }}</span>
+                        </p>
+                        {% endif %}
+                        {% if crime.comment %}
+                            <p><strong>Comment :</strong>
+                                <span class="ml-2" style="margin-left: 40px;">{{ crime.comment }}</span>
+                            </p>
+                        {% else %}
+                        <p><strong>Comment :</strong>
+                            <span class="ml-2">No comment Yet</span>
+                        </p>
+                        {% endif %}
+
+                        <hr>
+                    </div>
+                    <a href="{% url 'crimes'%}" class="btn btn-success" style="text-align: left;">Back</a>
+                </div> <!-- end card-body -->
+            </div> <!-- end card -->
+        </div> <!-- end col-->
+    </div>
+    <!-- end row-->
+
+</div>
+<!-- container -->
+<script>
+    $(function () {
+        $('.alert').click(function () {
+            return window.confirm("Are you sure?");
+        });
+    });
+</script>
 {% endblock %}
