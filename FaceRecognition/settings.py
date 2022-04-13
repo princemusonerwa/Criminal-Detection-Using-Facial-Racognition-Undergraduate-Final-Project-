@@ -13,6 +13,11 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 from pathlib import Path
 import os
 
+import environ
+
+env = environ.Env()
+# reading .env file
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -80,6 +85,7 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'FaceRecognition.wsgi.application'
 
 
@@ -89,10 +95,10 @@ WSGI_APPLICATION = 'FaceRecognition.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'final_project',
-        'USER': 'postgres',
-        'PORT': '5432',
-        'PASSWORD': '19974',
+        'NAME': env('DB_NAME'),
+        'USER': env('USERNAME'),
+        'PORT': env('PORT'),
+        'PASSWORD': env('PASSWORD'),
         'HOST': 'localhost',
     }
 }
@@ -143,11 +149,11 @@ MEDIA_URL = '/media/'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'princeshema19974@gmail.com'
-EMAIL_HOST_PASSWORD = 'nhhrekbkpuffgmda'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
 AUTH_USER_MODEL = 'accounts.User'
 
